@@ -13,20 +13,17 @@ namespace GridRL
     public partial class Engine : Form
     {
         public static Form form;
-        public static Thread gameThread;
 
         public Engine()
         {
             InitializeComponent();
             DoubleBuffered = true;
             form = this;
-
-            gameThread = new Thread(new ThreadStart(gameLoop));
         }
 
         public static void gameLoop()
         {
-            // wait for player input
+            // call on player input
             // update player
             // update enemies
             // render
