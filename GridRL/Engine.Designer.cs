@@ -1,6 +1,6 @@
 ﻿namespace GridRL
 {
-    partial class Form1
+    partial class Engine
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // Engine
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.DoubleBuffered = true;
+            this.ForeColor = System.Drawing.Color.White;
+            this.Name = "Engine";
+            this.Text = "GridRL";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.ResumeLayout(false);
+
         }
 
         #endregion
