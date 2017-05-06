@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace GridRL
 {
-    static class Program
+    public class Program : Engine
     {
         /// <summary>
         /// The main entry point for the application.
@@ -14,9 +14,12 @@ namespace GridRL
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+
             Application.Run(new Engine());
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e) {
+            //if(e.KeyCode == Keys.A) Console.WriteLine(innerInnerCanvas.X);
         }
     }
 }
