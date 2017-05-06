@@ -4,12 +4,14 @@ namespace GridRL {
     public class ImageSprite : Sprite {
         /* Constructors */
         public ImageSprite() : base() { }
+
         public ImageSprite(Image image) : base() {
             Image = image;
             Width = Image.Width;
             Height = Image.Height;
         }
-        public ImageSprite(Image image, double x, double y) : base() {
+
+        public ImageSprite(Image image, float x, float y) : base() {
             Image = image;
             X = x;
             Y = y;

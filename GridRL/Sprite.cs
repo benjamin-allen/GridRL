@@ -16,9 +16,9 @@ namespace GridRL {
 
         /* Properties */
         public Sprite Parent { get; set; } = null;
-        public double X { get; set; } = 0;
-        public double Y { get; set; } = 0;
-        public double Scale { get; set; } = 1;
+        public float X { get; set; } = 0;
+        public float Y { get; set; } = 0;
+        public float Scale { get; set; } = 1;
         public ActingType ActingType { get; set; } = ActingType.AllChildren;
         public DrawingType DrawingType { get; set; } = DrawingType.AllChildren;
 
@@ -53,8 +53,8 @@ namespace GridRL {
         public void Render(Graphics g) {
             if(DrawingType <= DrawingType.ThisOnly) {
                 Matrix original = g.Transform.Clone();
-                g.TranslateTransform((float)X, (float)Y);
-                g.ScaleTransform((float)Scale, (float)Scale);
+                g.TranslateTransform(X, Y);
+                g.ScaleTransform(Scale, Scale);
                 Paint(g);
                 if(DrawingType == DrawingType.AllChildren) {
                     foreach(Sprite s in children) {
