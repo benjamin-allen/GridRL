@@ -15,12 +15,12 @@ namespace GridRL {
 
 
         /* Properties */
-        public Sprite Parent { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Scale { get; set; }
-        public ActingType ActingType { get; set; }
-        public DrawingType DrawingType { get; set; }
+        public Sprite Parent { get; set; } = null;
+        public double X { get; set; } = 0;
+        public double Y { get; set; } = 0;
+        public double Scale { get; set; } = 1;
+        public ActingType ActingType { get; set; } = ActingType.AllChildren;
+        public DrawingType DrawingType { get; set; } = DrawingType.AllChildren;
 
 
         /* Children/Parent methods */
