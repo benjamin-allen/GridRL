@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace GridRL {
+﻿namespace GridRL {
     public class World {
         /* Constructors */
         public World() { }
 
         /* Properties */
-        public Tile[,] Data { get; set; } = new Tile[Engine.tilesHigh - 5, Engine.tilesWide - 16];
+        public Tile[,] Data { get; set; } = new Tile[Program.tilesHigh - 5, Program.tilesWide - 16];
         public int Level { get; set; } = 1;
 
         public Tile this[int y, int x] {
