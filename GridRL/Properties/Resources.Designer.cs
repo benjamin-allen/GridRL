@@ -63,9 +63,19 @@ namespace GridRL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap at {
+        internal static System.Drawing.Bitmap At {
             get {
-                object obj = ResourceManager.GetObject("at", resourceCulture);
+                object obj = ResourceManager.GetObject("At", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Empty {
+            get {
+                object obj = ResourceManager.GetObject("Empty", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

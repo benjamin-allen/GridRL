@@ -5,12 +5,6 @@ namespace GridRL {
         public static World world = new World();
 
         static void Main() {
-            for(int y = 0; y < tilesHigh - 5; ++y) {
-                for(int x = 0; x < tilesWide - 16; ++x) {
-                    world.Data[y, x] = new Tile(Properties.Resources.at, x * spriteWidth, y * spriteHeight);
-                    canvas.Add(world.Data[y, x]);
-                }
-            }
             Application.Run(new Program());
         }
 
@@ -25,7 +19,7 @@ namespace GridRL {
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
-            if(e.KeyCode == Keys.Escape) { Sprite innerCanvas = new Sprite(canvas); }
+            if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); }
             GameLoop();
         }
     }
