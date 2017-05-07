@@ -40,7 +40,6 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Name = "Engine";
             this.Text = "GridRL";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 
         }
