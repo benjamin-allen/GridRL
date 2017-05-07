@@ -34,6 +34,13 @@ namespace GridRL {
             children.Remove(s);
         }
 
+        public void Add(Sprite s) {
+            AddChild(s);
+        }
+        public void Remove(Sprite s) {
+            RemoveChild(s);
+        }
+
 
         /* Update/Render methods */
         protected virtual void Act() { }

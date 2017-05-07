@@ -8,12 +8,19 @@ namespace GridRL {
         public static int spriteHeight = 16;
         public static int tilesWide = 80;
         public static int tilesHigh = 45;
+        public static World world = new World();
 
         public Engine() {
             form = this;
             InitializeComponent();
             DoubleBuffered = true;
             form.ClientSize = new System.Drawing.Size(spriteWidth * tilesWide, spriteHeight * tilesHigh);
+            for(int y = 0; y < tilesHigh - 5; ++y) {
+                for(int x = 0; x < tilesWide - 16; ++x) {
+                    world.Data[y, x] = new Tile(Properties.Resources.at, x * spriteWidth, y * spriteHeight);
+                    canvas.Add(world.Data[y, x]);
+                }
+            }
             // main menu function goes here
             // if main menu returns something, start the game loop
             // otherwise spawn some help
