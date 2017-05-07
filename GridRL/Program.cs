@@ -14,7 +14,7 @@ namespace GridRL {
             Application.Run(new Program());
         }
 
-        public static void gameLoop() {
+        public static void GameLoop() {
             // call on player input
             // update player
             // update enemies
@@ -26,7 +26,7 @@ namespace GridRL {
 
         protected override void OnKeyDown(KeyEventArgs e) {
             if(e.KeyCode == Keys.Escape) { Sprite innerCanvas = new Sprite(canvas); }
-            gameLoop();
+            GameLoop();
         }
     }
 }
