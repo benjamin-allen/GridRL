@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace GridRL {
 
@@ -9,7 +10,8 @@ namespace GridRL {
 
         /* Properties */
         /// <summary> The array of tiles representing the current floor of the game. </summary>
-        public Tile[,] Data { get; set; } = new Tile[Program.tilesHigh - 5, Program.tilesWide - 16];
+        public Tile[,] Data { get; set; } = new Tile[Program.tilesHigh - 4, Program.tilesWide - 15];
+
         /// <summary> The current vertical level of the game. </summary>
         public int Level { get; set; } = 1;
 
@@ -24,21 +26,29 @@ namespace GridRL {
         /// TODO: slightly unsafe if lots of generation happens.
         public virtual void GenerateLevel() {
             Program.canvas.Remove(this);
+            int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             Data = new Tile[Data.GetLength(0), Data.GetLength(1)];
-            for(int i = 0; i < 10; ++i) {
-                int roomX = Engine.rand.Next(0, 53); // max width of room is 10
-                int roomY = Engine.rand.Next(0, 29); // max height of room is 10
-                int roomW = Engine.rand.Next(4, 10);
-                int roomH = Engine.rand.Next(4, 10);
-                for(int y = roomY; y <= roomY + roomH; ++y) {
-                    for(int x = roomX; x <= roomX + roomW; ++x) {
-                        if((y != roomY && y != roomY + roomH) && (x != roomX && x != roomX + roomW)) {
+            for(int i = 0; i < roomCount; ++i) {
+                int roomX = (Engine.rand.Next(0, 26) * 2) + 1; // max width of room is 10. std rand limit is 26
+                int roomY = (Engine.rand.Next(0, 15) * 2) + 1; // max height of room is 10. std rand limit is 15
+                int roomW = (Engine.rand.Next(2, 4) * 2) + 1;
+                int roomH = (Engine.rand.Next(2, 4) * 2) + 1;
+                if(Data[roomY, roomX] == null && Data[roomY + roomH - 1, roomX] == null && Data[roomY, roomX + roomW - 1] == null && Data[roomY + roomH - 1, roomX + roomW - 1] == null) {
+                    for(int y = roomY; y < roomY + roomH; ++y) {
+                        for(int x = roomX; x < roomX + roomW; ++x) {
                             Tile floor = new Tile(Properties.Resources.Empty, x, y);
                             Data[y, x] = floor;
-                            continue;
                         }
-                        Tile wall = new Tile(Properties.Resources.At, x, y);
-                        Data[y, x] = wall;
+                    }
+                }
+                else {
+                    if(Engine.rand.NextDouble() < .1) {
+                        for(int y = roomY; y < roomY + roomH; ++y) {
+                            for(int x = roomX; x < roomX + roomW; ++x) {
+                                Tile floor = new Tile(Properties.Resources.Empty, x, y);
+                                Data[y, x] = floor;
+                            }
+                        }
                     }
                 }
             }
