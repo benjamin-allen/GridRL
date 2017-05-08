@@ -2,6 +2,8 @@
 using System.Drawing;
 
 namespace GridRL {
+    /// <summary> Possible implementation: enumeration of creature's AI type. </summary>
+    //public enum AIType { }
 
     /// <summary>A base class for all living things.</summary>
     public class Creature : ImageSprite {
@@ -22,10 +24,19 @@ namespace GridRL {
         /* Properties */
 
         /// <summary> The name of the creature. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "Creature";
 
         /// <summary> Description of the creature. </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = "Generic Creature";
+
+        /// <summary> Creature's HP stat. </summary>
+        public int Health { get; set; } = 0;
+
+        /// <summary> Creature's Attack stat. </summary>
+        public int Attack { get; set; } = 0;
+
+        /// <summary> Creature's Defence stat. </summary>
+        public int Defense { get; set; } = 0;
 
         /* Methods */
         
