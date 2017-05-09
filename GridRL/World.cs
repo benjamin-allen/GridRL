@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace GridRL {
     /// <summary> A class containing an array of tiles and a level counter. </summary>
@@ -65,50 +67,70 @@ namespace GridRL {
                     break;
                 }
             }
-            int[] directions = { 1, 2, 3, 4 }; // 1N, 2E, 3S, 4W
-            carve(mazeX, mazeY, directions, 10);
+            int[] directions = { 1, 2, 3, 4 }; // 1N, 2S, 3W, 4E
+            carve(mazeX, mazeY, directions);
             Program.canvas.Add(this);
         }
 
-        internal void carve(int startX, int startY, int[] directions, int depth) {
-            if(depth == 0)
+        internal void carve(int startX, int startY, int[] directions) {
+            List<int> validDirs = getValidDirectionsFrom(startX, startY);
+            if(validDirs.Count == 0) {
                 return;
-            int index = (Engine.rand.Next(0, 4));
-            for(int i = 0; i < 4; ++i) {
-                index = (index + 1) % 4;
-                int[] nextStep = new int[2];
-                nextStep = dydx(directions[index]);
-                int nextY = startY + (2 * nextStep[0]);
-                int nextX = startX + (2 * nextStep[1]);
-                int interY = startY + nextStep[0];
-                int interX = startX + nextStep[1];
-                if(nextY < 1 || nextY > Data.GetLength(0) - 1 || nextX < 1 || nextX > Data.GetLength(1) - 1) {
-                    continue;
-                }
-                if(Data[nextY, nextX] == null) {
-                    Tile corridor = new Tile(Properties.Resources.At, interX, interY);
-                    Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
-                    Data[interX, interY] = corridor;
-                    Data[nextX, nextY] = corridor2;
-                    carve(nextX, nextY, directions, depth - 1);
-                }
             }
-            return;
+            foreach(int index in validDirs) {
+                validDirs = getValidDirectionsFrom(startX, startY);
+                validDirs.OrderBy(item => Engine.rand.Next());
+                int[] direction = dydx(directions[index]);
+                int nextY = startY + (2 * direction[0]);
+                int nextX = startX + (2 * direction[1]);
+                int interY = startY + direction[0];
+                int interX = startX + direction[1];
+                Tile corridor = new Tile(Properties.Resources.At, interX, interY);
+                Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
+                Data[interY, interX] = corridor;
+                Data[nextY, nextX] = corridor2;
+                carve(nextX, nextY, directions);
+            }
         }
 
         internal int[] dydx(int direction) {
             int[] output = { 0, 0 };
             switch(direction) {
                 case 1:
-                    output[0] = 1; return output;
+                    output[0] = -1; return output; // North
                 case 2:
-                    output[1] = 1; return output;
+                    output[0] = 1; return output; // South
                 case 3:
-                    output[0] = -1; return output;
+                    output[1] = -1; return output; // East
                 case 4:
-                    output[1] = -1; return output;
+                    output[1] = 1; return output; // West
                 default: return output;
             }
+        }
+
+        internal List<int> getValidDirectionsFrom(int testX, int testY) {
+            List<int> output = new List<int>();
+            if(testY - 2 > 0 ) {
+                if(Data[testY - 2, testX] == null) {
+                    output.Add(0); // North
+                }
+            }
+            if(testY + 2 < Data.GetLength(0) - 1) {
+                if(Data[testY + 2, testX] == null) {
+                    output.Add(1); // South
+                }
+            }
+            if(testX - 2 > 0) {
+                if(Data[testY, testX - 2] == null) {
+                    output.Add(2); // West
+                }
+            }
+            if(testX + 2 < Data.GetLength(1) - 1) {
+                if(Data[testY, testX + 2] == null) {
+                    output.Add(3); // East
+                }
+            }
+            return output;
         }
 
         /* Overrides */
