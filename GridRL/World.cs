@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GridRL {
     /// <summary> A class containing an array of tiles and a level counter. </summary>
-    public class World : Sprite{
+    public class World : Sprite {
         /* Constructors */
         public World() { GenerateLevel(); }
 
@@ -77,55 +77,68 @@ namespace GridRL {
             if(validDirs.Count == 0) {
                 return;
             }
-            int rando = Engine.rand.Next(0, validDirs.Count);
-            int index = validDirs[rando];
-            int[] direction = dydx(directions[index]);
-            int nextY = startY + (2 * direction[0]);
-            int nextX = startX + (2 * direction[1]);
-            int interY = startY + direction[0];
-            int interX = startX + direction[1];
-            Tile corridor = new Tile(Properties.Resources.At, interX, interY);
-            Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
-            Data[interY, interX] = corridor;
-            Data[nextY, nextX] = corridor2;
-            carve(nextX, nextY, directions);
+            foreach(int i in validDirs) {
+                List<int> newValidDirs = getValidDirectionsFrom(startX, startY);
+                if(!newValidDirs.Contains(i)) {
+                    continue;
+                }
+                int rando = Engine.rand.Next(0, newValidDirs.Count);
+                int[] direction = dydx(directions[newValidDirs[rando]]);
+                int nextY = startY + (2 * direction[0]);
+                int nextX = startX + (2 * direction[1]);
+                int interY = startY + direction[0];
+                int interX = startX + direction[1];
+                Tile corridor = new Tile(Properties.Resources.At, interX, interY);
+                Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
+                if(Data[startY, startX] == null) {
+                    Data[startY, startX] = new GridRL.Tile(Properties.Resources.At, startX, startY);
+                }
+                Data[interY, interX] = corridor;
+                Data[nextY, nextX] = corridor2;
+                carve(nextX, nextY, directions);
+            }
         }
 
         internal int[] dydx(int direction) {
             int[] output = { 0, 0 };
             switch(direction) {
                 case 1:
-                    output[0] = -1; return output; // North
+                    output[0] = -1;
+                    return output; // North
                 case 2:
-                    output[0] = 1; return output; // South
+                    output[0] = 1;
+                    return output; // South
                 case 3:
-                    output[1] = -1; return output; // East
+                    output[1] = -1;
+                    return output; // West
                 case 4:
-                    output[1] = 1; return output; // West
-                default: return output;
+                    output[1] = 1;
+                    return output; // East
+                default:
+                    return output;
             }
         }
 
         internal List<int> getValidDirectionsFrom(int testX, int testY) {
             List<int> output = new List<int>();
-            if(testY - 2 > 0 ) {
+            if(testY - 2 > 0) {
                 if(Data[testY - 2, testX] == null) {
                     output.Add(0); // North
                 }
             }
-            if(testY + 2 < Data.GetLength(0) - 1) {
+            if(testY + 2 < Data.GetLength(0)) {
                 if(Data[testY + 2, testX] == null) {
                     output.Add(1); // South
                 }
             }
             if(testX - 2 > 0) {
                 if(Data[testY, testX - 2] == null) {
-                    output.Add(2); // West
+                    output.Add(2); // East
                 }
             }
-            if(testX + 2 < Data.GetLength(1) - 1) {
+            if(testX + 2 < Data.GetLength(1)) {
                 if(Data[testY, testX + 2] == null) {
-                    output.Add(3); // East
+                    output.Add(3); // West
                 }
             }
             return output;
