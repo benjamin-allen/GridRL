@@ -77,20 +77,18 @@ namespace GridRL {
             if(validDirs.Count == 0) {
                 return;
             }
-            foreach(int index in validDirs) {
-                validDirs = getValidDirectionsFrom(startX, startY);
-                validDirs.OrderBy(item => Engine.rand.Next());
-                int[] direction = dydx(directions[index]);
-                int nextY = startY + (2 * direction[0]);
-                int nextX = startX + (2 * direction[1]);
-                int interY = startY + direction[0];
-                int interX = startX + direction[1];
-                Tile corridor = new Tile(Properties.Resources.At, interX, interY);
-                Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
-                Data[interY, interX] = corridor;
-                Data[nextY, nextX] = corridor2;
-                carve(nextX, nextY, directions);
-            }
+            int rando = Engine.rand.Next(0, validDirs.Count);
+            int index = validDirs[rando];
+            int[] direction = dydx(directions[index]);
+            int nextY = startY + (2 * direction[0]);
+            int nextX = startX + (2 * direction[1]);
+            int interY = startY + direction[0];
+            int interX = startX + direction[1];
+            Tile corridor = new Tile(Properties.Resources.At, interX, interY);
+            Tile corridor2 = new Tile(Properties.Resources.At, nextX, nextY);
+            Data[interY, interX] = corridor;
+            Data[nextY, nextX] = corridor2;
+            carve(nextX, nextY, directions);
         }
 
         internal int[] dydx(int direction) {
