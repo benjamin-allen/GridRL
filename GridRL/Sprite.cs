@@ -54,7 +54,6 @@ namespace GridRL {
         /// <summary> Removes a Sprite object from this sprite's list of children. </summary>
         /// <param name="s"> The sprite to be removed. </param>
         protected virtual void RemoveChild(Sprite s) {
-            s.Parent = null;
             children.Remove(s);
         }
 

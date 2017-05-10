@@ -13,9 +13,12 @@ namespace GridRL {
 
         /// <summary> Constructs a tile with the given image and position. </summary>
         /// <param name="image">The image used for this tile's sprite. </param>
-        /// <param name="x"> The horizontal position of the tile. </param>
-        /// <param name="y"> The vertical position of the tile. </param>
-        public Tile(Image image, float x, float y) : base(image, x, y) { }
+        /// <param name="x"> The horizontal position of the tile in the world data. </param>
+        /// <param name="y"> The vertical position of the tile in the world data. </param>
+        public Tile(Image image, int x, int y) : base(image) {
+            CoordX = x;
+            CoordY = y;
+        }
 
 
         /* Properties */
@@ -30,6 +33,23 @@ namespace GridRL {
 
         /// <summary> An extended flavor description of the tile. </summary>
         public string Description { get; set; }
+
+        private int coordX;
+        private int coordY;
+
+        /// <summary> The vertical index of the tile in the world's data.</summary>
+        public int CoordX {
+            get { return coordX; }
+            set { coordX = value; X = value * Engine.spriteWidth; }
+        }
+
+        /// <summary> The vertical index of the tile in the world's data.</summary>
+        public int CoordY {
+            get { return coordY; }
+            set { coordY = value; Y = value * Engine.spriteHeight; }
+        }
+
+
 
 
         /* Methods */
