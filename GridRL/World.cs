@@ -93,6 +93,13 @@ namespace GridRL {
                 }
             }
 
+            List<List<int>> regionLocations = getRegionLocations();
+            
+            while(regionLocations.Count > 1) {
+                connectRegions(regionLocations);
+                floodFill(regionLocations[0][1], regionLocations[0][0], directions);
+                regionLocations = getRegionLocations();
+            }
             Program.canvas.Add(this);
         }
 
@@ -222,7 +229,7 @@ namespace GridRL {
                             break;
                         }
                     }
-                    if(Engine.rand.NextDouble() < .25) {
+                    if(Engine.rand.NextDouble() < .1) {
                         isConnected = false;
                         wallToCarve = (wallToCarve + 1) % 4;
                     }
@@ -255,7 +262,7 @@ namespace GridRL {
                             break;
                         }
                     }
-                    if(Engine.rand.NextDouble() < .25) {
+                    if(Engine.rand.NextDouble() < .1) {
                         isConnected = false;
                         wallToCarve = (wallToCarve + 1) % 4;
                     }
@@ -288,7 +295,7 @@ namespace GridRL {
                             break;
                         }
                     }
-                    if(Engine.rand.NextDouble() < .25) {
+                    if(Engine.rand.NextDouble() < .1) {
                         isConnected = false;
                         wallToCarve = (wallToCarve + 1) % 4;
                     }
@@ -321,7 +328,7 @@ namespace GridRL {
                             break;
                         }
                     }
-                    if(Engine.rand.NextDouble() < .25) {
+                    if(Engine.rand.NextDouble() < .1) {
                         isConnected = false;
                         wallToCarve = (wallToCarve + 1) % 4;
                     }
@@ -352,6 +359,105 @@ namespace GridRL {
                 }
             }
             return output;
+        }
+
+        private List<List<int>> getRegionLocations() {
+            List<List<int>> regionLocs = new List<List<int>>();
+            List<int> regionIDs = new List<int>();
+            for(int y = 1; y < Data.GetLength(0) - 1; y+=2) {
+                for(int x = 1; x < Data.GetLength(1) - 1; x+=2) {
+                    if(Data[y, x] != null) {
+                        int region = Data[y, x].Region;
+                        if(!regionIDs.Contains(region)) {
+                            regionIDs.Add(region);
+                            regionLocs.Add(new List<int>(new int[] { y, x, region }));
+                        }
+                    }
+                }
+            }
+            return regionLocs;
+        }
+
+        private void connectRegions(List<List<int>> regionLocations) {
+            foreach(List<int> points in regionLocations) {
+                if(points[2] != regionLocations[0][2]) {
+                    int y = points[0];
+                    int x = points[1];
+                    bool ySafe = y > 3 && y < Data.GetLength(0) - 3;
+                    bool xSafe = x > 3 && x < Data.GetLength(1) - 3;
+                    int currentRegion = Data[y, x].Region;
+                    int masterRegion = regionLocations[0][2];
+                    //List<int> possibleConnections = new List<int>();
+                    if(ySafe && xSafe) {
+                        // check all directions
+                        if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
+                            Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            continue;
+                        }
+                        else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
+                            Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            continue;
+                        }
+                        else if(Data[y, x - 1] == null && Data[y, x - 2] != null && Data[y, x - 2].Region != currentRegion) {
+                            Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            continue;
+                        }
+                        else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
+                            Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            continue;
+                        }
+                    }
+                    else if(ySafe) {
+                        // check only Y
+                        if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
+                            Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            continue;
+                        }
+                        else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
+                            Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            continue;
+                        }
+                    }
+                    else if(xSafe) {
+                        // check only x
+                        if(Data[y, x - 1] == null && Data[y, x  - 2] != null && Data[y, x - 2].Region != currentRegion) {
+                            Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            continue;
+                        }
+                        else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
+                            Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            continue;
+                        }
+                    }
+                    floodFill(points[1], points[0], new int[] { 1, 2, 3, 4 });
+                }
+            }
+        }
+
+        private void floodFill(int x, int y, int[] directions) {
+            if(y == 13 && x == 42) { }
+            List<int> validDirs = new List<int>();
+            if(Data[y - 1, x] != null && Data[y - 1, x].Region != 0) {
+                validDirs.Add(0);
+            }
+            if(Data[y + 1, x] != null && Data[y + 1, x].Region != 0) {
+                validDirs.Add(1);
+            }
+            if(Data[y, x - 1] != null && Data[y, x - 1].Region != 0) {
+                validDirs.Add(2);
+            }
+            if(Data[y, x + 1] != null && Data[y, x + 1].Region != 0) {
+                validDirs.Add(3);
+            }
+            foreach(int dir in validDirs) {
+                int[] direction = dydx(directions[dir]);
+                int nextY = y + direction[0];
+                int nextX = x + direction[1];
+                if(nextX==41 && x == 42 && y == 13) { }
+                Data[y, x].Region = 0;
+                Data[nextY, nextX].Region = 0;
+                floodFill(nextX, nextY, directions);
+            }
         }
         #endregion
 
