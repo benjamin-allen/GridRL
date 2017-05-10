@@ -6,7 +6,7 @@ namespace GridRL {
     //public enum AIType { }
 
     /// <summary>A base class for all living things.</summary>
-    public class Creature : ImageSprite {
+    public class Creature : Actor {
         /* Constructors */
         public Creature() { }
 
@@ -22,12 +22,6 @@ namespace GridRL {
 
 
         /* Properties */
-
-        /// <summary> The name of the creature. </summary>
-        public string Name { get; set; } = "Creature";
-
-        /// <summary> Description of the creature. </summary>
-        public string Description { get; set; } = "Generic Creature";
 
         /// <summary> Creature's HP stat. </summary>
         public int Health { get; set; } = 0;
