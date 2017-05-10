@@ -27,7 +27,7 @@ namespace GridRL {
         /// TODO: slightly unsafe if lots of generation happens.
         public virtual void GenerateLevel() {
             Program.canvas.Remove(this);
-            int roomCount = (int)Math.Ceiling((8 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
+            int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             Data = new Tile[Data.GetLength(0), Data.GetLength(1)];
             int regionID = 0;
             List<List<int>> roomPoints = new List<List<int>>();
@@ -47,6 +47,17 @@ namespace GridRL {
                     points.Add(roomY); points.Add(roomX); points.Add(roomY + roomH); points.Add(roomX + roomW);
                     roomPoints.Add(points);
                 }
+                else {
+                    if(Engine.rand.NextDouble() < .1) {
+                        for(int y = roomY; y < roomY + roomH; ++y) {
+                            for(int x = roomX; x < roomX + roomW; ++x) {
+                                Data[y, x] = new RoomFloor(x, y, regionID);
+                            }
+                        }
+                        points.Add(roomY); points.Add(roomX); points.Add(roomY + roomH); points.Add(roomX + roomW);
+                        roomPoints.Add(points);
+                    }
+                }
             }
             int mazeY = 0;
             int mazeX = 0;
@@ -64,106 +75,8 @@ namespace GridRL {
                 }
             }
             foreach(List<int> pointSet in roomPoints) {
-                int roomY = pointSet[0];
-                int roomX = pointSet[1];
-                int room2Y = pointSet[2];
-                int room2X = pointSet[3];
-                bool isConnected = false;
-                int brando = Engine.rand.Next(1, 4);
-                // dis needs safety checks
-                // an infinite loop fixes
-                if(brando == 1) {
-                    // carve on north wall
-                    int dY = roomY - 1;
-                    int dX = roomX + Engine.rand.Next(0, room2X - roomX);
-                    while(!isConnected) {
-                        if(Data[dY, dX] == null && Data[dY - 1, dX] != null) {
-                            isConnected = true;
-                            int overrideRegion = Data[dY - 1, dX].Region;
-                            Data[dY, dX] = new Corridor(dX, dY, overrideRegion);
-                            for(int y = roomY; y < room2Y; ++y) {
-                                for(int x = roomX; x < room2X; ++x) {
-                                    Data[y, x].Region = overrideRegion;
-                                }
-                            }
-                        }
-                        else {
-                            dX++;
-                            if(dX >= room2X) {
-                                dX = roomX;
-                            }
-                        }
-                    }
-                }
-                if(brando == 2) {
-                    // carve on south wall
-                    int dY = room2Y;
-                    int dX = roomX + Engine.rand.Next(0, room2X - roomX);
-                    while(!isConnected) {
-                        if(Data[dY, dX] == null && Data[dY + 1, dX] != null) {
-                            isConnected = true;
-                            int overrideRegion = Data[dY + 1, dX].Region;
-                            Data[dY, dX] = new Corridor(dX, dY, overrideRegion);
-                            for(int y = roomY; y < room2Y; ++y) {
-                                for(int x = roomX; x < room2X; ++x) {
-                                    Data[y, x].Region = overrideRegion;
-                                }
-                            }
-                        }
-                        else {
-                            dX++;
-                            if(dX >= room2X) {
-                                dX = roomX;
-                            }
-                        }
-                    }
-                }
-                if(brando == 3) {                    
-                    // carve on west wall
-                    int dY = roomY + Engine.rand.Next(0, room2Y - roomY);
-                    int dX = roomX - 1;
-                    while(!isConnected) {
-                        if(Data[dY, dX] == null && Data[dY, dX - 1] != null) {
-                            isConnected = true;
-                            int overrideRegion = Data[dY, dX - 1].Region;
-                            Data[dY, dX] = new Corridor(dX, dY, overrideRegion);
-                            for(int y = roomY; y < room2Y; ++y) {
-                                for(int x = roomX; x < room2X; ++x) {
-                                    Data[y, x].Region = overrideRegion;
-                                }
-                            }
-                        }
-                        else {
-                            dY++;
-                            if(dY >= room2Y) {
-                                dY = roomY;
-                            }
-                        }
-                    }
-                }
-                if(brando == 4) {
-                    // carve on east wall
-                    int dY = roomY + Engine.rand.Next(0, room2Y - roomY);
-                    int dX = roomX + 1;
-                    while(!isConnected) {
-                        if(Data[dY, dX] == null && Data[dY, dX + 1] != null) {
-                            isConnected = true;
-                            int overrideRegion = Data[dY, dX + 1].Region;
-                            Data[dY, dX] = new Corridor(dX, dY, overrideRegion);
-                            for(int y = roomY; y < room2Y; ++y) {
-                                for(int x = roomX; x < room2X; ++x) {
-                                    Data[y, x].Region = overrideRegion;
-                                }
-                            }
-                        }
-                        else {
-                            dY++;
-                            if(dY >= room2Y) {
-                                dY = roomY;
-                            }
-                        }
-                    }
-                } 
+                makeDoor(pointSet);
+                 
             }
             
 
@@ -253,6 +166,152 @@ namespace GridRL {
                 }
             }
             return output;
+        }
+
+        internal void makeDoor(List<int> points) {
+            int roomY = points[0];
+            int roomX = points[1];
+            int room2Y = points[2];
+            int room2X = points[3];
+            bool isConnected = false;
+            int wallToCarve = Engine.rand.Next(0, 4);
+            int wallsTried = 0;
+            // dis needs safety checks
+            // an infinite loop fixes
+            while(wallsTried < 4 && !isConnected) {
+                if(wallToCarve == 0) {
+                    // carve on north wall
+                    int dY = roomY - 1;
+                    int dX = roomX + Engine.rand.Next(0, room2X - roomX);
+                    int firstDX = dX;
+                    while(!isConnected) {
+                        if(Data[dY, dX] == null && Data[dY - 1, dX] != null) {
+                            isConnected = true;
+                            int overrideRegion = Data[dY - 1, dX].Region;
+                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            for(int y = roomY; y < room2Y; ++y) {
+                                for(int x = roomX; x < room2X; ++x) {
+                                    Data[y, x].Region = overrideRegion;
+                                }
+                            }
+                        }
+                        else {
+                            dX++;
+                            if(dX >= room2X) {
+                                dX = roomX;
+                            }
+                        }
+                        if(firstDX == dX) {
+                            wallsTried++;
+                            wallToCarve = (wallToCarve + 1) % 4;
+                            break;
+                        }
+                    }
+                    if(Engine.rand.NextDouble() < .25) {
+                        isConnected = false;
+                        wallToCarve = (wallToCarve + 1) % 4;
+                    }
+                }
+                if(wallToCarve == 1) {
+                    // carve on south wall
+                    int dY = room2Y;
+                    int dX = roomX + Engine.rand.Next(0, room2X - roomX);
+                    int firstDX = dX;
+                    while(!isConnected) {
+                        if(Data[dY, dX] == null && Data[dY + 1, dX] != null) {
+                            isConnected = true;
+                            int overrideRegion = Data[dY + 1, dX].Region;
+                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            for(int y = roomY; y < room2Y; ++y) {
+                                for(int x = roomX; x < room2X; ++x) {
+                                    Data[y, x].Region = overrideRegion;
+                                }
+                            }
+                        }
+                        else {
+                            dX++;
+                            if(dX >= room2X) {
+                                dX = roomX;
+                            }
+                        }
+                        if(firstDX == dX) {
+                            wallsTried++;
+                            wallToCarve = (wallToCarve + 1) % 4;
+                            break;
+                        }
+                    }
+                    if(Engine.rand.NextDouble() < .25) {
+                        isConnected = false;
+                        wallToCarve = (wallToCarve + 1) % 4;
+                    }
+                }
+                if(wallToCarve == 2) {
+                    // carve on west wall
+                    int dY = roomY + Engine.rand.Next(0, room2Y - roomY);
+                    int dX = roomX - 1;
+                    int firstDY = dY;
+                    while(!isConnected) {
+                        if(Data[dY, dX] == null && Data[dY, dX - 1] != null) {
+                            isConnected = true;
+                            int overrideRegion = Data[dY, dX - 1].Region;
+                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            for(int y = roomY; y < room2Y; ++y) {
+                                for(int x = roomX; x < room2X; ++x) {
+                                    Data[y, x].Region = overrideRegion;
+                                }
+                            }
+                        }
+                        else {
+                            dY++;
+                            if(dY >= room2Y) {
+                                dY = roomY;
+                            }
+                        }
+                        if(firstDY == dY) {
+                            wallsTried++;
+                            wallToCarve = (wallToCarve + 1) % 4;
+                            break;
+                        }
+                    }
+                    if(Engine.rand.NextDouble() < .25) {
+                        isConnected = false;
+                        wallToCarve = (wallToCarve + 1) % 4;
+                    }
+                }
+                if(wallToCarve == 3) {
+                    // carve on east wall
+                    int dY = roomY + Engine.rand.Next(0, room2Y - roomY);
+                    int dX = roomX + 1;
+                    int firstDY = dY;
+                    while(!isConnected) {
+                        if(Data[dY, dX] == null && Data[dY, dX + 1] != null) {
+                            isConnected = true;
+                            int overrideRegion = Data[dY, dX + 1].Region;
+                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            for(int y = roomY; y < room2Y; ++y) {
+                                for(int x = roomX; x < room2X; ++x) {
+                                    Data[y, x].Region = overrideRegion;
+                                }
+                            }
+                        }
+                        else {
+                            dY++;
+                            if(dY >= room2Y) {
+                                dY = roomY;
+                            }
+                        }
+                        if(firstDY == dY) {
+                            wallsTried++;
+                            wallToCarve = (wallToCarve + 1) % 4;
+                            break;
+                        }
+                    }
+                    if(Engine.rand.NextDouble() < .25) {
+                        isConnected = false;
+                        wallToCarve = (wallToCarve + 1) % 4;
+                    }
+                } 
+            }
         }
 
         /* Overrides */

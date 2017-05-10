@@ -61,8 +61,8 @@ namespace GridRL {
 
     public class Corridor : Tile {
         /* Constructors */
-        public Corridor(int x, int y, int region) : base(Properties.Resources.At, x, y) {
-            Name = "Corridor";
+        public Corridor(int x, int y, int region) : base(Properties.Resources.Corridor, x, y) {
+            Name = "corridor";
             Description = "A darkened hallway that connects the many rooms of the dungeon.";
             IsWalkable = true;
             Region = region;
@@ -71,10 +71,20 @@ namespace GridRL {
 
     public class RoomFloor : Tile {
         /* Constructors */
-        public RoomFloor(int x, int y, int region) : base(Properties.Resources.Empty, x, y) {
-            Name = "Floor";
+        public RoomFloor(int x, int y, int region) : base(Properties.Resources.Floor, x, y) {
+            Name = "floor";
             Description = "A tiled floor, cracked and worn from years of neglect.";
             IsWalkable = true;
+            Region = region;
+        }
+    }
+
+    public class Door : Tile {
+        /* Constructors */
+        public Door(int x, int y, int region) : base(Properties.Resources.Door, x, y) {
+            Name = "door";
+            Description = "An old wooden door placed here long ago. You might be able to open it.";
+            IsWalkable = false;
             Region = region;
         }
     }
