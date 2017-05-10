@@ -33,8 +33,10 @@ namespace GridRL {
         public bool isVisible { get; set; } = true;
 
         /* Methods */
-
-
+        
         /* Overrides */
+
+        }
+
     }
 }
