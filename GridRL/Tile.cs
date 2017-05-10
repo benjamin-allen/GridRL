@@ -34,6 +34,9 @@ namespace GridRL {
         /// <summary> An extended flavor description of the tile. </summary>
         public string Description { get; set; }
 
+        /// <summary> Identifies tiles connected to each other. </summary>
+        public int Region { get; set; }
+
         private int coordX;
         private int coordY;
 
@@ -50,11 +53,29 @@ namespace GridRL {
         }
 
 
-
-
         /* Methods */
         /// <summary> Called when a tile is stepped on. </summary>
         /// <param name="s">The sprite that stepped on this tile. </param>
         public virtual void OnStepOn(Sprite s) { }
+    }
+
+    public class Corridor : Tile {
+        /* Constructors */
+        public Corridor(int x, int y, int region) : base(Properties.Resources.At, x, y) {
+            Name = "Corridor";
+            Description = "A darkened hallway that connects the many rooms of the dungeon.";
+            IsWalkable = true;
+            Region = region;
+        }
+    }
+
+    public class RoomFloor : Tile {
+        /* Constructors */
+        public RoomFloor(int x, int y, int region) : base(Properties.Resources.Empty, x, y) {
+            Name = "Floor";
+            Description = "A tiled floor, cracked and worn from years of neglect.";
+            IsWalkable = true;
+            Region = region;
+        }
     }
 }
