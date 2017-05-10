@@ -24,8 +24,9 @@ namespace GridRL {
 
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
-        /// TODO: slightly unsafe if lots of generation happens.
+        /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
         public virtual void GenerateLevel() {
+            DateTime start = DateTime.Now;
             Program.canvas.Remove(this);
             int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             Data = new Tile[Data.GetLength(0), Data.GetLength(1)];
@@ -44,7 +45,10 @@ namespace GridRL {
                             Data[y, x] = new RoomFloor(x, y, regionID);
                         }
                     }
-                    points.Add(roomY); points.Add(roomX); points.Add(roomY + roomH); points.Add(roomX + roomW);
+                    points.Add(roomY);
+                    points.Add(roomX);
+                    points.Add(roomY + roomH);
+                    points.Add(roomX + roomW);
                     roomPoints.Add(points);
                 }
                 else {
@@ -54,7 +58,10 @@ namespace GridRL {
                                 Data[y, x] = new RoomFloor(x, y, regionID);
                             }
                         }
-                        points.Add(roomY); points.Add(roomX); points.Add(roomY + roomH); points.Add(roomX + roomW);
+                        points.Add(roomY);
+                        points.Add(roomX);
+                        points.Add(roomY + roomH);
+                        points.Add(roomX + roomW);
                         roomPoints.Add(points);
                     }
                 }
@@ -74,17 +81,25 @@ namespace GridRL {
                     carve(mazeX, mazeY, directions, regionID);
                 }
             }
+
             foreach(List<int> pointSet in roomPoints) {
                 makeDoor(pointSet);
-                 
             }
-            
+
+            for(int i = 0; i < 50; i++) {
+                List<List<int>> mazeEnds = getMazeEndPoints();
+                foreach(List<int> endPoints in mazeEnds) {
+                    Data[endPoints[0], endPoints[1]] = null;
+                }
+            }
 
             Program.canvas.Add(this);
-            
         }
 
-        internal void carve(int startX, int startY, int[] directions, int region) {
+        #region Worldgen Functions
+
+        
+        private void carve(int startX, int startY, int[] directions, int region) {
             if(Data[startY, startX] == null) {
                 Data[startY, startX] = new Corridor(startX, startY, region);
             }
@@ -109,7 +124,7 @@ namespace GridRL {
             }
         }
 
-        internal int[] dydx(int direction) {
+        private int[] dydx(int direction) {
             int[] output = { 0, 0 };
             switch(direction) {
                 case 1:
@@ -129,7 +144,7 @@ namespace GridRL {
             }
         }
 
-        internal List<int> getValidDirectionsFrom(int testX, int testY) {
+        private List<int> getValidDirectionsFrom(int testX, int testY) {
             List<int> output = new List<int>();
             if(testY - 2 > 0) {
                 if(Data[testY - 2, testX] == null) {
@@ -154,7 +169,7 @@ namespace GridRL {
             return output;
         }
 
-        internal int[] getMazeStartPoints() {
+        private int[] getMazeStartPoints() {
             int[] output = { 0, 0 };
             for(int y = 1; y < Data.GetLength(0); y += 2) {
                 for(int x = 1; x < Data.GetLength(1); x += 2) {
@@ -168,7 +183,7 @@ namespace GridRL {
             return output;
         }
 
-        internal void makeDoor(List<int> points) {
+        private void makeDoor(List<int> points) {
             int roomY = points[0];
             int roomX = points[1];
             int room2Y = points[2];
@@ -313,6 +328,32 @@ namespace GridRL {
                 } 
             }
         }
+
+        private List<List<int>> getMazeEndPoints() {
+            List<List<int>> output = new List<List<int>>();
+            for(int y = 1; y < Data.GetLength(0) - 1; y++) {
+                for(int x = 1; x < Data.GetLength(1) - 1; x++) {
+                    int notNullNeighbors = 0;
+                    if(Data[y - 1, x] != null) {
+                        notNullNeighbors++;
+                    }
+                    if(Data[y + 1, x] != null) {
+                        notNullNeighbors++;
+                    }
+                    if(Data[y, x - 1] != null) {
+                        notNullNeighbors++;
+                    }
+                    if(Data[y, x + 1] != null) {
+                        notNullNeighbors++;
+                    }
+                    if(notNullNeighbors <= 1) {
+                        output.Add(new List<int>(new int[] { y, x }));
+                    }
+                }
+            }
+            return output;
+        }
+        #endregion
 
         /* Overrides */
 
