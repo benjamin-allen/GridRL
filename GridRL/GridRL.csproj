@@ -55,6 +55,7 @@
       <DependentUpon>Engine.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageSprite.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
