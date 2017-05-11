@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace GridRL {
     /// <summary> A base class for anything that exists on the world. </summary>
-    public class Actor : ImageSprite{
+    public class Actor : ImageSprite {
 
         /* Constructors */
         public Actor() { }
@@ -15,16 +15,18 @@ namespace GridRL {
         /// <param name="image"> The image used for this actor sprite</param>
         /// <param name="x"> The actor's X position on the world data. </param>
         /// <param name="y"> The actor's Y position on the world data.</param>
-        public Actor(Image image, float x, float y) : base(image, x, y) { }
+        public Actor(Image image, int x, int y) : base(image) {
+            CoordX = x;
+            CoordY = y;
+        }
 
 
         /* Properties */
-
         /// <summary> The name of the actor. </summary>
-        public string Name { get; set; } = "Actor";
+        public string Name { get; set; } = "Dummy Actor";
 
         /// <summary> Description of the actor. </summary>
-        public string Description { get; set; } = "Generic Actor";
+        public string Description { get; set; } = "If you can see this, file a bug report for an improperly initialized actor.";
 
         /// <summary> A boolean that determines if the actor can collide with other actors. </summary>
         public bool isCollidable { get; set; } = false;
@@ -32,11 +34,19 @@ namespace GridRL {
         /// <summary> A boolean that determines if an actor is visible. </summary>
         public bool isVisible { get; set; } = true;
 
-        /* Methods */
-        
-        /* Overrides */
+        private int coordX;
+        private int coordY;
 
+        /// <summary>The actor's horizontal position in the world grid. </summary>
+        public int CoordX {
+            get { return coordX; }
+            set { coordX = value; X = coordX * Engine.spriteWidth; }
         }
 
+        /// <summary>The actor's vertical position in the world grid. </summary>
+        public int CoordY {
+            get { return coordY; }
+            set { coordY = value; Y = coordY * Engine.spriteHeight; }
+        }
     }
 }
