@@ -21,16 +21,16 @@ namespace GridRL {
         /* Properties */
 
         /// <summary> The name of the actor. </summary>
-        public string Name { get; set; } = "Actor";
+        public string Name { get; set; }
 
         /// <summary> Description of the actor. </summary>
-        public string Description { get; set; } = "Generic Actor";
+        public string Description { get; set; }
 
         /// <summary> A boolean that determines if the actor can collide with other actors. </summary>
-        public bool isCollidable { get; set; } = false;
+        public bool isCollidable { get; set; }
 
         /// <summary> A boolean that determines if an actor is visible. </summary>
-        public bool isVisible { get; set; } = true;
+        public bool isVisible { get; set; }
 
         /* Methods */
         
