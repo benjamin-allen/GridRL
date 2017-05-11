@@ -32,7 +32,7 @@ namespace GridRL {
         public bool isCollidable { get; set; } = false;
 
         /// <summary> A boolean that determines if an actor is visible. </summary>
-        public bool isVisible { get; set; } = true;
+        public bool isVisible { get; set; } = false;
 
         private int coordX;
         private int coordY;
@@ -47,6 +47,13 @@ namespace GridRL {
         public int CoordY {
             get { return coordY; }
             set { coordY = value; Y = coordY * Engine.spriteHeight; }
+        }
+
+        /* Overrides */
+        protected override void Paint(Graphics g) {
+            if(isVisible) {
+                base.Paint(g); 
+            }
         }
     }
 }
