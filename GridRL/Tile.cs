@@ -3,54 +3,25 @@
 namespace GridRL {
 
     /// <summary> The basic definition of tiles, which make up a world. </summary>
-    public class Tile : ImageSprite{
+    public class Tile : Actor {
         /* Constructors */
-        public Tile() { }
-        
-        /// <summary> Constructs a tile with the given image. </summary>
-        /// <param name="image"> The image used for this tile's sprite. </param>
-        public Tile(Image image) : base(image) { }
 
         /// <summary> Constructs a tile with the given image and position. </summary>
         /// <param name="image">The image used for this tile's sprite. </param>
         /// <param name="x"> The horizontal position of the tile in the world data. </param>
         /// <param name="y"> The vertical position of the tile in the world data. </param>
-        public Tile(Image image, int x, int y) : base(image) {
-            CoordX = x;
-            CoordY = y;
+        public Tile(Image image, int x, int y) : base(image, x, y) {
+            Name = "Dummy Tile";
+            Description = "If you can see this, file a bug report for an improperly initialized creature.";
         }
 
 
         /* Properties */
         /// <summary> Property representing whether creatures and items can be on the tile. </summary>
-        public bool IsWalkable { get; set; }
+        public bool IsWalkable { get; set; } = false;
 
-        /// <summary> Property representing whether the tile can be seen by the player. </summary>
-        public bool IsVisible { get; set; }
-
-        /// <summary> The name of the tile. </summary>
-        public string Name { get; set; }
-
-        /// <summary> An extended flavor description of the tile. </summary>
-        public string Description { get; set; }
-
-        /// <summary> Identifies tiles connected to each other. </summary>
-        public int Region { get; set; }
-
-        private int coordX;
-        private int coordY;
-
-        /// <summary> The vertical index of the tile in the world's data.</summary>
-        public int CoordX {
-            get { return coordX; }
-            set { coordX = value; X = value * Engine.spriteWidth; }
-        }
-
-        /// <summary> The vertical index of the tile in the world's data.</summary>
-        public int CoordY {
-            get { return coordY; }
-            set { coordY = value; Y = value * Engine.spriteHeight; }
-        }
+        /// <summary> Identifies tiles connected to each other. Used during mapgen. </summary>
+        public int Region { get; set; } = -1;
 
 
         /* Methods */

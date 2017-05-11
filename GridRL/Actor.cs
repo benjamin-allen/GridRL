@@ -29,10 +29,10 @@ namespace GridRL {
         public string Description { get; set; } = "If you can see this, file a bug report for an improperly initialized actor.";
 
         /// <summary> A boolean that determines if the actor can collide with other actors. </summary>
-        public bool isCollidable { get; set; } = false;
+        public bool IsCollidable { get; set; } = false;
 
         /// <summary> A boolean that determines if an actor is visible. </summary>
-        public bool isVisible { get; set; } = false;
+        public bool IsVisible { get; set; } = false;
 
         private int coordX;
         private int coordY;
@@ -51,7 +51,7 @@ namespace GridRL {
 
         /* Overrides */
         protected override void Paint(Graphics g) {
-            if(isVisible) {
+            if(IsVisible) {
                 base.Paint(g); 
             }
         }

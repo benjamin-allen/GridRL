@@ -43,6 +43,7 @@ namespace GridRL {
                     for(int y = roomY; y < roomY + roomH; ++y) {
                         for(int x = roomX; x < roomX + roomW; ++x) {
                             Data[y, x] = new RoomFloor(x, y, regionID);
+                            Data[y, x].IsVisible = true;
                         }
                     }
                     points.Add(roomY);
@@ -56,6 +57,7 @@ namespace GridRL {
                         for(int y = roomY; y < roomY + roomH; ++y) {
                             for(int x = roomX; x < roomX + roomW; ++x) {
                                 Data[y, x] = new RoomFloor(x, y, regionID);
+                                Data[y, x].IsVisible = true;
                             }
                         }
                         points.Add(roomY);
@@ -109,6 +111,7 @@ namespace GridRL {
         private void carve(int startX, int startY, int[] directions, int region) {
             if(Data[startY, startX] == null) {
                 Data[startY, startX] = new Corridor(startX, startY, region);
+                Data[startY, startX].IsVisible = true;
             }
             List<int> validDirs = getValidDirectionsFrom(startX, startY);
             if(validDirs.Count == 0) {
@@ -126,7 +129,9 @@ namespace GridRL {
                 int interY = startY + direction[0];
                 int interX = startX + direction[1];
                 Data[interY, interX] = new Corridor(interX, interY, region);
+                Data[interY, interX].IsVisible = true;
                 Data[nextY, nextX] = new Corridor(nextX, nextY, region);
+                Data[nextY, nextX].IsVisible = true;
                 carve(nextX, nextY, directions, region);
             }
         }
@@ -211,6 +216,7 @@ namespace GridRL {
                             isConnected = true;
                             int overrideRegion = Data[dY - 1, dX].Region;
                             Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -244,6 +250,7 @@ namespace GridRL {
                             isConnected = true;
                             int overrideRegion = Data[dY + 1, dX].Region;
                             Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -277,6 +284,7 @@ namespace GridRL {
                             isConnected = true;
                             int overrideRegion = Data[dY, dX - 1].Region;
                             Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -310,6 +318,7 @@ namespace GridRL {
                             isConnected = true;
                             int overrideRegion = Data[dY, dX + 1].Region;
                             Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -392,18 +401,22 @@ namespace GridRL {
                         // check all directions
                         if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
                             Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            Data[y - 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
                             Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            Data[y + 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x - 1] == null && Data[y, x - 2] != null && Data[y, x - 2].Region != currentRegion) {
                             Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            Data[y, x - 1].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
                             Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            Data[y, x + 1].IsVisible = true;
                             continue;
                         }
                     }
@@ -411,10 +424,12 @@ namespace GridRL {
                         // check only Y
                         if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
                             Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            Data[y - 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
                             Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            Data[y + 1, x].IsVisible = true;
                             continue;
                         }
                     }
@@ -422,10 +437,12 @@ namespace GridRL {
                         // check only x
                         if(Data[y, x - 1] == null && Data[y, x  - 2] != null && Data[y, x - 2].Region != currentRegion) {
                             Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            Data[y, x - 1].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
                             Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            Data[y, x + 1].IsVisible = true;
                             continue;
                         }
                     }
