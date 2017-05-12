@@ -8,7 +8,7 @@ namespace GridRL {
             Description = "If you can see this, file a bug report for an improperly initialized item.";
         }
 
-        public Item(Image image, int x, int y) : base(image, x, y) {
+        public Item(Image image, int y, int x) : base(image, y, x) {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
         }

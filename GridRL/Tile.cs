@@ -5,12 +5,11 @@ namespace GridRL {
     /// <summary> The basic definition of tiles, which make up a world. </summary>
     public class Tile : Actor {
         /* Constructors */
-
         /// <summary> Constructs a tile with the given image and position. </summary>
         /// <param name="image">The image used for this tile's sprite. </param>
-        /// <param name="x"> The horizontal position of the tile in the world data. </param>
         /// <param name="y"> The vertical position of the tile in the world data. </param>
-        public Tile(Image image, int x, int y) : base(image, x, y) {
+        /// <param name="x"> The horizontal position of the tile in the world data. </param>
+        public Tile(Image image, int y, int x) : base(image, y, x) {
             Name = "Dummy Tile";
             Description = "If you can see this, file a bug report for an improperly initialized creature.";
         }
@@ -32,7 +31,7 @@ namespace GridRL {
 
     public class Corridor : Tile {
         /* Constructors */
-        public Corridor(int x, int y, int region) : base(Properties.Resources.Corridor, x, y) {
+        public Corridor(int y, int x, int region) : base(Properties.Resources.Corridor, y, x) {
             Name = "corridor";
             Description = "A darkened hallway that connects the many rooms of the dungeon.";
             IsWalkable = true;
@@ -42,7 +41,7 @@ namespace GridRL {
 
     public class RoomFloor : Tile {
         /* Constructors */
-        public RoomFloor(int x, int y, int region) : base(Properties.Resources.Floor, x, y) {
+        public RoomFloor(int y, int x, int region) : base(Properties.Resources.Floor, y, x) {
             Name = "floor";
             Description = "A tiled floor, cracked and worn from years of neglect.";
             IsWalkable = true;
@@ -52,7 +51,7 @@ namespace GridRL {
 
     public class Door : Tile {
         /* Constructors */
-        public Door(int x, int y, int region) : base(Properties.Resources.Door, x, y) {
+        public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
             IsWalkable = false;

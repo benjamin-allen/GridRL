@@ -13,9 +13,9 @@ namespace GridRL {
 
         /// <summary> A constructor that creates an actor with a given image and x/y coordinates. </summary>
         /// <param name="image"> The image used for this actor sprite</param>
-        /// <param name="x"> The actor's X position on the world data. </param>
         /// <param name="y"> The actor's Y position on the world data.</param>
-        public Actor(Image image, int x, int y) : base(image) {
+        /// <param name="x"> The actor's X position on the world data. </param>
+        public Actor(Image image, int y, int x) : base(image) {
             CoordX = x;
             CoordY = y;
         }

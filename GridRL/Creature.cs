@@ -12,7 +12,7 @@ namespace GridRL {
         /// <param name="image"> The image used for this creature's sprite. </param>
         /// <param name="x"> The creature's X position on the world data. </param>
         /// <param name="y"> The creature's Y position on the world data. </param>
-        public Creature(Image image, int x, int y) : base(image, x, y) {
+        public Creature(Image image, int x, int y) : base(image, y, x) {
             Name = "Dummy Creature";
             Description = "If you can see this, file a bug report for an improperly initialized creature.";
             DeathMessage = "The " + Name + " dies!";
