@@ -22,12 +22,17 @@ namespace GridRL {
             set { Data[y, x] = value; }
         }
 
+        public List<Creature> Creatures { get; set; }
+
+        public List<Item> Items { get; set; }
+
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
         /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
         public virtual void GenerateLevel() {
-            DateTime start = DateTime.Now;
             Program.canvas.Remove(this);
+            Creatures = new List<Creature>();
+            Items = new List<Item>();
             int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             Data = new Tile[Data.GetLength(0), Data.GetLength(1)];
             int regionID = 0;
@@ -42,7 +47,8 @@ namespace GridRL {
                     regionID++;
                     for(int y = roomY; y < roomY + roomH; ++y) {
                         for(int x = roomX; x < roomX + roomW; ++x) {
-                            Data[y, x] = new RoomFloor(x, y, regionID);
+                            Data[y, x] = new RoomFloor(y, x, regionID);
+                            Data[y, x].IsVisible = true;
                         }
                     }
                     points.Add(roomY);
@@ -55,7 +61,8 @@ namespace GridRL {
                     if(Engine.rand.NextDouble() < .1) {
                         for(int y = roomY; y < roomY + roomH; ++y) {
                             for(int x = roomX; x < roomX + roomW; ++x) {
-                                Data[y, x] = new RoomFloor(x, y, regionID);
+                                Data[y, x] = new RoomFloor(y, x, regionID);
+                                Data[y, x].IsVisible = true;
                             }
                         }
                         points.Add(roomY);
@@ -78,7 +85,7 @@ namespace GridRL {
                 }
                 else {
                     regionID++;
-                    carve(mazeX, mazeY, directions, regionID);
+                    carve(mazeY, mazeX, regionID, directions);
                 }
             }
 
@@ -97,25 +104,45 @@ namespace GridRL {
             
             while(regionLocations.Count > 1) {
                 connectRegions(regionLocations);
-                floodFill(regionLocations[0][1], regionLocations[0][0], directions);
+                floodFill(regionLocations[0][0], regionLocations[0][1], directions);
                 regionLocations = getRegionLocations();
             }
+
+            int entryRoom = Engine.rand.Next(0, roomPoints.Count);
+            int exitRoom = Engine.rand.Next(0, roomPoints.Count);
+            if(entryRoom == exitRoom && roomPoints.Count > 1) {
+                exitRoom = (exitRoom + 1) % roomPoints.Count;
+            }
+            int entryY = Engine.rand.Next(roomPoints[entryRoom][0], roomPoints[entryRoom][2]);
+            int entryX = Engine.rand.Next(roomPoints[entryRoom][1], roomPoints[entryRoom][1]);
+            int exitY = Engine.rand.Next(roomPoints[exitRoom][0], roomPoints[exitRoom][2]);
+            int exitX = Engine.rand.Next(roomPoints[exitRoom][1], roomPoints[exitRoom][3]);
+            Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
+            Data[entryY, entryX].IsVisible = true;
+            Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
+            Data[exitY, exitX].IsVisible = true;
+
+            Program.player.CoordX = entryX;
+            Program.player.CoordY = entryY;
+            Creatures.Add(Program.player);
+
             Program.canvas.Add(this);
         }
 
         #region Worldgen Functions
 
         
-        private void carve(int startX, int startY, int[] directions, int region) {
+        private void carve(int startY, int startX, int region, int[] directions) {
             if(Data[startY, startX] == null) {
-                Data[startY, startX] = new Corridor(startX, startY, region);
+                Data[startY, startX] = new Corridor(startY, startX, region);
+                Data[startY, startX].IsVisible = true;
             }
-            List<int> validDirs = getValidDirectionsFrom(startX, startY);
+            List<int> validDirs = getValidDirectionsFrom(startY, startX);
             if(validDirs.Count == 0) {
                 return;
             }
             foreach(int i in validDirs) {
-                List<int> newValidDirs = getValidDirectionsFrom(startX, startY);
+                List<int> newValidDirs = getValidDirectionsFrom(startY, startX);
                 if(!newValidDirs.Contains(i)) {
                     continue;
                 }
@@ -125,9 +152,11 @@ namespace GridRL {
                 int nextX = startX + (2 * direction[1]);
                 int interY = startY + direction[0];
                 int interX = startX + direction[1];
-                Data[interY, interX] = new Corridor(interX, interY, region);
-                Data[nextY, nextX] = new Corridor(nextX, nextY, region);
-                carve(nextX, nextY, directions, region);
+                Data[interY, interX] = new Corridor(interY, interX, region);
+                Data[interY, interX].IsVisible = true;
+                Data[nextY, nextX] = new Corridor(nextY, nextX, region);
+                Data[nextY, nextX].IsVisible = true;
+                carve(nextY, nextX, region, directions);
             }
         }
 
@@ -151,7 +180,7 @@ namespace GridRL {
             }
         }
 
-        private List<int> getValidDirectionsFrom(int testX, int testY) {
+        private List<int> getValidDirectionsFrom(int testY, int testX) {
             List<int> output = new List<int>();
             if(testY - 2 > 0) {
                 if(Data[testY - 2, testX] == null) {
@@ -210,7 +239,8 @@ namespace GridRL {
                         if(Data[dY, dX] == null && Data[dY - 1, dX] != null) {
                             isConnected = true;
                             int overrideRegion = Data[dY - 1, dX].Region;
-                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX] = new Door(dY, dX, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -243,7 +273,8 @@ namespace GridRL {
                         if(Data[dY, dX] == null && Data[dY + 1, dX] != null) {
                             isConnected = true;
                             int overrideRegion = Data[dY + 1, dX].Region;
-                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX] = new Door(dY, dX, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -276,7 +307,8 @@ namespace GridRL {
                         if(Data[dY, dX] == null && Data[dY, dX - 1] != null) {
                             isConnected = true;
                             int overrideRegion = Data[dY, dX - 1].Region;
-                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX] = new Door(dY, dX, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -309,7 +341,8 @@ namespace GridRL {
                         if(Data[dY, dX] == null && Data[dY, dX + 1] != null) {
                             isConnected = true;
                             int overrideRegion = Data[dY, dX + 1].Region;
-                            Data[dY, dX] = new Door(dX, dY, overrideRegion);
+                            Data[dY, dX] = new Door(dY, dX, overrideRegion);
+                            Data[dY, dX].IsVisible = true;
                             for(int y = roomY; y < room2Y; ++y) {
                                 for(int x = roomX; x < room2X; ++x) {
                                     Data[y, x].Region = overrideRegion;
@@ -391,50 +424,58 @@ namespace GridRL {
                     if(ySafe && xSafe) {
                         // check all directions
                         if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
-                            Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            Data[y - 1, x] = new Door(y - 1, x, currentRegion);
+                            Data[y - 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
-                            Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            Data[y + 1, x] = new Door(y + 1, x, currentRegion);
+                            Data[y + 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x - 1] == null && Data[y, x - 2] != null && Data[y, x - 2].Region != currentRegion) {
-                            Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            Data[y, x - 1] = new Door(y, x - 1, currentRegion);
+                            Data[y, x - 1].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
-                            Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            Data[y, x + 1] = new Door(y, x + 1, currentRegion);
+                            Data[y, x + 1].IsVisible = true;
                             continue;
                         }
                     }
                     else if(ySafe) {
                         // check only Y
                         if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
-                            Data[y - 1, x] = new Door(x, y - 1, currentRegion);
+                            Data[y - 1, x] = new Door(y - 1, x, currentRegion);
+                            Data[y - 1, x].IsVisible = true;
                             continue;
                         }
                         else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
-                            Data[y + 1, x] = new Door(x, y + 1, currentRegion);
+                            Data[y + 1, x] = new Door(y + 1, x, currentRegion);
+                            Data[y + 1, x].IsVisible = true;
                             continue;
                         }
                     }
                     else if(xSafe) {
                         // check only x
                         if(Data[y, x - 1] == null && Data[y, x  - 2] != null && Data[y, x - 2].Region != currentRegion) {
-                            Data[y, x - 1] = new Door(x - 1, y, currentRegion);
+                            Data[y, x - 1] = new Door(y, x - 1, currentRegion);
+                            Data[y, x - 1].IsVisible = true;
                             continue;
                         }
                         else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
-                            Data[y, x + 1] = new Door(x + 1, y, currentRegion);
+                            Data[y, x + 1] = new Door(y, x + 1, currentRegion);
+                            Data[y, x + 1].IsVisible = true;
                             continue;
                         }
                     }
-                    floodFill(points[1], points[0], new int[] { 1, 2, 3, 4 });
+                    floodFill(points[0], points[1], new int[] { 1, 2, 3, 4 });
                 }
             }
         }
 
-        private void floodFill(int x, int y, int[] directions) {
+        private void floodFill(int y, int x, int[] directions) {
             if(y == 13 && x == 42) { }
             List<int> validDirs = new List<int>();
             if(Data[y - 1, x] != null && Data[y - 1, x].Region != 0) {
@@ -456,7 +497,7 @@ namespace GridRL {
                 if(nextX==41 && x == 42 && y == 13) { }
                 Data[y, x].Region = 0;
                 Data[nextY, nextX].Region = 0;
-                floodFill(nextX, nextY, directions);
+                floodFill(nextY, nextX, directions);
             }
         }
         #endregion
@@ -480,6 +521,12 @@ namespace GridRL {
                         Data[y, x].Render(g);
                     }
                 }
+            }
+            foreach(Creature c in Creatures) {
+                c.Render(g);
+            }
+            foreach(Item i in Items) {
+                i.Render(g);
             }
         }
     }

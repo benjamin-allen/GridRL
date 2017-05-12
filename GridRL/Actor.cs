@@ -13,9 +13,9 @@ namespace GridRL {
 
         /// <summary> A constructor that creates an actor with a given image and x/y coordinates. </summary>
         /// <param name="image"> The image used for this actor sprite</param>
-        /// <param name="x"> The actor's X position on the world data. </param>
         /// <param name="y"> The actor's Y position on the world data.</param>
-        public Actor(Image image, int x, int y) : base(image) {
+        /// <param name="x"> The actor's X position on the world data. </param>
+        public Actor(Image image, int y, int x) : base(image) {
             CoordX = x;
             CoordY = y;
         }
@@ -29,10 +29,10 @@ namespace GridRL {
         public string Description { get; set; } = "If you can see this, file a bug report for an improperly initialized actor.";
 
         /// <summary> A boolean that determines if the actor can collide with other actors. </summary>
-        public bool isCollidable { get; set; } = false;
+        public bool IsCollidable { get; set; } = false;
 
         /// <summary> A boolean that determines if an actor is visible. </summary>
-        public bool isVisible { get; set; } = false;
+        public bool IsVisible { get; set; } = false;
 
         private int coordX;
         private int coordY;
@@ -49,9 +49,13 @@ namespace GridRL {
             set { coordY = value; Y = coordY * Engine.spriteHeight; }
         }
 
+
+        /* Methods */
+        public virtual void OnCollide(Actor a) { }
+
         /* Overrides */
         protected override void Paint(Graphics g) {
-            if(isVisible) {
+            if(IsVisible) {
                 base.Paint(g); 
             }
         }

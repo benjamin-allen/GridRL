@@ -55,6 +55,8 @@
       <DependentUpon>Engine.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageSprite.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,7 +90,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Player.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Corridor.Png" />
   </ItemGroup>
@@ -97,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Floor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stair.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

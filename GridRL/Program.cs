@@ -1,7 +1,9 @@
 ﻿using System.Windows.Forms;
+using System;
 
 namespace GridRL {
     public class Program : Engine {
+        public static Player player = new Player(0, 0);
         public static World world = new World();
 
         static void Main() {
@@ -9,18 +11,19 @@ namespace GridRL {
         }
 
         public static void GameLoop() {
-            // call on player input
-            // update player
+            turnCount++;
             // update enemies
             // render
-
+            Console.WriteLine(turnCount);
             canvas.Update();
             form.Refresh();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
             if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); }
-            GameLoop();
+            if(player.HandleGameInput(e)) {
+                GameLoop();
+            }
         }
     }
 }

@@ -1,56 +1,27 @@
-﻿using System.Drawing;
+﻿using System.Windows.Forms;
+using System.Drawing;
 
 namespace GridRL {
 
     /// <summary> The basic definition of tiles, which make up a world. </summary>
-    public class Tile : ImageSprite{
+    public class Tile : Actor {
         /* Constructors */
-        public Tile() { }
-        
-        /// <summary> Constructs a tile with the given image. </summary>
-        /// <param name="image"> The image used for this tile's sprite. </param>
-        public Tile(Image image) : base(image) { }
-
         /// <summary> Constructs a tile with the given image and position. </summary>
         /// <param name="image">The image used for this tile's sprite. </param>
-        /// <param name="x"> The horizontal position of the tile in the world data. </param>
         /// <param name="y"> The vertical position of the tile in the world data. </param>
-        public Tile(Image image, int x, int y) : base(image) {
-            CoordX = x;
-            CoordY = y;
+        /// <param name="x"> The horizontal position of the tile in the world data. </param>
+        public Tile(Image image, int y, int x) : base(image, y, x) {
+            Name = "Dummy Tile";
+            Description = "If you can see this, file a bug report for an improperly initialized creature.";
         }
 
 
         /* Properties */
         /// <summary> Property representing whether creatures and items can be on the tile. </summary>
-        public bool IsWalkable { get; set; }
+        public bool IsWalkable { get; set; } = false;
 
-        /// <summary> Property representing whether the tile can be seen by the player. </summary>
-        public bool IsVisible { get; set; }
-
-        /// <summary> The name of the tile. </summary>
-        public string Name { get; set; }
-
-        /// <summary> An extended flavor description of the tile. </summary>
-        public string Description { get; set; }
-
-        /// <summary> Identifies tiles connected to each other. </summary>
-        public int Region { get; set; }
-
-        private int coordX;
-        private int coordY;
-
-        /// <summary> The vertical index of the tile in the world's data.</summary>
-        public int CoordX {
-            get { return coordX; }
-            set { coordX = value; X = value * Engine.spriteWidth; }
-        }
-
-        /// <summary> The vertical index of the tile in the world's data.</summary>
-        public int CoordY {
-            get { return coordY; }
-            set { coordY = value; Y = value * Engine.spriteHeight; }
-        }
+        /// <summary> Identifies tiles connected to each other. Used during mapgen. </summary>
+        public int Region { get; set; } = -1;
 
 
         /* Methods */
@@ -61,7 +32,7 @@ namespace GridRL {
 
     public class Corridor : Tile {
         /* Constructors */
-        public Corridor(int x, int y, int region) : base(Properties.Resources.Corridor, x, y) {
+        public Corridor(int y, int x, int region) : base(Properties.Resources.Corridor, y, x) {
             Name = "corridor";
             Description = "A darkened hallway that connects the many rooms of the dungeon.";
             IsWalkable = true;
@@ -71,7 +42,7 @@ namespace GridRL {
 
     public class RoomFloor : Tile {
         /* Constructors */
-        public RoomFloor(int x, int y, int region) : base(Properties.Resources.Floor, x, y) {
+        public RoomFloor(int y, int x, int region) : base(Properties.Resources.Floor, y, x) {
             Name = "floor";
             Description = "A tiled floor, cracked and worn from years of neglect.";
             IsWalkable = true;
@@ -79,13 +50,61 @@ namespace GridRL {
         }
     }
 
+    public enum DoorState { Closed, Broken, Open}
     public class Door : Tile {
         /* Constructors */
-        public Door(int x, int y, int region) : base(Properties.Resources.Door, x, y) {
+        public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
-            IsWalkable = false;
             Region = region;
+            IsCollidable = true;
+
+        }
+
+        /* Properties */
+        public DoorState DoorState { get; set; } = DoorState.Closed;
+
+        /* Overrides */
+        public override void OnCollide(Actor a) {
+            if(DoorState == DoorState.Closed) {
+                DoorState = DoorState.Open;
+                IsCollidable = false;
+                IsWalkable = true;
+            }
+        }
+    }
+
+    public enum StairType { Up, Down }
+    public class Stair : Tile {
+        /* Constructors */
+        public Stair(int y, int x, StairType s) : base(Properties.Resources.Stair, y, x) {
+            Name = "stairway";
+            StairType = s;
+            if(s == StairType.Up) {
+                Description = "A set of stairs leading up.";
+            }
+            else {
+                Description = "A set of stairs leading down.";
+            }
+            IsWalkable = true;
+        }
+
+        /* Properties */
+        public StairType StairType { get; set; }
+
+        /* Overrides */
+        public override void OnStepOn(Sprite s) {
+            if(s.GetType() == typeof(Player)) {
+                if(StairType == StairType.Up && Program.world.Level > 1) {
+                    Program.world.Level--;
+                }
+                else if(StairType == StairType.Down) {
+                    Program.world.Level++;
+                }
+                else {
+                    Application.Exit();
+                }
+            }
         }
     }
 }
