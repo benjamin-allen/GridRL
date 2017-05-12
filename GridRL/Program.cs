@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System;
 
 namespace GridRL {
     public class Program : Engine {
@@ -10,11 +11,10 @@ namespace GridRL {
         }
 
         public static void GameLoop() {
-            // call on player input
-            // update player
+            turnCount++;
             // update enemies
             // render
-
+            Console.WriteLine(turnCount);
             canvas.Update();
             form.Refresh();
         }

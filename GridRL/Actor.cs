@@ -49,6 +49,10 @@ namespace GridRL {
             set { coordY = value; Y = coordY * Engine.spriteHeight; }
         }
 
+
+        /* Methods */
+        public virtual void OnCollide(Actor a) { }
+
         /* Overrides */
         protected override void Paint(Graphics g) {
             if(IsVisible) {

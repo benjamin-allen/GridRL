@@ -10,6 +10,7 @@ namespace GridRL {
         public static int tilesWide = 80;
         public static int tilesHigh = 45;
         public static Random rand = new Random(1);
+        public static int turnCount = 0;
 
         public Engine() {
             form = this;

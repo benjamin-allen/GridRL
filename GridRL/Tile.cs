@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Windows.Forms;
+using System.Drawing;
 
 namespace GridRL {
 
@@ -49,12 +50,27 @@ namespace GridRL {
         }
     }
 
+    public enum DoorState { Closed, Broken, Open}
     public class Door : Tile {
         /* Constructors */
         public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
             Region = region;
+            IsCollidable = true;
+
+        }
+
+        /* Properties */
+        public DoorState DoorState { get; set; } = DoorState.Closed;
+
+        /* Overrides */
+        public override void OnCollide(Actor a) {
+            if(DoorState == DoorState.Closed) {
+                DoorState = DoorState.Open;
+                IsCollidable = false;
+                IsWalkable = true;
+            }
         }
     }
 
@@ -75,5 +91,20 @@ namespace GridRL {
 
         /* Properties */
         public StairType StairType { get; set; }
+
+        /* Overrides */
+        public override void OnStepOn(Sprite s) {
+            if(s.GetType() == typeof(Player)) {
+                if(StairType == StairType.Up && Program.world.Level > 1) {
+                    Program.world.Level--;
+                }
+                else if(StairType == StairType.Down) {
+                    Program.world.Level++;
+                }
+                else {
+                    Application.Exit();
+                }
+            }
+        }
     }
 }
