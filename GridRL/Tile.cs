@@ -54,8 +54,26 @@ namespace GridRL {
         public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
-            IsWalkable = false;
             Region = region;
         }
+    }
+
+    public enum StairType { Up, Down }
+    public class Stair : Tile {
+        /* Constructors */
+        public Stair(int y, int x, StairType s) : base(Properties.Resources.Stair, y, x) {
+            Name = "stairway";
+            StairType = s;
+            if(s == StairType.Up) {
+                Description = "A set of stairs leading up.";
+            }
+            else {
+                Description = "A set of stairs leading down.";
+            }
+            IsWalkable = true;
+        }
+
+        /* Properties */
+        public StairType StairType { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace GridRL {
     public class Program : Engine {
+        public static Player player = new Player(0, 0);
         public static World world = new World();
 
         static void Main() {
@@ -20,7 +21,9 @@ namespace GridRL {
 
         protected override void OnKeyDown(KeyEventArgs e) {
             if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); }
-            GameLoop();
+            if(player.HandleGameInput(e)) {
+                GameLoop();
+            }
         }
     }
 }

@@ -22,11 +22,17 @@ namespace GridRL {
             set { Data[y, x] = value; }
         }
 
+        public List<Creature> Creatures { get; set; }
+
+        public List<Item> Items { get; set; }
+
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
         /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
         public virtual void GenerateLevel() {
             Program.canvas.Remove(this);
+            Creatures = new List<Creature>();
+            Items = new List<Item>();
             int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             Data = new Tile[Data.GetLength(0), Data.GetLength(1)];
             int regionID = 0;
@@ -101,6 +107,25 @@ namespace GridRL {
                 floodFill(regionLocations[0][0], regionLocations[0][1], directions);
                 regionLocations = getRegionLocations();
             }
+
+            int entryRoom = Engine.rand.Next(0, roomPoints.Count);
+            int exitRoom = Engine.rand.Next(0, roomPoints.Count);
+            if(entryRoom == exitRoom && roomPoints.Count > 1) {
+                exitRoom = (exitRoom + 1) % roomPoints.Count;
+            }
+            int entryY = Engine.rand.Next(roomPoints[entryRoom][0], roomPoints[entryRoom][2]);
+            int entryX = Engine.rand.Next(roomPoints[entryRoom][1], roomPoints[entryRoom][1]);
+            int exitY = Engine.rand.Next(roomPoints[exitRoom][0], roomPoints[exitRoom][2]);
+            int exitX = Engine.rand.Next(roomPoints[exitRoom][1], roomPoints[exitRoom][3]);
+            Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
+            Data[entryY, entryX].IsVisible = true;
+            Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
+            Data[exitY, exitX].IsVisible = true;
+
+            Program.player.CoordX = entryX;
+            Program.player.CoordY = entryY;
+            Creatures.Add(Program.player);
+
             Program.canvas.Add(this);
         }
 
@@ -496,6 +521,12 @@ namespace GridRL {
                         Data[y, x].Render(g);
                     }
                 }
+            }
+            foreach(Creature c in Creatures) {
+                c.Render(g);
+            }
+            foreach(Item i in Items) {
+                i.Render(g);
             }
         }
     }
