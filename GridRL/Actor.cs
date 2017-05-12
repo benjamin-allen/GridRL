@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 
 
 namespace GridRL {
+
+    public enum Direction { Up, Down, Left, Right }
+
     /// <summary> A base class for anything that exists on the world. </summary>
     public class Actor : ImageSprite {
 
@@ -52,6 +56,49 @@ namespace GridRL {
 
         /* Methods */
         public virtual void OnCollide(Actor a) { }
+
+        public bool CanAccess(Direction d, int magnitude = 1) {
+            bool output = false;
+            magnitude = Math.Abs(magnitude);
+            if(d == Direction.Up) {
+                output = Program.world.Data[CoordY - (1 * magnitude), CoordX] == null ? false : true;
+            }
+            else if(d == Direction.Down) {
+                output = Program.world.Data[CoordY + (1 * magnitude), CoordX] == null ? false : true;
+            }
+            else if(d == Direction.Left) {
+                output = Program.world.Data[CoordY, CoordX - (1 * magnitude)] == null ? false : true;
+            }
+            else if(d == Direction.Right) {
+                output = Program.world.Data[CoordY, CoordX + (1 * magnitude)] == null ? false : true;
+            }
+            return output;
+        }
+
+        public bool WillCollideWith(Actor a) {
+            bool output = false;
+            if(a.IsCollidable && IsCollidable) {
+                output = true;
+            }
+            return output; 
+        }
+
+        public List<int> DirectionToPoints(Direction d) {
+            List<int> output = new List<int>(new int[] { CoordY, CoordX });
+            if(d == Direction.Up) {
+                output[0]--;
+            }
+            else if(d == Direction.Down) {
+                output[0]++;
+            }
+            else if(d == Direction.Left) {
+                output[1]--;
+            }
+            else if(d == Direction.Right) {
+                output[1]++;
+            }
+            return output;
+        }
 
         /* Overrides */
         protected override void Paint(Graphics g) {

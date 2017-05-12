@@ -20,7 +20,7 @@ namespace GridRL {
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
-            if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); }
+            if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); GameLoop(); }
             if(player.HandleGameInput(e)) {
                 GameLoop();
             }

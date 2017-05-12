@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace GridRL {
     public class Player : Creature {
@@ -15,83 +16,46 @@ namespace GridRL {
 
         /* Methods */
         public bool HandleGameInput(KeyEventArgs e) {
-            if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8) {
-                if(Program.world.Data[CoordY - 1, CoordX] != null) {
+            if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2
+            || e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6) {
+                Direction dir = KeyPressToDirection(e);
+                if(CanAccess(dir)) {
+                    List<int> points = DirectionToPoints(dir);
                     foreach(Creature c in Program.world.Creatures) {
-                        if(c.CoordY == CoordY - 1 && c.CoordX == CoordX && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
+                        if(c != this && WillCollideWith(c) && c.CoordY == CoordY && c.CoordX == CoordX) {
+                            c.OnCollide(this);
                             return true;
                         }
                     }
-                    if(Program.world.Data[CoordY - 1, CoordX].IsCollidable) {
-                        Program.world.Data[CoordY - 1, CoordX].OnCollide(this);
+                    if(WillCollideWith(Program.world.Data[points[0], points[1]])) {
+                        Program.world.Data[points[0], points[1]].OnCollide(this);
                         return true;
                     }
-                    else if(Program.world.Data[CoordY - 1, CoordX].IsWalkable) {
-                        CoordY -= 1;
-                        Program.world.Data[CoordY, CoordX].OnStepOn(this);
-                        return true;
-                    }
-                }
-            }
-            else if(e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2) {
-                if(Program.world.Data[CoordY + 1, CoordX] != null) {
-                    foreach(Creature c in Program.world.Creatures) {
-                        if(c.CoordY == CoordY + 1 && c.CoordX == CoordX && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
-                            return true;
-                        }
-                    }
-                    if(Program.world.Data[CoordY + 1, CoordX].IsCollidable) {
-                        Program.world.Data[CoordY + 1, CoordX].OnCollide(this);
-                        return true;
-                    }
-                    else if(Program.world.Data[CoordY + 1, CoordX].IsWalkable) {
-                        CoordY += 1;
-                        Program.world.Data[CoordY, CoordX].OnStepOn(this);
-                        return true;
-                    }
-                }
-            }
-            else if(e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4) {
-                if(Program.world.Data[CoordY, CoordX - 1] != null) {
-                    foreach(Creature c in Program.world.Creatures) {
-                        if(c.CoordY == CoordY && c.CoordX == CoordX - 1 && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
-                            return true;
-                        }
-                    }
-                    if(Program.world.Data[CoordY, CoordX - 1].IsCollidable) {
-                        Program.world.Data[CoordY, CoordX - 1].OnCollide(this);
-                        return true;
-                    }
-                    else if(Program.world.Data[CoordY, CoordX - 1].IsWalkable) {
-                        CoordX -= 1;
-                        Program.world.Data[CoordY, CoordX].OnStepOn(this);
-                        return true;
-                    }
-                }
-            }
-            else if(e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6) {
-                if(Program.world.Data[CoordY, CoordX + 1] != null) {
-                    foreach(Creature c in Program.world.Creatures) {
-                        if(c.CoordY == CoordY && c.CoordX == CoordX + 1 && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
-                            return true;
-                        }
-                    }
-                    if(Program.world.Data[CoordY, CoordX + 1].IsCollidable) {
-                        Program.world.Data[CoordY, CoordX + 1].OnCollide(this);
-                        return true;
-                    }
-                    else if(Program.world.Data[CoordY, CoordX + 1].IsWalkable) {
-                        CoordX += 1;
-                        Program.world.Data[CoordY, CoordX].OnStepOn(this);
+                    else if(Program.world.Data[points[0], points[1]].IsWalkable) {
+                        CoordY = points[0];
+                        CoordX = points[1];
+                        Program.world.Data[points[0], points[1]].OnStepOn(this);
                         return true;
                     }
                 }
             }
             return false;
+        }
+
+
+        private Direction KeyPressToDirection(KeyEventArgs e) {
+            if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8) {
+                return Direction.Up;
+            }
+            else if(e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2) {
+                return Direction.Down;
+            }
+            else if(e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4) {
+                return Direction.Left;
+            }
+            else {
+                return Direction.Right;
+            }
         }
     }
 }
