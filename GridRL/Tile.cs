@@ -97,9 +97,11 @@ namespace GridRL {
             if(s.GetType() == typeof(Player)) {
                 if(StairType == StairType.Up && Program.world.Level > 1) {
                     Program.world.Level--;
+                    Program.world.GenerateLevel();
                 }
                 else if(StairType == StairType.Down) {
                     Program.world.Level++;
+                    Program.world.GenerateLevel();
                 }
                 else {
                     Application.Exit();
