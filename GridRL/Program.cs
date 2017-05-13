@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 using System;
 
 namespace GridRL {
@@ -23,6 +24,16 @@ namespace GridRL {
             if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); GameLoop(); }
             if(player.HandleGameInput(e)) {
                 GameLoop();
+            }
+        }
+
+        public static void Shuffle<T>(List<T> list) {
+            int n = list.Count;
+            for(int i = 0; i < n; i++) {
+                int r = i + (int)(rand.NextDouble() * (n - i));
+                T t = list[r];
+                list[r] = list[i];
+                list[i] = t;
             }
         }
     }

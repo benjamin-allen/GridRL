@@ -4,8 +4,11 @@ using System.Drawing;
 using System.Linq;
 
 namespace GridRL {
+
+    public enum WorldType { Dungeon }
+
     /// <summary> A class containing an array of tiles and a level counter. </summary>
-    public class World : Sprite {
+    public partial class World : Sprite {
         /* Constructors */
         public World() { GenerateLevel(); }
 
@@ -21,6 +24,12 @@ namespace GridRL {
             get { return Data[y, x]; }
             set { Data[y, x] = value; }
         }
+
+        public WorldType WorldType { get; set; }
+
+        public List<List<int>> RoomPoints { get; set; }
+
+        public int LastRegionID { get; set; } = 0;
 
         public List<Creature> Creatures { get; set; }
 

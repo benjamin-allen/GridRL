@@ -83,19 +83,21 @@ namespace GridRL {
             return output; 
         }
 
-        public List<int> DirectionToPoints(Direction d) {
+        public List<int> DirectionToPoints(Direction d, int magnitude = 1) {
             List<int> output = new List<int>(new int[] { CoordY, CoordX });
+            magnitude = Math.Abs(magnitude);
             if(d == Direction.Up) {
-                output[0]--;
+                output[0] = output[0] - (1 * magnitude);
             }
             else if(d == Direction.Down) {
-                output[0]++;
+                output[0] = output[0] + (1 * magnitude);
+                ;
             }
             else if(d == Direction.Left) {
-                output[1]--;
+                output[1] = output[1] - (1 * magnitude);
             }
             else if(d == Direction.Right) {
-                output[1]++;
+                output[1] = output[1] + (1 * magnitude);
             }
             return output;
         }
