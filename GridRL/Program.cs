@@ -8,6 +8,7 @@ namespace GridRL {
         public static World world = new World();
 
         static void Main() {
+            world.GenerateLevel();
             Application.Run(new Program());
         }
 

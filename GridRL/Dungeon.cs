@@ -8,7 +8,7 @@ namespace GridRL {
             GenerateRooms();
             GenerateMaze();
             foreach(List<int> pointSet in RoomPoints) {
-                makeDoor(pointSet);
+                MakeDoor(pointSet);
             }
 
             for(int i = 0; i < 50; i++) {
@@ -17,20 +17,34 @@ namespace GridRL {
                     Data[endPoints[0], endPoints[1]] = null;
                 }
             }
-            // floodfill checks
-            List<List<int>> regionLocations = getRegionLocations();
 
+            List<List<int>> regionLocations = GetRegionLocations();
             while(regionLocations.Count > 1) {
-                connectRegions(regionLocations);
-                floodFill(regionLocations[0][0], regionLocations[0][1], directions);
-                regionLocations = getRegionLocations();
+                ConnectRegions(regionLocations);
+                FloodFill(regionLocations[0][0], regionLocations[0][1]);
+                regionLocations = GetRegionLocations();
             }
-            // populate stairs
+
+            int entryRoom = Engine.rand.Next(0, RoomPoints.Count);
+            int exitRoom = Engine.rand.Next(0, RoomPoints.Count);
+            if(entryRoom == exitRoom && RoomPoints.Count > 1) {
+                exitRoom = (exitRoom + 1) % RoomPoints.Count;
+            }
+            int entryY = Engine.rand.Next(RoomPoints[entryRoom][0], RoomPoints[entryRoom][2]);
+            int entryX = Engine.rand.Next(RoomPoints[entryRoom][1], RoomPoints[entryRoom][1]);
+            int exitY = Engine.rand.Next(RoomPoints[exitRoom][0], RoomPoints[exitRoom][2]);
+            int exitX = Engine.rand.Next(RoomPoints[exitRoom][1], RoomPoints[exitRoom][3]);
+            Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
+            Data[entryY, entryX].IsVisible = true;
+            Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
+            Data[exitY, exitX].IsVisible = true;
+
+            Program.player.CoordX = entryX;
+            Program.player.CoordY = entryY;
         }
 
-
         protected void GenerateRooms() {
-            int roomCount = (int)Math.Ceiling((4 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
+            int roomCount = (int)Math.Ceiling((8 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             LastRegionID = 0;
             for(int i = 0; i < roomCount; ++i) {
                 List<int> points = new List<int>();
@@ -44,7 +58,7 @@ namespace GridRL {
                     RoomPoints.Add(points);
                 }
                 else {
-                    if(Engine.rand.NextDouble() < .1) {
+                    if(Engine.rand.NextDouble() < .2 || i == roomCount - 1) {
                         BuildRoom(points, LastRegionID);
                         RoomPoints.Add(points);
                     }
@@ -85,6 +99,7 @@ namespace GridRL {
             if(validDirs.Count == 0) {
                 return;
             }
+            Program.Shuffle(validDirs);
             foreach(Direction d in validDirs) {
                 if(Data[points[0], points[1]].CanAccess(d, 2)) {
                     continue;
@@ -100,13 +115,19 @@ namespace GridRL {
         }
 
         private bool CheckForRoomOverlap(List<int> points) {
-            for(int i = points[0]; i < points[2]; ++i) {
-                if(Data[i, points[1]] != null || Data[i, points[3]] != null) {
+            for(int i = points[0]; i < points[2]; i += 2) {
+                if(Data[i, points[1]] == null && Data[i, points[3]] == null) {
+                    continue;
+                }
+                else {
                     return true;
                 }
             }
-            for(int i = points[1]; i < points[3]; ++i) {
-                if(Data[points[0], i] != null || Data[points[3], i] != null) {
+            for(int i = points[1]; i < points[3]; i += 2) {
+                if(Data[points[0], i] == null && Data[points[2], i] == null) {
+                    continue;
+                }
+                else {
                     return true;
                 }
             }
@@ -155,33 +176,35 @@ namespace GridRL {
         private List<int> DirectionToDoorPoints(Direction d, List<int> points) {
             int roomH = points[2] - points[0];
             int roomW = points[3] - points[1];
-            int doorY = 0;
-            int doorX = 0;
+            int testY = 0;
+            int testX = 0;
             bool upOrDown = false;
             if(d == Direction.Down || d == Direction.Up) {
                 upOrDown = true;
-                if(d == Direction.Down) { doorY = points[2]; }
-                doorX = points[1] + Engine.rand.Next(0, roomW);
+                testY = points[0];
+                if(d == Direction.Down) { testY = points[2] - 1; }
+                testX = points[1] + Engine.rand.Next(0, roomW);
             }
             else if(d == Direction.Left || d == Direction.Right) {
-                if(d == Direction.Right) { doorX = points[3]; }
-                doorY = points[0] + Engine.rand.Next(0, roomH);
+                testX = points[1];
+                if(d == Direction.Right) { testX = points[3] - 1; }
+                testY = points[0] + Engine.rand.Next(0, roomH);
             }
-            while(!Data[doorY, doorX].CanAccess(d)) {
+            while(!Data[testY, testX].CanAccess(d, 2)) {
                 if(upOrDown) {
-                    doorX++;
-                    if(doorX > points[3]) {
-                        doorX = points[1];
+                    testX++;
+                    if(testX >= points[3]) {
+                        testX = points[1];
                     }
                 }
                 else {
-                    doorY++;
-                    if(doorY > points[2]) {
-                        doorY = points[0];
+                    testY++;
+                    if(testY >= points[2]) {
+                        testY = points[0];
                     }
                 }
             }
-            return new List<int>(new int[] { doorY, doorX });
+            return Data[testY, testX].DirectionToPoints(d);
         }
 
         private void MakeDoor(List<int> points) {
@@ -199,10 +222,11 @@ namespace GridRL {
                         continue;
                     }
                     isConnected = true;
+                    Data[doorPoints[0], doorPoints[1]] = new Door(doorPoints[0], doorPoints[1], -1);
                     List<int> otherArea = Data[doorPoints[0], doorPoints[1]].DirectionToPoints(d);
                     int overrideRegion = Data[otherArea[0], otherArea[1]].Region;
-                    Data[doorPoints[0], doorPoints[1]] = new Door(doorPoints[0], doorPoints[1], overrideRegion);
                     Data[doorPoints[0], doorPoints[1]].IsVisible = true;
+                    Data[doorPoints[0], doorPoints[1]].Region = overrideRegion;
                     for(int y = roomY; y < room2Y; ++y) {
                         for(int x = roomX; x < room2X; ++x) {
                             Data[y, x].Region = overrideRegion;
@@ -236,7 +260,7 @@ namespace GridRL {
             return output;
         }
 
-        private List<List<int>> getRegionLocations() {
+        private List<List<int>> GetRegionLocations() {
             List<List<int>> regionLocs = new List<List<int>>();
             List<int> regionIDs = new List<int>();
             for(int y = 1; y < Data.GetLength(0) - 1; y += 2) {
@@ -253,7 +277,8 @@ namespace GridRL {
             return regionLocs;
         }
 
-        private void connectRegions(List<List<int>> regionLocations) {
+        private void ConnectRegions(List<List<int>> regionLocations) {
+            List<Direction> dirs = new List<Direction>();
             foreach(List<int> points in regionLocations) {
                 if(points[2] != regionLocations[0][2]) {
                     int y = points[0];
@@ -262,84 +287,44 @@ namespace GridRL {
                     bool xSafe = x > 3 && x < Data.GetLength(1) - 3;
                     int currentRegion = Data[y, x].Region;
                     int masterRegion = regionLocations[0][2];
-                    //List<int> possibleConnections = new List<int>();
                     if(ySafe && xSafe) {
-                        // check all directions
-                        if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
-                            Data[y - 1, x] = new Door(y - 1, x, currentRegion);
-                            Data[y - 1, x].IsVisible = true;
-                            continue;
-                        }
-                        else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
-                            Data[y + 1, x] = new Door(y + 1, x, currentRegion);
-                            Data[y + 1, x].IsVisible = true;
-                            continue;
-                        }
-                        else if(Data[y, x - 1] == null && Data[y, x - 2] != null && Data[y, x - 2].Region != currentRegion) {
-                            Data[y, x - 1] = new Door(y, x - 1, currentRegion);
-                            Data[y, x - 1].IsVisible = true;
-                            continue;
-                        }
-                        else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
-                            Data[y, x + 1] = new Door(y, x + 1, currentRegion);
-                            Data[y, x + 1].IsVisible = true;
-                            continue;
-                        }
+                        dirs = new List<Direction>(new Direction[] { Direction.Up, Direction.Down, Direction.Left, Direction.Right });
                     }
                     else if(ySafe) {
-                        // check only Y
-                        if(Data[y - 1, x] == null && Data[y - 2, x] != null && Data[y - 2, x].Region != currentRegion) {
-                            Data[y - 1, x] = new Door(y - 1, x, currentRegion);
-                            Data[y - 1, x].IsVisible = true;
-                            continue;
-                        }
-                        else if(Data[y + 1, x] == null && Data[y + 2, x] != null && Data[y + 2, x].Region != currentRegion) {
-                            Data[y + 1, x] = new Door(y + 1, x, currentRegion);
-                            Data[y + 1, x].IsVisible = true;
+                        dirs = new List<Direction>(new Direction[] { Direction.Up, Direction.Down });
+                    }
+                    else if (xSafe) {
+                        dirs = new List<Direction>(new Direction[] { Direction.Left, Direction.Right });
+                    }
+                    Program.Shuffle(dirs);
+                    foreach(Direction d in dirs) {
+                        List<int> masterRegionPoints = Data[y, x].DirectionToPoints(d, 2);
+                        List<int> connectPoints = Data[y, x].DirectionToPoints(d, 1);
+                        if(!Data[y,x].CanAccess(d, 1) && Data[y,x].CanAccess(d, 2) && Data[masterRegionPoints[0], masterRegionPoints[1]].Region != currentRegion) {
+                            Data[connectPoints[0], connectPoints[1]] = new Door(connectPoints[0], connectPoints[1], currentRegion);
+                            Data[connectPoints[0], connectPoints[1]].IsVisible = true;
                             continue;
                         }
                     }
-                    else if(xSafe) {
-                        // check only x
-                        if(Data[y, x - 1] == null && Data[y, x - 2] != null && Data[y, x - 2].Region != currentRegion) {
-                            Data[y, x - 1] = new Door(y, x - 1, currentRegion);
-                            Data[y, x - 1].IsVisible = true;
-                            continue;
-                        }
-                        else if(Data[y, x + 1] == null && Data[y, x + 2] != null && Data[y, x + 2].Region != currentRegion) {
-                            Data[y, x + 1] = new Door(y, x + 1, currentRegion);
-                            Data[y, x + 1].IsVisible = true;
-                            continue;
-                        }
-                    }
-                    floodFill(points[0], points[1], new int[] { 1, 2, 3, 4 });
+                    FloodFill(points[0], points[1]);
                 }
             }
         }
 
-        private void floodFill(int y, int x, int[] directions) {
-            if(y == 13 && x == 42) { }
-            List<int> validDirs = new List<int>();
-            if(Data[y - 1, x] != null && Data[y - 1, x].Region != 0) {
-                validDirs.Add(0);
+        private void FloodFill(int y, int x) {
+            List<Direction> validDirs = new List<Direction>();
+            var dirs = Enum.GetValues(typeof(Direction));
+            foreach(Direction d in dirs) {
+                List<int> points = Data[y, x].DirectionToPoints(d);
+                if(Data[points[0], points[1]] != null && Data[points[0], points[1]].Region != 0) {
+                    validDirs.Add(d);
+                }
             }
-            if(Data[y + 1, x] != null && Data[y + 1, x].Region != 0) {
-                validDirs.Add(1);
-            }
-            if(Data[y, x - 1] != null && Data[y, x - 1].Region != 0) {
-                validDirs.Add(2);
-            }
-            if(Data[y, x + 1] != null && Data[y, x + 1].Region != 0) {
-                validDirs.Add(3);
-            }
-            foreach(int dir in validDirs) {
-                int[] direction = dydx(directions[dir]);
-                int nextY = y + direction[0];
-                int nextX = x + direction[1];
-                if(nextX == 41 && x == 42 && y == 13) { }
+            foreach(Direction dir in validDirs) {
+                List<int> points = Data[y, x].DirectionToPoints(dir);
                 Data[y, x].Region = 0;
-                Data[nextY, nextX].Region = 0;
-                floodFill(nextY, nextX, directions);
+                Data[points[0], points[1]].Region = 0;
+                FloodFill(points[0], points[1]);
             }
         }
     }
