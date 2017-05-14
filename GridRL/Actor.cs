@@ -55,8 +55,14 @@ namespace GridRL {
 
 
         /* Methods */
+        /// <summary> Virtual function to be called when two actors collide. </summary>
+        /// <param name="a"> The actor colliding with this actor. </param>
         public virtual void OnCollide(Actor a) { }
 
+        /// <summary> Checks if this actor can access a position on the world's data array. </summary>
+        /// <param name="d"> The direction to check. </param>
+        /// <param name="magnitude"> The distance from this actor to check. </param>
+        /// <returns> A bool representing whether this actor can access the data at the specified direction and magnitude. </returns>
         public bool CanAccess(Direction d, int magnitude = 1) {
             bool output = false;
             magnitude = Math.Abs(magnitude);
@@ -75,6 +81,9 @@ namespace GridRL {
             return output;
         }
 
+        /// <summary> Checks if this actor will collide with the specified actor. Does not perform location checks. </summary>
+        /// <param name="a"> The actor to check for collision against. </param>
+        /// <returns> A bool representing whether these actors can collide with each other. </returns>
         public bool WillCollideWith(Actor a) {
             bool output = false;
             if(a.IsCollidable && IsCollidable) {
@@ -83,6 +92,10 @@ namespace GridRL {
             return output; 
         }
 
+        /// <summary> Calculates coordinates. </summary>
+        /// <param name="d"> The direction of movement. </param>
+        /// <param name="magnitude"> The distance to calculate to. </param>
+        /// <returns> The Y and X coordinates of the pathed point. </returns>
         public List<int> DirectionToPoints(Direction d, int magnitude = 1) {
             List<int> output = new List<int>(new int[] { CoordY, CoordX });
             magnitude = Math.Abs(magnitude);
