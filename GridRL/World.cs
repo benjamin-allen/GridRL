@@ -26,20 +26,27 @@ namespace GridRL {
             set { Data[y, x] = value; }
         }
 
+        /// <summary> Used to determine the worldgen code to be run. </summary>
         public WorldType WorldType { get; set; }
 
+        /// <summary> World-specific list of all room locations. </summary>
         public List<List<int>> RoomPoints { get; set; }
 
+        /// <summary> The last region to be placed. </summary>
+        /// <remarks> -1 is considered placeholder, 0 is for final floodfill. </remarks>
         public int LastRegionID { get; set; } = 0;
 
+        /// <summary> List of all creatures located in the level. </summary>
         public List<Creature> Creatures { get; set; }
 
+        /// <summary> List of all items located in the level. </summary>
         public List<Item> Items { get; set; }
 
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
         /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
         public virtual void GenerateLevel() {
+            // Clean up the old world data
             Program.canvas.Remove(this);
             for(int y = 0; y < Data.GetLength(0); ++y) {
                 for(int x = 0; x < Data.GetLength(1); ++x) {
@@ -49,9 +56,11 @@ namespace GridRL {
             Creatures = new List<Creature>();
             Items = new List<Item>();
             RoomPoints = new List<List<int>>();
+            // Generate the new world
             if(WorldType == WorldType.Dungeon) {
                 GenerateDungeon();
             }
+            // Add the world to the canvas
             Creatures.Add(Program.player);
             Program.canvas.Add(this);
         }

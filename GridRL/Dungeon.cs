@@ -4,27 +4,28 @@ using System.Collections.Generic;
 namespace GridRL {
     public partial class World {
         /* Methods */
+        /// <summary> Populates a dungeon-like map. </summary>
         private void GenerateDungeon() {
             GenerateRooms();
             GenerateMaze();
             foreach(List<int> pointSet in RoomPoints) {
                 MakeDoor(pointSet);
             }
-
+            // Retract the maze starting at the dead ends
             for(int i = 0; i < 50; i++) {
                 List<List<int>> mazeEnds = GetMazeEndPoints();
                 foreach(List<int> endPoints in mazeEnds) {
                     Data[endPoints[0], endPoints[1]] = null;
                 }
             }
-
+            // Ensure that all regions are connected (i.e. only one region)
             List<List<int>> regionLocations = GetRegionLocations();
             while(regionLocations.Count > 1) {
                 ConnectRegions(regionLocations);
                 FloodFill(regionLocations[0][0], regionLocations[0][1]);
                 regionLocations = GetRegionLocations();
             }
-
+            // Place the stairs to get out of the dungeon
             int entryRoom = Engine.rand.Next(0, RoomPoints.Count);
             int exitRoom = Engine.rand.Next(0, RoomPoints.Count);
             if(entryRoom == exitRoom && RoomPoints.Count > 1) {
@@ -43,7 +44,9 @@ namespace GridRL {
             Program.player.CoordY = entryY;
         }
 
-        protected void GenerateRooms() {
+        /// <summary> Builds the rooms of the dungeon. </summary>
+        private void GenerateRooms() {
+            // This is a curve so that more rooms are built as the level increases. 
             int roomCount = (int)Math.Ceiling((8 * Level * Math.Sqrt(Level)) + Engine.rand.Next(5, 9)) / Level;
             LastRegionID = 0;
             for(int i = 0; i < roomCount; ++i) {
@@ -52,13 +55,16 @@ namespace GridRL {
                 points.Add((Engine.rand.Next(1, 26) * 2) + 1); // max width of room is 10. std rand limit is 26 but rand is exclusive
                 points.Add(points[0] + ((Engine.rand.Next(2, 4) * 2) + 1));
                 points.Add(points[1] + ((Engine.rand.Next(2, 4) * 2) + 1));
+                // Place a room if there's no overlap
                 if(!CheckForRoomOverlap(points)) {
                     LastRegionID++;
                     BuildRoom(points, LastRegionID);
                     RoomPoints.Add(points);
                 }
+                // Otherwise place it 1/5 of the time even if there is an overlap
                 else {
                     if(Engine.rand.NextDouble() < .2 || i == roomCount - 1) {
+                        LastRegionID++;
                         BuildRoom(points, LastRegionID);
                         RoomPoints.Add(points);
                     }
@@ -66,13 +72,16 @@ namespace GridRL {
             }
         }
 
-        protected void GenerateMaze() {
+        /// <summary> Generates a new maze at the new maze location. </summary>
+        private void GenerateMaze() {
             List<int> mazePoints = new List<int>();
             while(true) {
                 mazePoints = GetMazeStartPoints();
+                // if there's nowhere to start a maze
                 if(mazePoints[0] == 0 || mazePoints[1] == 0) {
                     break;
                 }
+                // otherwise, start a maze
                 else {
                     LastRegionID++;
                     Carve(mazePoints, LastRegionID);
@@ -80,7 +89,9 @@ namespace GridRL {
             }
         }
 
-
+        /// <summary> Places a room at the specified points. </summary>/summary>
+        /// <param name="points"> The points of the room. </param>
+        /// <param name="region"> The region to be used for the new room. </param>
         private void BuildRoom(List<int> points, int region) {
             for(int y = points[0]; y < points[2]; ++y) {
                 for(int x = points[1]; x < points[3]; ++x) {
@@ -90,15 +101,21 @@ namespace GridRL {
             }
         }
 
+        /// <summary> RBT maze generation function. </summary>
+        /// <param name="points"> Points to carve. </param>
+        /// <param name="region"> Region to use for this maze. </param>
         private void Carve(List<int> points, int region) {
+            // Make a corridor at the points if it's null
             if(Data[points[0], points[1]] == null) {
                 Data[points[0], points[1]] = new Corridor(points[0], points[1], region);
                 Data[points[0], points[1]].IsVisible = true;
             }
+            // Check to see if any carving can be done
             List<Direction> validDirs = GetValidDirectionsFrom(points[0], points[1]);
             if(validDirs.Count == 0) {
                 return;
             }
+            // If so, shuffle directions, pick each direction, place corridors, and call Carve()
             Program.Shuffle(validDirs);
             foreach(Direction d in validDirs) {
                 if(Data[points[0], points[1]].CanAccess(d, 2)) {
@@ -113,8 +130,12 @@ namespace GridRL {
                 Carve(nextPoints, region);
             }
         }
-
+        /// <summary> Helper function for room placement. Checks if the edges of the room made by the points overlap
+        ///           with any other room. </summary>
+        /// <param name="points"> The points of the room to be tested</param>
+        /// <returns> A boolean indicating whether rooms overlap or not. </returns>
         private bool CheckForRoomOverlap(List<int> points) {
+            // Check the horizontal edges
             for(int i = points[0]; i < points[2]; i += 2) {
                 if(Data[i, points[1]] == null && Data[i, points[3]] == null) {
                     continue;
@@ -123,6 +144,7 @@ namespace GridRL {
                     return true;
                 }
             }
+            // Check the vertical edges
             for(int i = points[1]; i < points[3]; i += 2) {
                 if(Data[points[0], i] == null && Data[points[2], i] == null) {
                     continue;
@@ -134,6 +156,8 @@ namespace GridRL {
             return false;
         }
 
+        /// <summary> Finds the first available maze start location. </summary>
+        /// <returns> The points to begin the new maze at. </returns>
         private List<int> GetMazeStartPoints() {
             List<int> output = new List<int>(new int[] { 0, 0 });
             for(int y = 1; y < Data.GetLength(0); y += 2) {
@@ -148,6 +172,10 @@ namespace GridRL {
             return output;
         }
 
+        /// <summary> Helper function for Carve. Takes input points and checks for empty data.  </summary>
+        /// <param name="testY"> Y coordinate of current Carve call. </param>
+        /// <param name="testX"> X coordinate of current Carve call. </param>
+        /// <returns> List of valid directions to carve in. </returns>
         private List<Direction> GetValidDirectionsFrom(int testY, int testX) {
             List<Direction> output = new List<Direction>();
             if(testY - 2 > 0) {
@@ -173,6 +201,10 @@ namespace GridRL {
             return output;
         }
 
+        /// <summary> Helper function for MakeDoor(). Calculates a position for attaching a door to a room. </summary>
+        /// <param name="d"> The direction being tested. </param>
+        /// <param name="points"> The RoomPoints data for this room. </param>
+        /// <returns> The two points to place the door at. </returns>
         private List<int> DirectionToDoorPoints(Direction d, List<int> points) {
             int roomH = points[2] - points[0];
             int roomW = points[3] - points[1];
@@ -190,6 +222,7 @@ namespace GridRL {
                 if(d == Direction.Right) { testX = points[3] - 1; }
                 testY = points[0] + Engine.rand.Next(0, roomH);
             }
+            // If a door connection would not actually connect two areas.
             while(!Data[testY, testX].CanAccess(d, 2)) {
                 if(upOrDown) {
                     testX++;
@@ -207,12 +240,15 @@ namespace GridRL {
             return Data[testY, testX].DirectionToPoints(d);
         }
 
+        /// <summary> Places a door on the side of a room. </summary>
+        /// <param name="points"> The RoomPoints of the room. </param>
         private void MakeDoor(List<int> points) {
             int roomY = points[0];
             int roomX = points[1];
             int room2Y = points[2];
             int room2X = points[3];
             bool isConnected = false;
+            // Try each wall randomly
             List<Direction> walls = new List<Direction>(new Direction[] { Direction.Up, Direction.Down, Direction.Left, Direction.Right });
             Program.Shuffle(walls);
             foreach(Direction d in walls) {
@@ -227,11 +263,13 @@ namespace GridRL {
                     int overrideRegion = Data[otherArea[0], otherArea[1]].Region;
                     Data[doorPoints[0], doorPoints[1]].IsVisible = true;
                     Data[doorPoints[0], doorPoints[1]].Region = overrideRegion;
+                    // Once the door is in place, flood the room with the new region to represent attachment
                     for(int y = roomY; y < room2Y; ++y) {
                         for(int x = roomX; x < room2X; ++x) {
                             Data[y, x].Region = overrideRegion;
                         }
                     }
+                    // Have a small chance to place another door
                     if(Engine.rand.NextDouble() < .1) {
                         isConnected = false;
                     }
@@ -239,6 +277,8 @@ namespace GridRL {
             }
         }
 
+        /// <summary> Locates parts of the maze to be deleted. </summary>
+        /// <returns> List of all points in the maze to be removed. </returns>
         private List<List<int>> GetMazeEndPoints() {
             List<List<int>> output = new List<List<int>>();
             var dirs = Enum.GetValues(typeof(Direction));
@@ -246,6 +286,7 @@ namespace GridRL {
                 for(int x = 1; x < Data.GetLength(1) - 1; x++) {
                     if(Data[y, x] != null) {
                         int notNullNeighbors = 0;
+                        // Corridors can be deleted if they are a dead end (i.e. have more than 2 nulls surrounding them)
                         foreach(Direction d in dirs) {
                             if(Data[y, x].CanAccess(d)) {
                                 notNullNeighbors++;
@@ -260,6 +301,8 @@ namespace GridRL {
             return output;
         }
 
+        /// <summary> Retrieves all individual regions left on the map. </summary>
+        /// <returns> A list of the upper left locations of all individual regions. </returns>
         private List<List<int>> GetRegionLocations() {
             List<List<int>> regionLocs = new List<List<int>>();
             List<int> regionIDs = new List<int>();
@@ -277,6 +320,8 @@ namespace GridRL {
             return regionLocs;
         }
 
+        /// <summary> Attaches each region to a nearby one. </summary>
+        /// <param name="regionLocations"> The list of all individual region locations. </param>
         private void ConnectRegions(List<List<int>> regionLocations) {
             List<Direction> dirs = new List<Direction>();
             foreach(List<int> points in regionLocations) {
@@ -311,6 +356,9 @@ namespace GridRL {
             }
         }
 
+        /// <summary> Recursive function that modifies regions of all connected tiles. </summary>
+        /// <param name="y"> The Y coordinate of this call. </param>
+        /// <param name="x"> The X coordinate of this call. </param>
         private void FloodFill(int y, int x) {
             List<Direction> validDirs = new List<Direction>();
             var dirs = Enum.GetValues(typeof(Direction));
