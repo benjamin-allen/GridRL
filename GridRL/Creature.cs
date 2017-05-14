@@ -30,6 +30,7 @@ namespace GridRL {
         /// <summary> Creature's Defense stat. </summary>
         public int Defense { get; set; } = 0;
 
+        /// <summary> A message to be printed when the creature dies. </summary>
         public string DeathMessage { get; set; }
 
         /* Methods */

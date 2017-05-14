@@ -12,7 +12,7 @@ namespace GridRL {
         /// <param name="x"> The horizontal position of the tile in the world data. </param>
         public Tile(Image image, int y, int x) : base(image, y, x) {
             Name = "Dummy Tile";
-            Description = "If you can see this, file a bug report for an improperly initialized creature.";
+            Description = "If you can see this, file a bug report for an improperly initialized tile.";
         }
 
 
