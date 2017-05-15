@@ -33,6 +33,8 @@ namespace GridRL {
         /// <summary> A message to be printed when the creature dies. </summary>
         public string DeathMessage { get; set; }
 
+        public Inventory Inventory { get; set; }
+
         /* Methods */
 
         //Possible override base.Remove() for onDeath message of some kind.
