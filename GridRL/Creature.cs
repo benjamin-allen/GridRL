@@ -33,6 +33,7 @@ namespace GridRL {
         /// <summary> A message to be printed when the creature dies. </summary>
         public string DeathMessage { get; set; }
 
+        /// <summary> The items held by this creature. </summary>
         public Inventory Inventory { get; set; }
 
         /* Methods */

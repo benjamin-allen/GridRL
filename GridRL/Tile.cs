@@ -23,6 +23,9 @@ namespace GridRL {
         /// <summary> Identifies tiles connected to each other. Used during mapgen. </summary>
         public int Region { get; set; } = -1;
 
+        /// <summary> The items located on this tile. </summary>
+        public Inventory Inventory { get; set; }
+
 
         /* Methods */
         /// <summary> Called when a tile is stepped on. </summary>

@@ -24,7 +24,8 @@ namespace GridRL {
         }
 
         /* Properties */
-        public byte MaxStack { get; set; } = 100;
+        /// <summary> Represents the maximum allowed copies of an item in an inventory. </summary>
+        public byte MaxStack { get; set; } = 255;
 
         /* Methods */
         /// <summary> Called when an actor uses this item. </summary>
@@ -38,9 +39,10 @@ namespace GridRL {
         }
     }
 
-
+    /// <summary> Represents a collection of items for creatures and tiles. </summary>
     public class Inventory {
         /* Constructors */
+        /// <summary> Creates an empty inventory. </summary>
         public Inventory() {
             Items = new Item[20];
             for(int i = 0; i < 20; ++I) {
@@ -49,18 +51,27 @@ namespace GridRL {
         }
 
         /* Properties */
+        /// <summary> The discrete items in the inventory. </summary>
         public Item[] Items { get; set; }
 
+        /// <summary> The number of copies of an item in the inventory. </summary>
+        /// <remarks> Counts[i] corresponds to the number of copies of Items[i]. </remarks>
         public byte[] Counts { get; set; }
 
         /* Methods */
+        /// <summary> Adds an item to this inventory. </summary>
+        /// <param name="item"> The item to be added. </param>
+        /// <returns> A boolean indicating whether addition was successful. </returns>
         public bool AddItem(Item item) {
             int firstEmptySlot = -1;
             bool itemPlaced = false;
             for(int i = 0; i < Items.Length; ++i) {
+                // Store the location of the first empty slot in case there isn't
+                // an instance of this item in the inventory. 
                 if(Items[i] == null && firstEmptySlot == -1) {
                     firstEmptySlot = i;
                 }
+                // If there is an instance, increment count and stop looping. 
                 else if(Items[i] == item) {
                     if(Counts[i] < Items[i].MaxStack) {
                         Counts[i]++;
@@ -69,14 +80,19 @@ namespace GridRL {
                     }
                 }
             }
+            // If no copy was found but there's an empty space, add it to that space. 
             if(!itemPlaced && firstEmptySlot != -1) {
                 Items[firstEmptySlot] = item;
                 Counts[firstEmptySlot] = 1;
                 itemPlaced = true;
             }
+            // If none of these work then we couldn't add the item. 
             return itemPlaced;
         }
 
+        /// <summary> Removes an item from the inventory. </summary>
+        /// <param name="item"> The item to be removed. </param>
+        /// <returns> A boolean indicating whether removal was successful. </returns>
         public bool RemoveItem(Item item) {
             bool itemRemoved = false;
             if(!Items.Contains(item)) {
