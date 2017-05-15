@@ -19,7 +19,6 @@ namespace GridRL {
                 if(Program.world.Data[CoordY - 1, CoordX] != null) {
                     foreach(Creature c in Program.world.Creatures) {
                         if(c.CoordY == CoordY - 1 && c.CoordX == CoordX && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
                             PerformAttack(c);
                             return true;
                         }
@@ -39,7 +38,7 @@ namespace GridRL {
                 if(Program.world.Data[CoordY + 1, CoordX] != null) {
                     foreach(Creature c in Program.world.Creatures) {
                         if(c.CoordY == CoordY + 1 && c.CoordX == CoordX && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
+                            PerformAttack(c);
                             return true;
                         }
                     }
@@ -58,7 +57,7 @@ namespace GridRL {
                 if(Program.world.Data[CoordY, CoordX - 1] != null) {
                     foreach(Creature c in Program.world.Creatures) {
                         if(c.CoordY == CoordY && c.CoordX == CoordX - 1 && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
+                            PerformAttack(c);
                             return true;
                         }
                     }
@@ -77,7 +76,7 @@ namespace GridRL {
                 if(Program.world.Data[CoordY, CoordX + 1] != null) {
                     foreach(Creature c in Program.world.Creatures) {
                         if(c.CoordY == CoordY && c.CoordX == CoordX + 1 && c.IsCollidable) {
-                            // Attack c if c is hostile + do not move
+                            PerformAttack(c);
                             return true;
                         }
                     }
