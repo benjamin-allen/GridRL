@@ -45,7 +45,7 @@ namespace GridRL {
         /// <summary> Creates an empty inventory. </summary>
         public Inventory() {
             Items = new Item[20];
-            for(int i = 0; i < 20; ++I) {
+            for(int i = 0; i < 20; ++i) {
                 Counts[i] = 0;
             }
         }

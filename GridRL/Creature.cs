@@ -37,6 +37,27 @@ namespace GridRL {
         public Inventory Inventory { get; set; }
 
         /* Methods */
+        /// <summary> Attempt to add an item to the invetory of this creature. </summary>
+        /// <param name="i"> The item being obtained. </param>
+        /// <returns> A boolean indicating whether the item was successfully obtained. </returns>
+        public bool PickUp(Item i) {
+            if(Program.world.Data[CoordY, CoordX].Inventory.RemoveItem(i)) {
+                Inventory.AddItem(i);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary> Attempt to remove the item held by this creature. </summary>
+        /// <param name="i"> The item being dropped. </param>
+        /// <returns> A boolean indicating whether the item was successfully dropped. </returns>
+        public bool Drop(Item i) {
+            if(Program.world.Data[CoordY, CoordX].Inventory.AddItem(i)) {
+                Inventory.RemoveItem(i);
+                return true;
+            }
+            return false;
+        }
 
         //Possible override base.Remove() for onDeath message of some kind.
     }
