@@ -33,7 +33,16 @@ namespace GridRL {
         public string DeathMessage { get; set; }
 
         /* Methods */
+        protected virtual void PerformAttack(Creature attacked) {
+            attacked.OnAttack(this);
+        }
 
+        protected virtual void OnAttack(Creature attacker) {
+            int Damage = attacker.Attack - Defense;
+            if(Damage > 0) {
+                Health -= Damage;
+            }
+        }
         //Possible override base.Remove() for onDeath message of some kind.
     }
 }

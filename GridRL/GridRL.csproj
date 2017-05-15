@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="Creature.cs" />
+    <Compile Include="DummyCreature.cs" />
     <Compile Include="Engine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Stair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\New Piskel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
