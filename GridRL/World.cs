@@ -125,7 +125,8 @@ namespace GridRL {
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
             Creatures.Add(Program.player);
-
+            DummyCreature dummy = new DummyCreature(entryY + 4, entryX +4);
+            Creatures.Add(dummy);
             Program.canvas.Add(this);
         }
 

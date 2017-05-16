@@ -15,11 +15,5 @@ namespace GridRL {
         }
 
         /* Overrides */
-        protected override void OnAttack(Creature attacker) {
-            int Damage = attacker.Attack - Defense;
-            if(Damage > 0) {
-                Health -= Damage;
-            }
-        }
     }
 }

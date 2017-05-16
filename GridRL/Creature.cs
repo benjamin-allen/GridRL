@@ -42,6 +42,12 @@ namespace GridRL {
             if(Damage > 0) {
                 Health -= Damage;
             }
+
+            if(Health <= 0) {
+                Remove(this);
+                IsVisible = false;
+                IsCollidable = false;
+            }
         }
         //Possible override base.Remove() for onDeath message of some kind.
     }

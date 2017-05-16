@@ -14,7 +14,6 @@ namespace GridRL {
             turnCount++;
             // update enemies
             // render
-            Console.WriteLine(turnCount);
             canvas.Update();
             form.Refresh();
         }
