@@ -21,6 +21,7 @@ namespace GridRL {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
             IsCollidable = false;
+            IsVisible = true;
         }
 
         /* Properties */
@@ -34,9 +35,26 @@ namespace GridRL {
 
         /// <summary> Called when a creature picks up this item. </summary>
         /// <param name="grabber"> The creature that picked up this item.</param>
-        public virtual void PickUp(Creature grabber) {
+        public virtual void PickUp(Creature grabber) { }
 
+        public virtual void OnActivate(Creature activator) { }
+    }
+
+    public class Weapon : Item {
+        /* Constructors */
+        public Weapon(int y, int x) :base(Properties.Resources.Weap, y, x) {
+            Name = "weapon";
+            Description = "It's some kind of weapon. You can't make out what it is.";
+            MaxStack = 1;
         }
+
+        /* Properties */
+        public int Attack { get; set; } = 3;
+
+        public float EffectChance { get; set; } = .75f;
+
+        /* Methods */
+        public virtual void OnStrike(Creature owner, Creature struck) { }
     }
 
     /// <summary> Represents a collection of items for creatures and tiles. </summary>
@@ -45,9 +63,7 @@ namespace GridRL {
         /// <summary> Creates an empty inventory. </summary>
         public Inventory() {
             Items = new Item[20];
-            for(int i = 0; i < 20; ++i) {
-                Counts[i] = 0;
-            }
+            Counts = new byte[20];
         }
 
         /* Properties */

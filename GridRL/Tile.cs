@@ -24,7 +24,7 @@ namespace GridRL {
         public int Region { get; set; } = -1;
 
         /// <summary> The items located on this tile. </summary>
-        public Inventory Inventory { get; set; }
+        public Inventory Inventory { get; set; } = new Inventory();
 
 
         /* Methods */

@@ -83,14 +83,15 @@ namespace GridRL {
                 for(int x = 0; x < Data.GetLength(1); ++x) {
                     if(Data[y, x] != null) {
                         Data[y, x].Render(g);
+                        Item i = Data[y, x].Inventory.Items.FirstOrDefault();
+                        if(i != null) {
+                            i.Render(g);
+                        }
                     }
                 }
             }
             foreach(Creature c in Creatures) {
                 c.Render(g);
-            }
-            foreach(Item i in Items) {
-                i.Render(g);
             }
         }
     }
