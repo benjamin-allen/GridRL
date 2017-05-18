@@ -42,6 +42,8 @@ namespace GridRL {
 
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
+            DummyCreature dummy = new DummyCreature(entryY + 3, entryX + 3);
+            Creatures.Add(dummy);
         }
 
         /// <summary> Builds the rooms of the dungeon. </summary>

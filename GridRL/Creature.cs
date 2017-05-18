@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System;
 
 namespace GridRL {
     /// <summary> Possible implementation: enumeration of creature's AI type. </summary>
@@ -39,6 +40,7 @@ namespace GridRL {
         /* Methods */
         protected virtual void PerformAttack(Creature attacked) {
             attacked.OnAttack(this);
+        }
         /// <summary> Attempt to add an item to the invetory of this creature. </summary>
         /// <param name="i"> The item being obtained. </param>
         /// <returns> A boolean indicating whether the item was successfully obtained. </returns>
@@ -66,13 +68,14 @@ namespace GridRL {
             if(Damage > 0) {
                 Health -= Damage;
             }
-
+            Console.WriteLine(Name + " was hit!");
             if(Health <= 0) {
                 Remove(this);
                 IsVisible = false;
                 IsCollidable = false;
             }
         }
+        
         //Possible override base.Remove() for onDeath message of some kind.
     }
 }

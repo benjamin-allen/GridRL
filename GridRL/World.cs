@@ -61,7 +61,6 @@ namespace GridRL {
                 GenerateDungeon();
             }
             // Add the world to the canvas
-            Creatures.Add(Program.player);
             Program.canvas.Add(this);
         }
 
@@ -75,6 +74,9 @@ namespace GridRL {
                         Data[y, x].Update();
                     }
                 }
+            }
+            foreach(Creature c in Creatures) {
+                c.Update();
             }
         }
 
@@ -93,6 +95,7 @@ namespace GridRL {
             foreach(Creature c in Creatures) {
                 c.Render(g);
             }
+            Program.player.Render(g);
         }
     }
 }

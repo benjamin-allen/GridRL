@@ -32,8 +32,9 @@ namespace GridRL {
                     List<int> points = DirectionToPoints(dir);
                     // Check for collision with any creatures
                     foreach(Creature c in Program.world.Creatures) {
-                        if(c != this && WillCollideWith(c) && c.CoordY == CoordY && c.CoordX == CoordX) {
-                            c.OnCollide(this);
+                        if(c != this && WillCollideWith(c) && c.CoordY == points[0] && c.CoordX == points[1]) {
+                            //c.OnCollide(this);
+                            PerformAttack(c);
                             return true;
                         }
                     }
