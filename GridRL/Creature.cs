@@ -34,7 +34,7 @@ namespace GridRL {
         public string DeathMessage { get; set; }
 
         /// <summary> The items held by this creature. </summary>
-        public Inventory Inventory { get; set; }
+        public Inventory Inventory { get; set; } = new Inventory();
 
         /* Methods */
         /// <summary> Attempt to add an item to the invetory of this creature. </summary>
