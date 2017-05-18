@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
+using System.Collections.Generic;
+using System;
 
 namespace GridRL {
 
@@ -30,7 +32,20 @@ namespace GridRL {
         /* Methods */
         /// <summary> Called when a tile is stepped on. </summary>
         /// <param name="s">The sprite that stepped on this tile. </param>
-        public virtual void OnStepOn(Sprite s) { }
+        public virtual void OnStepOn(Sprite s) {
+            List<Item> items = new List<Item>();
+            foreach(Item i in Inventory.Items) {
+                if(i != null) {
+                    items.Add(i);
+                }
+            }
+            if(items.Count >= 1) {
+                Console.WriteLine("There is a " + items[0].Name + " here.");
+                if(items.Count > 1) {
+                    Console.WriteLine("There are other items here as well.");
+                }
+            }
+        }
     }
 
     public class Corridor : Tile {
