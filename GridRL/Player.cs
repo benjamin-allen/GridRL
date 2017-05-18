@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace GridRL {
     public class Player : Creature {
@@ -47,6 +49,13 @@ namespace GridRL {
                         Program.world.Data[points[0], points[1]].OnStepOn(this);
                         return true;
                     }
+                }
+            }
+            else if(e.KeyCode == Keys.G) {
+                Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
+                if(i != null) {
+                    PickUp(i);
+                    Console.WriteLine("You pick up the " + i.Name + ".");
                 }
             }
             return false;

@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GridRL {
     public class Item : Actor {
@@ -8,6 +10,7 @@ namespace GridRL {
         public Item(Image image) : base(image) {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
+            IsCollidable = false;
         }
 
         /// <summary> Constructs a new item at the given rendering location. </summary>
@@ -17,10 +20,13 @@ namespace GridRL {
         public Item(Image image, int y, int x) : base(image, y, x) {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
+            IsCollidable = false;
+            IsVisible = true;
         }
 
         /* Properties */
-
+        /// <summary> Represents the maximum allowed copies of an item in an inventory. </summary>
+        public byte MaxStack { get; set; } = 255;
 
         /* Methods */
         /// <summary> Called when an actor uses this item. </summary>
@@ -30,5 +36,100 @@ namespace GridRL {
         /// <summary> Called when a creature picks up this item. </summary>
         /// <param name="grabber"> The creature that picked up this item.</param>
         public virtual void PickUp(Creature grabber) { }
+
+        public virtual void OnActivate(Creature activator) { }
+    }
+
+    public class Weapon : Item {
+        /* Constructors */
+        public Weapon(int y, int x) :base(Properties.Resources.Weap, y, x) {
+            Name = "weapon";
+            Description = "It's some kind of weapon. You can't make out what it is.";
+            MaxStack = 1;
+        }
+
+        /* Properties */
+        public int Attack { get; set; } = 3;
+
+        public float EffectChance { get; set; } = .75f;
+
+        /* Methods */
+        public virtual void OnStrike(Creature owner, Creature struck) { }
+    }
+
+    /// <summary> Represents a collection of items for creatures and tiles. </summary>
+    public class Inventory {
+        /* Constructors */
+        /// <summary> Creates an empty inventory. </summary>
+        public Inventory() {
+            Items = new Item[20];
+            Counts = new byte[20];
+        }
+
+        /* Properties */
+        /// <summary> The discrete items in the inventory. </summary>
+        public Item[] Items { get; set; }
+
+        /// <summary> The number of copies of an item in the inventory. </summary>
+        /// <remarks> Counts[i] corresponds to the number of copies of Items[i]. </remarks>
+        public byte[] Counts { get; set; }
+
+        /* Methods */
+        /// <summary> Adds an item to this inventory. </summary>
+        /// <param name="item"> The item to be added. </param>
+        /// <returns> A boolean indicating whether addition was successful. </returns>
+        public bool AddItem(Item item) {
+            int firstEmptySlot = -1;
+            bool itemPlaced = false;
+            for(int i = 0; i < Items.Length; ++i) {
+                // Store the location of the first empty slot in case there isn't
+                // an instance of this item in the inventory. 
+                if(Items[i] == null && firstEmptySlot == -1) {
+                    firstEmptySlot = i;
+                }
+                // If there is an instance, increment count and stop looping. 
+                else if(Items[i] == item) {
+                    if(Counts[i] < Items[i].MaxStack) {
+                        Counts[i]++;
+                        itemPlaced = true;
+                        break;
+                    }
+                }
+            }
+            // If no copy was found but there's an empty space, add it to that space. 
+            if(!itemPlaced && firstEmptySlot != -1) {
+                Items[firstEmptySlot] = item;
+                Counts[firstEmptySlot] = 1;
+                itemPlaced = true;
+            }
+            // If none of these work then we couldn't add the item. 
+            return itemPlaced;
+        }
+
+        /// <summary> Removes an item from the inventory. </summary>
+        /// <param name="item"> The item to be removed. </param>
+        /// <returns> A boolean indicating whether removal was successful. </returns>
+        public bool RemoveItem(Item item) {
+            bool itemRemoved = false;
+            if(!Items.Contains(item)) {
+                return false;
+            }
+            for(int i = 0; i < Items.Length; ++i) {
+                if(Items[i] != null && Items[i] == item) {
+                    if(Counts[i] > 1) {
+                        Counts[i]--;
+                        itemRemoved = true;
+                        break;
+                    }
+                    else {
+                        Counts[i] = 0;
+                        Items[i] = null;
+                        itemRemoved = true;
+                        break;
+                    }
+                }
+            }
+            return itemRemoved;
+        }
     }
 }
