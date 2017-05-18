@@ -40,8 +40,6 @@ namespace GridRL {
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
             Data[exitY, exitX].IsVisible = true;
 
-            Data[entryY + 2, entryX + 2].Inventory.AddItem(new Weapon(entryY + 2, entryX + 2));
-
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
         }
