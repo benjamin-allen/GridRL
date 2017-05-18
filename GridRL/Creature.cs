@@ -37,6 +37,8 @@ namespace GridRL {
         public Inventory Inventory { get; set; } = new Inventory();
 
         /* Methods */
+        protected virtual void PerformAttack(Creature attacked) {
+            attacked.OnAttack(this);
         /// <summary> Attempt to add an item to the invetory of this creature. </summary>
         /// <param name="i"> The item being obtained. </param>
         /// <returns> A boolean indicating whether the item was successfully obtained. </returns>
@@ -59,6 +61,18 @@ namespace GridRL {
             return false;
         }
 
+        protected virtual void OnAttack(Creature attacker) {
+            int Damage = attacker.Attack - Defense;
+            if(Damage > 0) {
+                Health -= Damage;
+            }
+
+            if(Health <= 0) {
+                Remove(this);
+                IsVisible = false;
+                IsCollidable = false;
+            }
+        }
         //Possible override base.Remove() for onDeath message of some kind.
     }
 }

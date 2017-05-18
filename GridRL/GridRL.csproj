@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="Creature.cs" />
+    <Compile Include="DummyCreature.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="Engine.cs">
       <SubType>Form</SubType>
@@ -105,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Stair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\New Piskel.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Weap.png" />
