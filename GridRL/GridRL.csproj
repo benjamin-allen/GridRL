@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
+    <Compile Include="AI.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="DummyCreature.cs" />
     <Compile Include="Dungeon.cs" />

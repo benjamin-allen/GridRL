@@ -1,12 +1,14 @@
 ﻿using System.Drawing;
+using System.Linq;
+using System.Collections.Generic;
 using System;
 
 namespace GridRL {
     /// <summary> Possible implementation: enumeration of creature's AI type. </summary>
-    //public enum AIType { }
+    public enum AIType { None, Monster, NPC }
 
     /// <summary>A base class for all living things.</summary>
-    public class Creature : Actor {
+    public partial class Creature : Actor {
         /* Constructors */
         /// <summary> A constructor that creates a creature with a given image and x/y coordinates. </summary>
         /// <param name="image"> The image used for this creature's sprite. </param>
@@ -36,6 +38,8 @@ namespace GridRL {
 
         /// <summary> The items held by this creature. </summary>
         public Inventory Inventory { get; set; } = new Inventory();
+
+        public AIType AI { get; set; } = AIType.Monster;
 
         /* Methods */
         protected virtual void PerformAttack(Creature attacked) {
@@ -75,7 +79,16 @@ namespace GridRL {
                 IsCollidable = false;
             }
         }
-        
+
+
+        /* Overrides */
+        protected override void Act() {
+            base.Act();
+            if(AI == AIType.Monster) {
+                RandomWalk();
+            }
+        }
+
         //Possible override base.Remove() for onDeath message of some kind.
     }
 }

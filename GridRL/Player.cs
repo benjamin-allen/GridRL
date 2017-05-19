@@ -52,6 +52,9 @@ namespace GridRL {
                     }
                 }
             }
+            if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
+                return true;
+            }
             else if(e.KeyCode == Keys.G) {
                 Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
                 if(i != null) {
