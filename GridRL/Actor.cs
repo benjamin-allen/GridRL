@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GridRL {
 
-    public enum Direction { Up, Down, Left, Right }
+    public enum Direction {None, Up, Down, Left, Right }
 
     /// <summary> A base class for anything that exists on the world. </summary>
     public class Actor : ImageSprite {

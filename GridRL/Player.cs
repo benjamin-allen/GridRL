@@ -17,6 +17,7 @@ namespace GridRL {
             Attack = 10;
             Defense = 10;
             IsVisible = true;
+            Abilities.Add(new Fireball());
         }
 
         /* Methods */
@@ -52,8 +53,11 @@ namespace GridRL {
                     }
                 }
             }
-            if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
+            else if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
                 return true;
+            }
+            else if(e.KeyCode == Keys.A) {
+                return Abilities[0].Use(this);
             }
             else if(e.KeyCode == Keys.G) {
                 Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
@@ -68,7 +72,7 @@ namespace GridRL {
         /// <summary> Converts a keypress to a direction. </summary>
         /// <param name="e"> KeyEventArgs thingy. </param>
         /// <returns> The direction to go. </returns>
-        private Direction KeyPressToDirection(KeyEventArgs e) {
+        public Direction KeyPressToDirection(KeyEventArgs e) {
             if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8) {
                 return Direction.Up;
             }

@@ -6,6 +6,8 @@ namespace GridRL {
     public class Program : Engine {
         public static Player player = new Player(0, 0);
         public static World world = new World();
+        public static int waitState = 0;
+        public static Direction lastDirection = Direction.None;
 
         static void Main() {
             world.GenerateLevel();
@@ -21,9 +23,24 @@ namespace GridRL {
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
-            if(e.KeyCode == Keys.Escape) { world.GenerateLevel(); GameLoop(); }
-            if(player.HandleGameInput(e)) {
+            Keys kc = e.KeyCode;
+            if(waitState != 0) {
+                if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right || 
+                kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
+                    waitState = 0;
+                    Direction d = player.KeyPressToDirection(e);
+                    lastDirection = d;
+                    Console.WriteLine(d);
+                }
+                else if(kc == Keys.Escape) {
+                    waitState = -1;
+                }
+            }
+            else if(player.HandleGameInput(e)) {
                 GameLoop();
+            }
+            else {
+                waitState = 0;
             }
         }
 

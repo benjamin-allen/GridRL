@@ -41,6 +41,8 @@ namespace GridRL {
 
         public AIType AI { get; set; } = AIType.Monster;
 
+        public List<Ability> Abilities { get; set; } = new List<Ability>();
+
         /* Methods */
         protected virtual void PerformAttack(Creature attacked) {
             attacked.OnAttack(this);

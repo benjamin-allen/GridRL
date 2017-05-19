@@ -42,6 +42,8 @@ namespace GridRL {
         /// <summary> List of all items located in the level. </summary>
         public List<Item> Items { get; set; }
 
+        public List<Effect> Effects { get; set; }
+
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
         /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
@@ -56,6 +58,7 @@ namespace GridRL {
             Creatures = new List<Creature>();
             Items = new List<Item>();
             RoomPoints = new List<List<int>>();
+            Effects = new List<Effect>();
             // Generate the new world
             if(WorldType == WorldType.Dungeon) {
                 GenerateDungeon();
@@ -94,6 +97,9 @@ namespace GridRL {
             }
             foreach(Creature c in Creatures) {
                 c.Render(g);
+            }
+            foreach(Effect e in Effects) {
+                e.Render(g);
             }
             Program.player.Render(g);
         }
