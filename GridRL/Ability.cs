@@ -9,11 +9,17 @@ namespace GridRL {
             Activate(y, x);
         }
 
+        public int TurnsLeft { get; set; }
+
         protected virtual void Activate(int y, int x) { }
+
+        protected override void Act() {
+            TurnsLeft--;
+        }
     }
 
     class FireballEffect : Effect {
-        public FireballEffect(int y, int x) : base(Properties.Resources.Fireball, y, x) { }
+        public FireballEffect(int y, int x) : base(Properties.Resources.Fireball, y, x) { TurnsLeft = 1; }
 
         protected override void Activate(int y, int x) {
             CoordY = y;
@@ -50,7 +56,7 @@ namespace GridRL {
             Name = "fireball";
             Description = "Big ball of gas";
             GridHeight = 2;
-            GridWidth = 2; 
+            GridWidth = 2;
         }
 
         public override bool Use(Creature user) {

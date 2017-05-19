@@ -16,8 +16,6 @@ namespace GridRL {
 
         public static void GameLoop() {
             turnCount++;
-            // update enemies
-            // render
             canvas.Update();
             form.Refresh();
         }
@@ -30,7 +28,6 @@ namespace GridRL {
                     waitState = 0;
                     Direction d = player.KeyPressToDirection(e);
                     lastDirection = d;
-                    Console.WriteLine(d);
                 }
                 else if(kc == Keys.Escape) {
                     waitState = -1;

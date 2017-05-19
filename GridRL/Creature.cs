@@ -77,6 +77,7 @@ namespace GridRL {
             Console.WriteLine(Name + " was hit!");
             if(Health <= 0) {
                 Remove(this);
+                Program.world.Creatures.Remove(this);
                 IsVisible = false;
                 IsCollidable = false;
             }

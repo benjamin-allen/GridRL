@@ -43,6 +43,7 @@ namespace GridRL {
         public List<Item> Items { get; set; }
 
         public List<Effect> Effects { get; set; }
+        public List<Effect> EffectsToRemove { get; set; }
 
         /* Methods */
         /// <summary> Deletes the current level data and creates a new one. </summary>
@@ -59,6 +60,7 @@ namespace GridRL {
             Items = new List<Item>();
             RoomPoints = new List<List<int>>();
             Effects = new List<Effect>();
+            EffectsToRemove = new List<Effect>();
             // Generate the new world
             if(WorldType == WorldType.Dungeon) {
                 GenerateDungeon();
@@ -80,6 +82,15 @@ namespace GridRL {
             }
             foreach(Creature c in Creatures) {
                 c.Update();
+            }
+            foreach(Effect e in Effects) {
+                e.Update();
+                if(e.TurnsLeft < 0) {
+                    EffectsToRemove.Add(e);
+                }
+            }
+            foreach(Effect e in EffectsToRemove) {
+                Effects.Remove(e);
             }
         }
 
