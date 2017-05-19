@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability.cs" />
     <Compile Include="Actor.cs" />
     <Compile Include="AI.cs" />
     <Compile Include="Creature.cs" />
