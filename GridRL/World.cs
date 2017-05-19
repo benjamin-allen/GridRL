@@ -38,6 +38,7 @@ namespace GridRL {
 
         /// <summary> List of all creatures located in the level. </summary>
         public List<Creature> Creatures { get; set; }
+        public List<Creature> CreaturesToRemove { get; set; }
 
         /// <summary> List of all items located in the level. </summary>
         public List<Item> Items { get; set; }
@@ -57,6 +58,7 @@ namespace GridRL {
                 }
             }
             Creatures = new List<Creature>();
+            CreaturesToRemove = new List<Creature>();
             Items = new List<Item>();
             RoomPoints = new List<List<int>>();
             Effects = new List<Effect>();
@@ -73,6 +75,13 @@ namespace GridRL {
         /* Overrides */
 
         protected override void Act() {
+            foreach(Creature c in Creatures) {
+                foreach(Effect e in Effects) {
+                    if(c.CoordX == e.CoordX && c.CoordY == e.CoordY) {
+                        e.OnCollide(c);
+                    }
+                }
+            }
             for(int y = 0; y < Data.GetLength(0); ++y) {
                 for(int x = 0; x < Data.GetLength(1); ++x) {
                     if(Data[y, x] != null) {
@@ -91,6 +100,9 @@ namespace GridRL {
             }
             foreach(Effect e in EffectsToRemove) {
                 Effects.Remove(e);
+            }
+            foreach(Creature c in CreaturesToRemove) {
+                Creatures.Remove(c);
             }
         }
 

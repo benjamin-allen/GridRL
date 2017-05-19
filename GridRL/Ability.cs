@@ -16,6 +16,10 @@ namespace GridRL {
         protected override void Act() {
             TurnsLeft--;
         }
+
+        public override void OnCollide(Actor a) {
+            Program.world.CreaturesToRemove.Add((Creature)a);
+        }
     }
 
     class FireballEffect : Effect {
