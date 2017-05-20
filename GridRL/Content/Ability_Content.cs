@@ -3,12 +3,17 @@ using System.Collections.Generic;
 
 namespace GridRL {
     public class Fireball : Ability {
+        #region Constructors
+
         public Fireball() {
             Name = "fireball";
             Description = "Big ball of gas";
             GridHeight = 2;
             GridWidth = 2;
         }
+
+        #endregion
+        #region Overrides
 
         public override bool Use(Creature user) {
             if(user == Program.player) {
@@ -26,5 +31,7 @@ namespace GridRL {
             }
             return true;
         }
+
+        #endregion
     }
 }

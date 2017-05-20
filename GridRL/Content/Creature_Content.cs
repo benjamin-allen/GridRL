@@ -1,6 +1,7 @@
 ﻿namespace GridRL {
     public class DummyCreature : Creature {
-        /* Constructors */
+        #region Constructors
+
         public DummyCreature(int y, int x) : base(Properties.Resources.Dummy, y, x) {
             Name = "Dummy";
             Description = "A mobile training dummy. ";
@@ -10,5 +11,7 @@
             Defense = 0;
             IsVisible = true;
         }
+
+        #endregion
     }
 }
