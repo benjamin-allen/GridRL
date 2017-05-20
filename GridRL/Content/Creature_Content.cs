@@ -1,5 +1,4 @@
 ﻿namespace GridRL {
-
     public class DummyCreature : Creature {
         /* Constructors */
         public DummyCreature(int y, int x) : base(Properties.Resources.Dummy, y, x) {
