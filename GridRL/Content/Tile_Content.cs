@@ -1,88 +1,51 @@
 ﻿using System.Windows.Forms;
-using System.Drawing;
-using System.Collections.Generic;
-using System;
 
 namespace GridRL {
-
-    /// <summary> The basic definition of tiles, which make up a world. </summary>
-    public class Tile : Actor {
-        /* Constructors */
-        /// <summary> Constructs a tile with the given image and position. </summary>
-        /// <param name="image">The image used for this tile's sprite. </param>
-        /// <param name="y"> The vertical position of the tile in the world data. </param>
-        /// <param name="x"> The horizontal position of the tile in the world data. </param>
-        public Tile(Image image, int y, int x) : base(image, y, x) {
-            Name = "Dummy Tile";
-            Description = "If you can see this, file a bug report for an improperly initialized tile.";
-        }
-
-
-        /* Properties */
-        /// <summary> Property representing whether creatures and items can be on the tile. </summary>
-        public bool IsWalkable { get; set; } = false;
-
-        /// <summary> Identifies tiles connected to each other. Used during mapgen. </summary>
-        public int Region { get; set; } = -1;
-
-        /// <summary> The items located on this tile. </summary>
-        public Inventory Inventory { get; set; } = new Inventory();
-
-
-        /* Methods */
-        /// <summary> Called when a tile is stepped on. </summary>
-        /// <param name="s">The sprite that stepped on this tile. </param>
-        public virtual void OnStepOn(Sprite s) {
-            List<Item> items = new List<Item>();
-            foreach(Item i in Inventory.Items) {
-                if(i != null) {
-                    items.Add(i);
-                }
-            }
-            if(items.Count >= 1) {
-                Console.WriteLine("There is a " + items[0].Name + " here.");
-                if(items.Count > 1) {
-                    Console.WriteLine("There are other items here as well.");
-                }
-            }
-        }
-    }
-
     public class Corridor : Tile {
-        /* Constructors */
+        #region Constructors
+
         public Corridor(int y, int x, int region) : base(Properties.Resources.Corridor, y, x) {
             Name = "corridor";
             Description = "A darkened hallway that connects the many rooms of the dungeon.";
             IsWalkable = true;
             Region = region;
         }
+
+        #endregion
     }
 
     public class RoomFloor : Tile {
-        /* Constructors */
+        #region Constructors
+
         public RoomFloor(int y, int x, int region) : base(Properties.Resources.Floor, y, x) {
             Name = "floor";
             Description = "A tiled floor, cracked and worn from years of neglect.";
             IsWalkable = true;
             Region = region;
         }
+
+        #endregion
     }
 
-    public enum DoorState { Closed, Broken, Open}
+    public enum DoorState { Closed, Broken, Open }
     public class Door : Tile {
-        /* Constructors */
+        #region Constructors
+
         public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
             Region = region;
             IsCollidable = true;
-
         }
 
-        /* Properties */
+        #endregion
+        #region Properties
+
         public DoorState DoorState { get; set; } = DoorState.Closed;
 
-        /* Overrides */
+        #endregion
+        #region Overrides
+
         public override void OnCollide(Actor a) {
             if(DoorState == DoorState.Closed) {
                 DoorState = DoorState.Open;
@@ -90,11 +53,14 @@ namespace GridRL {
                 IsWalkable = true;
             }
         }
+
+        #endregion
     }
 
     public enum StairType { Up, Down }
     public class Stair : Tile {
-        /* Constructors */
+        #region Constructors
+
         public Stair(int y, int x, StairType s) : base(Properties.Resources.Stair, y, x) {
             Name = "stairway";
             StairType = s;
@@ -107,10 +73,14 @@ namespace GridRL {
             IsWalkable = true;
         }
 
-        /* Properties */
-        public StairType StairType { get; set; }
+        #endregion
+        #region Properties
 
-        /* Overrides */
+        public StairType StairType { get; set; }
+        
+        #endregion
+        #region Overrides
+
         public override void OnStepOn(Sprite s) {
             if(s.GetType() == typeof(Player)) {
                 if(StairType == StairType.Up && Program.world.Level > 1) {
@@ -126,5 +96,7 @@ namespace GridRL {
                 }
             }
         }
+
+        #endregion
     }
 }

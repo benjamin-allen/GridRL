@@ -3,14 +3,7 @@ using System.Windows.Forms;
 
 namespace GridRL {
     public partial class Engine : Form {
-        public static Form form;
-        public static Sprite canvas = new Sprite();
-        public static int spriteWidth = 16;
-        public static int spriteHeight = 16;
-        public static int tilesWide = 80;
-        public static int tilesHigh = 45;
-        public static Random rand = new Random(1);
-        public static int turnCount = 0;
+        #region Constructors
 
         public Engine() {
             form = this;
@@ -24,8 +17,25 @@ namespace GridRL {
             // otherwise exit the game
         }
 
+        #endregion
+        #region Properties
+
+        public static Form form;
+        public static Sprite canvas = new Sprite();
+        public static int spriteWidth = 16;
+        public static int spriteHeight = 16;
+        public static int tilesWide = 80;
+        public static int tilesHigh = 45;
+        public static Random rand = new Random(1);
+        public static int turnCount = 0;
+
+        #endregion
+        #region Overrides
+
         protected override void OnPaint(PaintEventArgs e) {
             canvas.Render(e.Graphics);
         }
+
+        #endregion
     }
 }

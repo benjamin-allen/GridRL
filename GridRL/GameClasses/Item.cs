@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GridRL {
     public class Item : Actor {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> Constructs a new item. </summary>
         /// <param name="image"></param>
         public Item(Image image) : base(image) {
@@ -24,11 +24,15 @@ namespace GridRL {
             IsVisible = true;
         }
 
-        /* Properties */
+        #endregion
+        #region Properties
+
         /// <summary> Represents the maximum allowed copies of an item in an inventory. </summary>
         public byte MaxStack { get; set; } = 255;
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         /// <summary> Called when an actor uses this item. </summary>
         /// <param name="activator"> The actor that activated this item. </param>
         public virtual void Activate(Actor activator) { }
@@ -38,35 +42,24 @@ namespace GridRL {
         public virtual void PickUp(Creature grabber) { }
 
         public virtual void OnActivate(Creature activator) { }
+
+        #endregion
     }
 
-    public class Weapon : Item {
-        /* Constructors */
-        public Weapon(int y, int x) :base(Properties.Resources.Weap, y, x) {
-            Name = "weapon";
-            Description = "It's some kind of weapon. You can't make out what it is.";
-            MaxStack = 1;
-        }
-
-        /* Properties */
-        public int Attack { get; set; } = 3;
-
-        public float EffectChance { get; set; } = .75f;
-
-        /* Methods */
-        public virtual void OnStrike(Creature owner, Creature struck) { }
-    }
 
     /// <summary> Represents a collection of items for creatures and tiles. </summary>
     public class Inventory {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> Creates an empty inventory. </summary>
         public Inventory() {
             Items = new Item[20];
             Counts = new byte[20];
         }
 
-        /* Properties */
+        #endregion
+        #region Properties
+
         /// <summary> The discrete items in the inventory. </summary>
         public Item[] Items { get; set; }
 
@@ -74,7 +67,9 @@ namespace GridRL {
         /// <remarks> Counts[i] corresponds to the number of copies of Items[i]. </remarks>
         public byte[] Counts { get; set; }
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         /// <summary> Adds an item to this inventory. </summary>
         /// <param name="item"> The item to be added. </param>
         /// <returns> A boolean indicating whether addition was successful. </returns>
@@ -131,5 +126,7 @@ namespace GridRL {
             }
             return itemRemoved;
         }
+
+        #endregion
     }
 }

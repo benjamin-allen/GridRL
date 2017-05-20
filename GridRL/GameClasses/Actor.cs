@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 
 namespace GridRL {
-
-    public enum Direction { Up, Down, Left, Right }
+    /// <summary> </summary>
+    public enum Direction {None, Up, Down, Left, Right }
 
     /// <summary> A base class for anything that exists on the world. </summary>
     public class Actor : ImageSprite {
+        #region Constructors
 
-        /* Constructors */
         public Actor() { }
 
         public Actor(Image image) : base(image) { }
@@ -24,8 +24,9 @@ namespace GridRL {
             CoordY = y;
         }
 
+        #endregion
+        #region Properties
 
-        /* Properties */
         /// <summary> The name of the actor. </summary>
         public string Name { get; set; } = "Dummy Actor";
 
@@ -53,8 +54,8 @@ namespace GridRL {
             set { coordY = value; Y = coordY * Engine.spriteHeight; }
         }
 
-
-        /* Methods */
+        #endregion
+        #region Methods
         /// <summary> Virtual function to be called when two actors collide. </summary>
         /// <param name="a"> The actor colliding with this actor. </param>
         public virtual void OnCollide(Actor a) { }
@@ -115,11 +116,15 @@ namespace GridRL {
             return output;
         }
 
-        /* Overrides */
+        #endregion
+        #region Overrides
+
         protected override void Paint(Graphics g) {
             if(IsVisible) {
                 base.Paint(g); 
             }
         }
+
+        #endregion
     }
 }

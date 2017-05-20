@@ -5,7 +5,8 @@ using System;
 
 namespace GridRL {
     public class Player : Creature {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> Creates a controllable creature. </summary>
         /// <param name="y"> The Y coordinate to place the player in the world. </param>
         /// <param name="x"> The X coordinate to place the player in the world. </param>
@@ -17,9 +18,12 @@ namespace GridRL {
             Attack = 10;
             Defense = 10;
             IsVisible = true;
+            Abilities.Add(new Fireball());
         }
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         /// <summary> Top-level function to capture and pass input to their sub-functions. </summary>
         /// <param name="e"> The KeyEventArgs thing. </param>
         /// <returns> A boolean indicating whether to advance the game. </returns>
@@ -52,8 +56,11 @@ namespace GridRL {
                     }
                 }
             }
-            if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
+            else if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
                 return true;
+            }
+            else if(e.KeyCode == Keys.A) {
+                return Abilities[0].Use(this);
             }
             else if(e.KeyCode == Keys.G) {
                 Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
@@ -68,7 +75,7 @@ namespace GridRL {
         /// <summary> Converts a keypress to a direction. </summary>
         /// <param name="e"> KeyEventArgs thingy. </param>
         /// <returns> The direction to go. </returns>
-        private Direction KeyPressToDirection(KeyEventArgs e) {
+        public Direction KeyPressToDirection(KeyEventArgs e) {
             if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8) {
                 return Direction.Up;
             }
@@ -82,5 +89,7 @@ namespace GridRL {
                 return Direction.Right;
             }
         }
+
+        #endregion
     }
 }
