@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System;
 
 namespace GridRL {
-    /// <summary> Possible implementation: enumeration of creature's AI type. </summary>
+    /// <summary> Determines how a creature acts. </summary>
     public enum AIType { None, Monster, NPC }
 
     /// <summary>A base class for all living things.</summary>
     public partial class Creature : Actor {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> A constructor that creates a creature with a given image and x/y coordinates. </summary>
         /// <param name="image"> The image used for this creature's sprite. </param>
         /// <param name="y"> The creature's Y position on the world data. </param>
@@ -21,8 +22,8 @@ namespace GridRL {
             IsCollidable = true;
         }
 
-
-        /* Properties */
+        #endregion
+        #region Properties
 
         /// <summary> Creature's HP stat. </summary>
         public int Health { get; set; } = 0;
@@ -43,7 +44,9 @@ namespace GridRL {
 
         public List<Ability> Abilities { get; set; } = new List<Ability>();
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         protected virtual void PerformAttack(Creature attacked) {
             attacked.OnAttack(this);
         }
@@ -83,8 +86,8 @@ namespace GridRL {
             }
         }
 
-
-        /* Overrides */
+        #endregion
+        #region Overrides
         protected override void Act() {
             base.Act();
             if(AI == AIType.Monster) {
@@ -93,5 +96,7 @@ namespace GridRL {
         }
 
         //Possible override base.Remove() for onDeath message of some kind.
+
+        #endregion
     }
 }

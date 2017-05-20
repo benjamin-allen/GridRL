@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System;
 
 namespace GridRL {
-
     /// <summary> The basic definition of tiles, which make up a world. </summary>
     public class Tile : Actor {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> Constructs a tile with the given image and position. </summary>
         /// <param name="image">The image used for this tile's sprite. </param>
         /// <param name="y"> The vertical position of the tile in the world data. </param>
@@ -16,8 +16,9 @@ namespace GridRL {
             Description = "If you can see this, file a bug report for an improperly initialized tile.";
         }
 
+        #endregion
+        #region Properties
 
-        /* Properties */
         /// <summary> Property representing whether creatures and items can be on the tile. </summary>
         public bool IsWalkable { get; set; } = false;
 
@@ -27,8 +28,9 @@ namespace GridRL {
         /// <summary> The items located on this tile. </summary>
         public Inventory Inventory { get; set; } = new Inventory();
 
+        #endregion
+        #region Methods
 
-        /* Methods */
         /// <summary> Called when a tile is stepped on. </summary>
         /// <param name="s">The sprite that stepped on this tile. </param>
         public virtual void OnStepOn(Sprite s) {
@@ -45,5 +47,7 @@ namespace GridRL {
                 }
             }
         }
+
+        #endregion
     }
 }

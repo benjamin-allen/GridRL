@@ -2,12 +2,19 @@
 
 namespace GridRL {
     public class Effect : Actor {
+        #region Constructors
+
         public Effect(Image image, int y, int x) : base(image, y, x) {
             Activate(y, x);
         }
 
+        #endregion
+        #region Properties
+
         public int TurnsLeft { get; set; }
 
+        #endregion
+        #region Methods
         protected virtual void Activate(int y, int x) { }
 
         protected override void Act() {
@@ -17,13 +24,18 @@ namespace GridRL {
         public override void OnCollide(Actor a) {
             Program.world.CreaturesToRemove.Add((Creature)a);
         }
+
+        #endregion
     }
 
     public class Ability {
-        /* Constructors */
+        #region Constructors
+
         public Ability() { }
 
-        /* Properties */
+        #endregion
+        #region Properties
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -36,8 +48,11 @@ namespace GridRL {
 
         public int GridX { get; set; }
 
+        #endregion
+        #region Methods
 
-        /* Methods */
-        public virtual bool Use(Creature user) { return false; }    
+        public virtual bool Use(Creature user) { return false; }
+
+        #endregion
     }
 }
