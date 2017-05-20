@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
 
 namespace GridRL {
-
     /// <summary> An extension of <c>Sprite</c> with support for images. </summary>
     public class ImageSprite : Sprite {
-        /* Constructors */
+        #region Constructors
+
         public ImageSprite() : base() { }
 
         /// <summary> Constructs a new ImageSprite with a known image. </summary>
@@ -27,8 +27,9 @@ namespace GridRL {
             Height = Image.Height;
         }
 
+        #endregion
+        #region Properties
 
-        /* Properties */
         /// <summary> The image representing this sprite. </summary>
         public Image Image { get; set; }
 
@@ -38,10 +39,13 @@ namespace GridRL {
         /// <summary> The height of this sprite. Set automatically. </summary>
         public int Height { get; set; }
 
+        #endregion
+        #region Overrides
 
-        /* Overrides */
         protected override void Paint(Graphics g) {
             g.DrawImage(Image, 0, 0);
         }
+
+        #endregion
     }
 }

@@ -10,7 +10,8 @@ namespace GridRL {
 
     /// <summary> Class for handling basic functions common to all sprites</summary>
     public class Sprite {
-        /* Constructors */
+        #region Constructors
+
         public Sprite() { }
 
         /// <summary> Sets the new sprite's parent to another Sprite object. </summary>
@@ -19,8 +20,9 @@ namespace GridRL {
             parent.AddChild(this);
         }
 
+        #endregion
+        #region Properties
 
-        /* Properties */
         /// <summary> The sprite object whose list of children contains this sprite. </summary>
         public Sprite Parent { get; set; } = null;
 
@@ -39,10 +41,11 @@ namespace GridRL {
         /// <summary> The sprite's method of drawing. </summary>
         public DrawingType DrawingType { get; set; } = DrawingType.AllChildren;
 
-
-        /* Children/Parent methods */
         /// <summary> The children who will be rendered/updated when this sprite renders/updates. </summary>
         protected List<Sprite> children = new List<Sprite>();
+
+        #endregion
+        #region Methods 
 
         /// <summary> Adds a Sprite object as a child of this sprite. </summary>
         /// <param name="s"> The sprite to be added. </param>
@@ -69,8 +72,6 @@ namespace GridRL {
             RemoveChild(s);
         }
 
-
-        /* Update/Render methods */
         /// <summary> Extensible method designed to handle all action. </summary>
         /// <see cref="Update"/>
         protected virtual void Act() { }
@@ -107,5 +108,7 @@ namespace GridRL {
                 g.Transform = original;
             }
         }
+
+        #endregion
     }
 }

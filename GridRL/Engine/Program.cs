@@ -4,10 +4,15 @@ using System;
 
 namespace GridRL {
     public class Program : Engine {
+        #region Properties
+
         public static Player player = new Player(0, 0);
         public static World world = new World();
         public static int waitState = 0;
         public static Direction lastDirection = Direction.None;
+
+        #endregion
+        #region Methods
 
         static void Main() {
             world.GenerateLevel();
@@ -19,6 +24,9 @@ namespace GridRL {
             canvas.Update();
             form.Refresh();
         }
+
+        #endregion
+        #region Overrides
 
         protected override void OnKeyDown(KeyEventArgs e) {
             Keys kc = e.KeyCode;
@@ -41,6 +49,9 @@ namespace GridRL {
             }
         }
 
+        #endregion
+        #region Utilities
+
         public static void Shuffle<T>(List<T> list) {
             int n = list.Count;
             for(int i = 0; i < n; i++) {
@@ -50,6 +61,7 @@ namespace GridRL {
                 list[i] = t;
             }
         }
-        
+
+        #endregion
     }
 }
