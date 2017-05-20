@@ -4,15 +4,18 @@ using System.Drawing;
 using System.Linq;
 
 namespace GridRL {
-
+    /// <summary> The type of world to be generate. </summary>
     public enum WorldType { Dungeon }
 
     /// <summary> A class containing an array of tiles and a level counter. </summary>
     public partial class World : Sprite {
-        /* Constructors */
+        #region Constructors
+
         public World() { }
 
-        /* Properties */
+        #endregion
+        #region Properties
+
         /// <summary> The array of tiles representing the current floor of the game. </summary>
         public Tile[,] Data { get; set; } = new Tile[Program.tilesHigh - 4, Program.tilesWide - 15];
 
@@ -46,7 +49,9 @@ namespace GridRL {
         public List<Effect> Effects { get; set; }
         public List<Effect> EffectsToRemove { get; set; }
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         /// <summary> Deletes the current level data and creates a new one. </summary>
         /// TODO: extensive unit testing. If you find a bug, make an issue and give us any and all information to debug it.
         public virtual void GenerateLevel() {
@@ -71,8 +76,8 @@ namespace GridRL {
             Program.canvas.Add(this);
         }
 
-
-        /* Overrides */
+        #endregion
+        #region Overrides
 
         protected override void Act() {
             foreach(Creature c in Creatures) {
@@ -126,5 +131,7 @@ namespace GridRL {
             }
             Program.player.Render(g);
         }
+
+        #endregion
     }
 }

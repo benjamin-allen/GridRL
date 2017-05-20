@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace GridRL {
     public partial class Creature {
-        /* Methods */
+        #region Methods
+
         private void RandomWalk() {
             var dirs = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToList();
             Program.Shuffle(dirs);
@@ -35,5 +36,7 @@ namespace GridRL {
                 }
             }
         }
+
+        #endregion
     }
 }

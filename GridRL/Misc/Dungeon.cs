@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace GridRL {
     public partial class World {
-        /* Methods */
+        #region Methods
+
         /// <summary> Populates a dungeon-like map. </summary>
         private void GenerateDungeon() {
             GenerateRooms();
@@ -377,5 +378,7 @@ namespace GridRL {
                 FloodFill(points[0], points[1]);
             }
         }
+
+        #endregion
     }
 }

@@ -5,7 +5,8 @@ using System;
 
 namespace GridRL {
     public class Player : Creature {
-        /* Constructors */
+        #region Constructors
+
         /// <summary> Creates a controllable creature. </summary>
         /// <param name="y"> The Y coordinate to place the player in the world. </param>
         /// <param name="x"> The X coordinate to place the player in the world. </param>
@@ -20,7 +21,9 @@ namespace GridRL {
             Abilities.Add(new Fireball());
         }
 
-        /* Methods */
+        #endregion
+        #region Methods
+
         /// <summary> Top-level function to capture and pass input to their sub-functions. </summary>
         /// <param name="e"> The KeyEventArgs thing. </param>
         /// <returns> A boolean indicating whether to advance the game. </returns>
@@ -86,5 +89,7 @@ namespace GridRL {
                 return Direction.Right;
             }
         }
+
+        #endregion
     }
 }
