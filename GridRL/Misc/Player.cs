@@ -60,13 +60,14 @@ namespace GridRL {
                 return true;
             }
             else if(e.KeyCode == Keys.A) {
+                Program.console.SetText("Used the " + Abilities[0].Name + " Ability!");
                 return Abilities[0].Use(this);
             }
             else if(e.KeyCode == Keys.G) {
                 Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
                 if(i != null) {
                     PickUp(i);
-                    Console.WriteLine("You pick up the " + i.Name + ".");
+                    Program.console.SetText("You pick up the " + i.Name + ".");
                 }
             }
             return false;

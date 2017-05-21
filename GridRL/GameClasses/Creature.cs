@@ -56,6 +56,7 @@ namespace GridRL {
         public bool PickUp(Item i) {
             if(Program.world.Data[CoordY, CoordX].Inventory.RemoveItem(i)) {
                 Inventory.AddItem(i);
+                Program.console.SetText(Name + " picked up the " + i.Name);
                 return true;
             }
             return false;
@@ -67,6 +68,7 @@ namespace GridRL {
         public bool Drop(Item i) {
             if(Program.world.Data[CoordY, CoordX].Inventory.AddItem(i)) {
                 Inventory.RemoveItem(i);
+                Program.console.SetText(Name + " dropped the " + i.Name);
                 return true;
             }
             return false;
@@ -77,12 +79,12 @@ namespace GridRL {
             if(Damage > 0) {
                 Health -= Damage;
             }
-            Console.WriteLine(Name + " was hit!");
+            Program.console.SetText(Name + " was hit!");
             if(Health <= 0) {
                 Remove(this);
                 Program.world.Creatures.Remove(this);
-                IsVisible = false;
-                IsCollidable = false;
+                Program.console.SetText(Name + " was killed!");
+                Program.world.CreaturesToRemove.Add(this);
             }
         }
 

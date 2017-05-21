@@ -22,6 +22,7 @@ namespace GridRL {
         }
 
         public override void OnCollide(Actor a) {
+            Program.console.SetText("The " + a.Name + " was destroyed!");
             Program.world.CreaturesToRemove.Add((Creature)a);
         }
 

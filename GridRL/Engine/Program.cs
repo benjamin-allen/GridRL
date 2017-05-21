@@ -7,6 +7,7 @@ namespace GridRL {
         #region Properties
 
         public static Player player = new Player(0, 0);
+        public static ScreenOutput console = new ScreenOutput();
         public static World world = new World();
         public static int waitState = 0;
         public static Direction lastDirection = Direction.None;
@@ -16,6 +17,7 @@ namespace GridRL {
 
         static void Main() {
             world.GenerateLevel();
+            canvas.Add(console);
             Application.Run(new Program());
         }
 
