@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace GridRL {
     public class Ability {
@@ -29,13 +30,18 @@ namespace GridRL {
         /// <summary> This ability's location on the grid. </summary>
         public int GridX { get; set; }
 
+        /// <summary> The effect acvitated when this ability is used. </summary>
+        public Effect Effect { get; set; }
+
         #endregion
         #region Methods
 
         /// <summary> Called when a creature activates this ability. Remove base when overriding. </summary>
         /// <param name="user"> The creature using this ability. </param>
         /// <returns> True: Ability used | False: Use abandoned (Prompt for direction abandoned) </returns>
-        public virtual bool Use(Creature user) { return false; }
+        public virtual bool Use(Creature user) {
+            return false;
+        }
 
         #endregion
     }
@@ -43,19 +49,99 @@ namespace GridRL {
     public class PassiveAbility : Ability {
         #region Constructors
 
-        public PassiveAbility() : base() { }
+        public PassiveAbility(Creature owner) : base() {
+            Owner = owner;
+        }
 
         #endregion
         #region Properties
 
-        public PassiveEffect Effect { get; set; }
+        public Creature Owner { get; set; }
+
+        #endregion
+        #region Method
+
+        public virtual void OnAddToGrid() { }
+
+        public virtual void OnRemoveFromGrid() { }
+
+        #endregion
+    }
+
+    public class DirectedAbility : Ability {
+        #region Constructors
+
+        public DirectedAbility() : base() { }
+
+        #endregion
+        #region Methods 
+
+        public virtual void CreateEffect(Creature user, Direction dir) { }
+
+        private bool promptDirection() {
+            Program.waitState = 1;
+            while(Program.waitState == 1) {
+                Application.DoEvents();
+            }
+            if(Program.waitState == -1) {
+                Program.lastDirection = Direction.None;
+                return false;
+            }
+            return true;
+        }
 
         #endregion
         #region Overrides
 
         public override bool Use(Creature user) {
-            // create new passive and apply it to the user
+            // if user is player, prompt for input
+            if(user == Program.player) {
+                if(promptDirection()) {
+                    CreateEffect(user, Program.lastDirection);
+                    Program.lastDirection = Direction.None;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                Direction dir = Direction.None;
+                if(Program.player.CoordX == user.CoordX) {
+                    if(Program.player.CoordY < user.CoordY) {
+                        dir = Direction.Up;
+                    }
+                    else {
+                        dir = Direction.Down;
+                    }
+                }
+                else if(Program.player.CoordY == user.CoordY) {
+                    if(Program.player.CoordX < user.CoordX) {
+                        dir = Direction.Left;
+                    }
+                    else {
+                        dir = Direction.Right;
+                    }
+                }
+                CreateEffect(user, dir);
+            } 
             return true;
+        }
+
+        #endregion
+    }
+
+    public class TargetedAbility : Ability {
+        #region Constructors
+
+        public TargetedAbility() : base() { }
+
+        #endregion
+        #region Overrides
+
+        public override bool Use(Creature user) {
+            // if user is player, allow for a targeter to select the square
+            // if user is not player, select the square of the player
+            return false;
         }
 
         #endregion
@@ -72,6 +158,8 @@ namespace GridRL {
             Activate(y, x);
         }
 
+        public Effect(Image image) : base(image) { }
+
         #endregion
         #region Properties
 
@@ -84,7 +172,7 @@ namespace GridRL {
         /// <summary> Called upon construction. </summary>
         /// <param name="y"></param>
         /// <param name="x"></param>
-        protected virtual void Activate(int y, int x) { }
+        public virtual void Activate(int y, int x) { }
 
         /// <summary> Base implementation decrements the lifetime of the effect. </summary>
         protected override void Act() {
@@ -92,9 +180,5 @@ namespace GridRL {
         }
 
         #endregion
-    }
-
-    public class PassiveEffect : Effect {
-        public PassiveEffect() : base(null, -1, -1) { }
     }
 }

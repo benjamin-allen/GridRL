@@ -2,36 +2,26 @@
 using System.Collections.Generic;
 
 namespace GridRL {
-    public class Fireball : Ability {
+    public class FlameBurst : DirectedAbility {
         #region Constructors
 
-        public Fireball() {
-            Name = "fireball";
-            Description = "Big ball of gas";
-            GridHeight = 2;
+        public FlameBurst() {
+            Name = "Flame Burst";
+            Description = "Blasts a small jet of flame from your hand.";
+            GridHeight = 1;
             GridWidth = 2;
+            Effect = new FlameBurstEffect();
         }
 
         #endregion
         #region Overrides
 
-        public override bool Use(Creature user) {
-            if(user == Program.player) {
-                // Prompt for direction
-                Program.waitState = 1;
-                while(Program.waitState == 1) {
-                    // Stop the game here but process events. 
-                    Application.DoEvents();
-                }
-                if(Program.waitState == -1) {
-                    return false;
-                }
-                List<int> points = user.DirectionToPoints(Program.lastDirection);
-                FireballEffect e = new FireballEffect(points[0], points[1]);
-                Program.world.Effects.Add(e);
-                Program.lastDirection = Direction.None;
-            }
-            return true;
+        public override void CreateEffect(Creature user, Direction dir) {
+            List<int> points = user.DirectionToPoints(dir);
+            Effect.CoordY = points[0];
+            Effect.CoordX = points[1];
+            Effect.Activate(Effect.CoordY, Effect.CoordX);
+            Program.world.Effects.Add(Effect);
         }
 
         #endregion

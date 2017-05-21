@@ -18,7 +18,7 @@ namespace GridRL {
             Attack = 10;
             Defense = 10;
             IsVisible = true;
-            Abilities.Add(new Fireball());
+            Abilities.Add(new FlameBurst());
         }
 
         #endregion

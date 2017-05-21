@@ -22,6 +22,8 @@ namespace GridRL {
         public static void GameLoop() {
             turnCount++;
             canvas.Update();
+            world.CreaturesToRemove = new List<Creature>();
+            world.EffectsToRemove = new List<Effect>();
             form.Refresh();
         }
 
