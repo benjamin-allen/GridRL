@@ -2,6 +2,7 @@
 using System.Linq;
 
 namespace GridRL {
+    /// <summary> Represents an actor that can exist in an inventory. </summary>
     public class Item : Actor {
         #region Constructors
 
@@ -47,7 +48,6 @@ namespace GridRL {
 
         #endregion
     }
-
 
     /// <summary> Represents a collection of items for creatures and tiles. </summary>
     public class Inventory {
@@ -128,6 +128,74 @@ namespace GridRL {
             }
             return itemRemoved;
         }
+
+        #endregion
+    }
+
+    /// <summary> An item that can be wielded and used to strike enemies. </summary>
+    public class Weapon : Item {
+        #region Constructors
+
+        /// <summary> Creates a new weapon with the given parameters. </summary>
+        /// <param name="image"> The image to be used for this weapon. </param>
+        /// <param name="y"> The y coordinate of this weapon. </param>
+        /// <param name="x"> The x coordinate of this weapon. </param>
+        public Weapon(Image image, int y, int x) : base(image, y, x) {
+            Name = "Dummy Weapon";
+            Description = "If you can see this, file a report for an improperly initialized weapon.";
+            MaxStack = 1;
+        }
+
+        #endregion
+        #region Properties
+
+        /// <summary> The attack bonus from this weapon. </summary>
+        public int Attack { get; set; } = 0;
+
+        /// <summary> The chance this weapon has of performing any special effects. </summary>
+        public float EffectChance { get; set; } = 0;
+
+        #endregion
+        #region Methods
+
+        /// <summary> Called when the wielded weapon is used to strike another creature. </summary>
+        /// <param name="owner"> The creature that wields this weapon. </param>
+        /// <param name="struck"> The creature being struck. </param>
+        public virtual void OnStrike(Creature owner, Creature struck) { }
+
+        #endregion
+    }
+
+    /// <summary> An item that can be worn for defense. </summary>
+    public class Armor : Item {
+        #region Constructors
+
+        /// <summary> Creates a new armor with the given parameters. </summary>
+        /// <param name="image"> The image to be used for this armor. </param>
+        /// <param name="y"> The y coordinate of this armor. </param>
+        /// <param name="x"> The x coordinate of this armor. </param>
+        public Armor(Image image, int y, int x) : base(image, y, x) {
+            Name = "Dummy Armor";
+            Description = "If you can see this, file a report for an improperly initialized armor.";
+            MaxStack = 1;
+        }
+
+        #endregion
+        #region Properties
+
+        /// <summary> The defense bonus from this armor. </summary>
+        public int Defense { get; set; } = 0;
+
+        /// <summary> The chance this armor has of performing any special effects. </summary>
+        public float EffectChance { get; set; } = 0;
+
+        #endregion
+        #region Methods
+
+        /// <summary> Called when the creature wearing this armor is struck. </summary>
+        /// <param name="striker"> The creature striking this one. </param>
+        /// <param name="owner"> The creature which owns this armor. </param>
+        public virtual void OnStrike(Creature striker, Creature owner) { }
 
         #endregion
     }
