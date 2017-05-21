@@ -11,6 +11,7 @@ namespace GridRL {
     public partial class World : Sprite {
         #region Constructors
 
+        /// <summary> Creates the world. </summary>
         public World() { }
 
         #endregion
@@ -41,12 +42,17 @@ namespace GridRL {
 
         /// <summary> List of all creatures located in the level. </summary>
         public List<Creature> Creatures { get; set; }
+
+        /// <summary> List of creatures to remove. </summary>
         public List<Creature> CreaturesToRemove { get; set; }
 
         /// <summary> List of all items located in the level. </summary>
         public List<Item> Items { get; set; }
 
+        /// <summary> List of effects that exist in the world. </summary>
         public List<Effect> Effects { get; set; }
+
+        /// <summary> List of effects to remove. </summary>
         public List<Effect> EffectsToRemove { get; set; }
 
         #endregion
@@ -79,7 +85,9 @@ namespace GridRL {
         #endregion
         #region Overrides
 
+        /// <summary> Updates the world. </summary>
         protected override void Act() {
+            // Collides creatures and effects. 
             foreach(Creature c in Creatures) {
                 foreach(Effect e in Effects) {
                     if(c.CoordX == e.CoordX && c.CoordY == e.CoordY) {
@@ -87,6 +95,7 @@ namespace GridRL {
                     }
                 }
             }
+            // Update tiles
             for(int y = 0; y < Data.GetLength(0); ++y) {
                 for(int x = 0; x < Data.GetLength(1); ++x) {
                     if(Data[y, x] != null) {
@@ -94,23 +103,29 @@ namespace GridRL {
                     }
                 }
             }
+            // Update creatures
             foreach(Creature c in Creatures) {
                 c.Update();
             }
+            // Update effects
             foreach(Effect e in Effects) {
                 e.Update();
                 if(e.TurnsLeft < 0) {
                     EffectsToRemove.Add(e);
                 }
             }
+            // Remove any effects to remove 
             foreach(Effect e in EffectsToRemove) {
                 Effects.Remove(e);
             }
+            // Remove an creatures to remove
             foreach(Creature c in CreaturesToRemove) {
                 Creatures.Remove(c);
             }
         }
 
+        /// <summary> Draws the world. </summary>
+        /// <param name="g"> The graphics doohicky. </param>
         protected override void Paint(Graphics g) {
             for(int y = 0; y < Data.GetLength(0); ++y) {
                 for(int x = 0; x < Data.GetLength(1); ++x) {

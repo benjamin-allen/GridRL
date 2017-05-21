@@ -30,6 +30,7 @@ namespace GridRL {
 
         protected override void OnKeyDown(KeyEventArgs e) {
             Keys kc = e.KeyCode;
+            // Do this if we're waiting for key input. 
             if(waitState != 0) {
                 if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right || 
                 kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
@@ -52,6 +53,9 @@ namespace GridRL {
         #endregion
         #region Utilities
 
+        /// <summary> Shuffles a list. </summary>
+        /// <typeparam name="T"> Template type parameter. </typeparam>
+        /// <param name="list"> The list to be shuffle. </param>
         public static void Shuffle<T>(List<T> list) {
             int n = list.Count;
             for(int i = 0; i < n; i++) {

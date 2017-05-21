@@ -40,16 +40,21 @@ namespace GridRL {
         /// <summary> The items held by this creature. </summary>
         public Inventory Inventory { get; set; } = new Inventory();
 
+        /// <summary> The kind of behavior followed by the creature. </summary>
         public AIType AI { get; set; } = AIType.Monster;
 
+        /// <summary> The abilities currently known by this monster. </summary>
         public List<Ability> Abilities { get; set; } = new List<Ability>();
 
         #endregion
         #region Methods
 
+        /// <summary> Executes an attack on the given creature. </summary>
+        /// <param name="attacked"> The creature to be attacked. </param>
         protected virtual void PerformAttack(Creature attacked) {
             attacked.OnAttack(this);
         }
+
         /// <summary> Attempt to add an item to the invetory of this creature. </summary>
         /// <param name="i"> The item being obtained. </param>
         /// <returns> A boolean indicating whether the item was successfully obtained. </returns>
@@ -72,6 +77,8 @@ namespace GridRL {
             return false;
         }
 
+        /// <summary> Called when a creature is attacked. </summary>
+        /// <param name="attacker"> The creature attacking this. </param>
         protected virtual void OnAttack(Creature attacker) {
             int Damage = attacker.Attack - Defense;
             if(Damage > 0) {
@@ -88,14 +95,14 @@ namespace GridRL {
 
         #endregion
         #region Overrides
+
+        /// <summary> Makes decisions based on AI. </summary>
         protected override void Act() {
             base.Act();
             if(AI == AIType.Monster) {
                 RandomWalk();
             }
         }
-
-        //Possible override base.Remove() for onDeath message of some kind.
 
         #endregion
     }

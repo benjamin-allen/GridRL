@@ -15,6 +15,10 @@
             IsVisible = true;
         }
 
+        public override void OnCollide(Actor a) {
+            Program.world.CreaturesToRemove.Add((Creature)a);
+        }
+
         #endregion
     }
 }

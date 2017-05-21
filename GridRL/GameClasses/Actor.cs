@@ -119,6 +119,8 @@ namespace GridRL {
         #endregion
         #region Overrides
 
+        /// <summary> Draws the actor if it is visible. </summary>
+        /// <param name="g"> Graphics doohicky. </param>
         protected override void Paint(Graphics g) {
             if(IsVisible) {
                 base.Paint(g); 

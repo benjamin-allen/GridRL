@@ -6,6 +6,7 @@ namespace GridRL {
     public partial class Creature {
         #region Methods
 
+        /// <summary> Performs a random walk. </summary>
         private void RandomWalk() {
             var dirs = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToList();
             Program.Shuffle(dirs);

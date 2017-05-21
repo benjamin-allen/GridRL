@@ -41,6 +41,8 @@ namespace GridRL {
         /// <param name="grabber"> The creature that picked up this item.</param>
         public virtual void PickUp(Creature grabber) { }
 
+        /// <summary> Called when this item is activated. </summary>
+        /// <param name="activator"> The creature that activated this. </param>
         public virtual void OnActivate(Creature activator) { }
 
         #endregion

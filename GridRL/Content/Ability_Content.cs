@@ -17,8 +17,10 @@ namespace GridRL {
 
         public override bool Use(Creature user) {
             if(user == Program.player) {
+                // Prompt for direction
                 Program.waitState = 1;
                 while(Program.waitState == 1) {
+                    // Stop the game here but process events. 
                     Application.DoEvents();
                 }
                 if(Program.waitState == -1) {
