@@ -84,8 +84,8 @@ namespace GridRL {
 
         public void UpdateVisibles() {
             bool playerIsInRoom = false;
-            for(int y = 1; y < Data.GetLength(0) - 1; ++y) {
-                for(int x = 1; x < Data.GetLength(1) - 1; ++x) {
+            for(int y = 0; y < Data.GetLength(0); ++y) {
+                for(int x = 0; x < Data.GetLength(1); ++x) {
                     if(Data[y, x] != null) {
                         if(Data[y, x].Visibility == Vis.Visible) {
                             Data[y, x].Visibility = Vis.Memory;
@@ -145,8 +145,8 @@ namespace GridRL {
                         || Data[points[0], points[1]] == null) {
                             break;
                         }
-                        if(Data[points[0], points[1]].BlocksLight || !Data[points[0], points[1]].BlocksLight) {
-                            Data[points[0], points[1]].Visibility = Vis.Visible;
+                        Data[points[0], points[1]].Visibility = Vis.Visible;
+                        if(Data[points[0], points[1]].BlocksLight) {
                             break;
                         }
                         foreach(Creature c in Creatures) {

@@ -39,20 +39,14 @@ namespace GridRL {
             Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
 
-            for(int y = 1; y < Data.GetLength(0) - 1; ++y) {
-                for(int x = 1; x < Data.GetLength(1) - 1; ++x) {
-                    if(Data[y, x] == null) {
-                        Data[y, x] = new Wall(y, x);
+            foreach(List<int> points in RoomPoints) {
+                for(int y = points[0] - 1; y < points[2] + 1; ++y) {
+                    for(int x = points[1] - 1; x < points[3] + 1; ++x) {
+                        if(Data[y, x] == null) {
+                            Data[y, x] = new Wall(y, x);
+                        }
                     }
                 }
-            }
-            for(int y = 0; y < Data.GetLength(0); ++ y) {
-                Data[y, 0] = new Wall(y, 0);
-                Data[y, Data.GetLength(1) - 1] = new Wall(y, Data.GetLength(1) - 1);
-            }
-            for(int x = 0; x < Data.GetLength(1); ++x) {
-                Data[0, x] = new Wall(0, x);
-                Data[Data.GetLength(0) - 1, x] = new Wall(Data.GetLength(0) - 1 , x);
             }
 
             Program.player.CoordX = entryX;
