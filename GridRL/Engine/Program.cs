@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Collections.Generic;
-using System;
+using System.Drawing.Imaging;
 
 namespace GridRL {
     public class Program : Engine {
@@ -10,11 +10,18 @@ namespace GridRL {
         public static World world = new World();
         public static int waitState = 0;
         public static Direction lastDirection = Direction.None;
+        public static ColorMatrix grayMatrix = new ColorMatrix(new float[][] { new float[]{1, 0, 0, 0, 0},
+                                                                               new float[]{0, 1, 0, 0, 0},
+                                                                               new float[]{0, 0, 1, 0, 0},
+                                                                               new float[]{0, 0, 0, .25f, 0},
+                                                                               new float[]{0, 0, 0, 0, 1} });
+        public static ImageAttributes gray = new ImageAttributes();
 
         #endregion
         #region Methods
 
         static void Main() {
+            gray.SetColorMatrix(grayMatrix);
             world.GenerateLevel();
             Application.Run(new Program());
         }

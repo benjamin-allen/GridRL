@@ -128,6 +128,9 @@ namespace GridRL {
             if(Visibility == Vis.Visible) {
                 base.Paint(g); 
             }
+            else if(Visibility == Vis.Memory) {
+                g.DrawImage(Image, new Rectangle(0, 0, Image.Width, Image.Height), 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, Program.gray);
+            }
         }
 
         #endregion
