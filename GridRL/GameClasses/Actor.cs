@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 
 namespace GridRL {
-    /// <summary> </summary>
+    /// <summary> Represents cardinal directions for movement and directional abilities. </summary>
     public enum Direction {None, Up, Down, Left, Right }
+
+    /// <summary> Represents the visibility status of an actor. </summary>
+    public enum Vis { Unseen, Memory, Visible}
 
     /// <summary> A base class for anything that exists on the world. </summary>
     public class Actor : ImageSprite {
@@ -37,7 +40,7 @@ namespace GridRL {
         public bool IsCollidable { get; set; } = false;
 
         /// <summary> A boolean that determines if an actor is visible. </summary>
-        public bool IsVisible { get; set; } = false;
+        public Vis Visibility { get; set; } = Vis.Unseen;
 
         private int coordX;
         private int coordY;
@@ -122,7 +125,7 @@ namespace GridRL {
         /// <summary> Draws the actor if it is visible. </summary>
         /// <param name="g"> Graphics doohicky. </param>
         protected override void Paint(Graphics g) {
-            if(IsVisible) {
+            if(Visibility == Vis.Visible) {
                 base.Paint(g); 
             }
         }

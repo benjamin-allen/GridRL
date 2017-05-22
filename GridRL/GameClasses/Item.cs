@@ -22,7 +22,7 @@ namespace GridRL {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
             IsCollidable = false;
-            IsVisible = true;
+            Visibility = Vis.Unseen;
         }
 
         #endregion
@@ -196,6 +196,30 @@ namespace GridRL {
         /// <param name="striker"> The creature striking this one. </param>
         /// <param name="owner"> The creature which owns this armor. </param>
         public virtual void OnStrike(Creature striker, Creature owner) { }
+
+        #endregion
+    }
+
+    class Orb : Item {
+        #region Constructors
+
+        public Orb(Image image) : base(image) {
+            Name = "Dummy Orb";
+            Description = "If you can see this, file a report for an improperly initialized orb.";
+            MaxStack = 1;
+        }
+
+        #endregion
+        #region Properties
+
+        public Ability Ability { get; set; }
+
+        #endregion
+        #region Methods
+
+        public void Activate(Creature activator) {
+            activator.AddNewAbility(Ability);
+        }
 
         #endregion
     }

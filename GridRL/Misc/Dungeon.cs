@@ -37,9 +37,7 @@ namespace GridRL {
             int exitY = Engine.rand.Next(RoomPoints[exitRoom][0], RoomPoints[exitRoom][2]);
             int exitX = Engine.rand.Next(RoomPoints[exitRoom][1], RoomPoints[exitRoom][3]);
             Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
-            Data[entryY, entryX].IsVisible = true;
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
-            Data[exitY, exitX].IsVisible = true;
 
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
@@ -99,7 +97,6 @@ namespace GridRL {
             for(int y = points[0]; y < points[2]; ++y) {
                 for(int x = points[1]; x < points[3]; ++x) {
                     Data[y, x] = new RoomFloor(y, x, region);
-                    Data[y, x].IsVisible = true;
                 }
             }
         }
@@ -111,7 +108,6 @@ namespace GridRL {
             // Make a corridor at the points if it's null
             if(Data[points[0], points[1]] == null) {
                 Data[points[0], points[1]] = new Corridor(points[0], points[1], region);
-                Data[points[0], points[1]].IsVisible = true;
             }
             // Check to see if any carving can be done
             List<Direction> validDirs = GetValidDirectionsFrom(points[0], points[1]);
@@ -127,9 +123,7 @@ namespace GridRL {
                 List<int> interPoints = Data[points[0], points[1]].DirectionToPoints(d);
                 List<int> nextPoints = Data[points[0], points[1]].DirectionToPoints(d, 2);
                 Data[interPoints[0], interPoints[1]] = new Corridor(interPoints[0], interPoints[1], region);
-                Data[interPoints[0], interPoints[1]].IsVisible = true;
                 Data[nextPoints[0], nextPoints[1]] = new Corridor(nextPoints[0], nextPoints[1], region);
-                Data[nextPoints[0], nextPoints[1]].IsVisible = true;
                 Carve(nextPoints, region);
             }
         }
@@ -264,7 +258,6 @@ namespace GridRL {
                     Data[doorPoints[0], doorPoints[1]] = new Door(doorPoints[0], doorPoints[1], -1);
                     List<int> otherArea = Data[doorPoints[0], doorPoints[1]].DirectionToPoints(d);
                     int overrideRegion = Data[otherArea[0], otherArea[1]].Region;
-                    Data[doorPoints[0], doorPoints[1]].IsVisible = true;
                     Data[doorPoints[0], doorPoints[1]].Region = overrideRegion;
                     // Once the door is in place, flood the room with the new region to represent attachment
                     for(int y = roomY; y < room2Y; ++y) {
@@ -350,7 +343,6 @@ namespace GridRL {
                         List<int> connectPoints = Data[y, x].DirectionToPoints(d, 1);
                         if(!Data[y,x].CanAccess(d, 1) && Data[y,x].CanAccess(d, 2) && Data[masterRegionPoints[0], masterRegionPoints[1]].Region != currentRegion) {
                             Data[connectPoints[0], connectPoints[1]] = new Door(connectPoints[0], connectPoints[1], currentRegion);
-                            Data[connectPoints[0], connectPoints[1]].IsVisible = true;
                             continue;
                         }
                     }

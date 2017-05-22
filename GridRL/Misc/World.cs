@@ -82,6 +82,84 @@ namespace GridRL {
             Program.canvas.Add(this);
         }
 
+        public void UpdateVisibles() {
+            bool playerIsInRoom = false;
+            for(int y = 1; y < Data.GetLength(0) - 1; ++y) {
+                for(int x = 1; x < Data.GetLength(1) - 1; ++x) {
+                    if(Data[y, x] != null) {
+                        Data[y, x].Visibility = Vis.Unseen;
+                    }
+                }
+            }
+            foreach(List<int> points in RoomPoints) {
+                if(Program.player.CoordY >= points[0] && Program.player.CoordY < points[2]
+                && Program.player.CoordX >= points[1] && Program.player.CoordX < points[3]) {
+                    playerIsInRoom = true;
+                    for (int y = points[0]; y < points[2]; ++y) {
+                        for(int x = points[1]; x < points[3]; ++x) {
+                            if(Data[y, x] != null) {
+                                Data[y, x].Visibility = Vis.Visible;
+                            }
+                        }
+                    }
+                    foreach(Creature c in Creatures) {
+                        if(c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3]) {
+                            c.Visibility = Vis.Visible;
+                        }
+                        foreach(Effect e in Effects) {
+                            if(e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
+                                e.Visibility = Vis.Visible;
+                            }
+                        }
+                    }
+                }
+                else {
+                    for(int y = points[0]; y < points[2]; ++y) {
+                        for(int x = points[1]; x < points[3]; ++x) {
+                            if(Data[y, x] != null && Data[y, x].Visibility == Vis.Visible) {
+                                Data[y, x].Visibility = Vis.Memory;
+                            }
+                        }
+                    }
+                    foreach(Creature c in Creatures) {
+                        if(c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3]) {
+                            c.Visibility = Vis.Unseen;
+                        }
+                        foreach(Effect e in Effects) {
+                            if(e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
+                                e.Visibility = Vis.Unseen;
+                            }
+                        }
+                    }
+                }
+            }
+            if(!playerIsInRoom) {
+                var dirs = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToList();
+                foreach(Direction d in dirs) {
+                    for(int i = 1; i < 4; ++i) {
+                        List<int> points = Program.player.DirectionToPoints(d, i);
+                        if(points[0] < 1 || points[0] > Data.GetLength(0) || points[1] < 1 || points[1] > Data.GetLength(1)
+                        || Data[points[0], points[1]] == null) {
+                            break;
+                        }
+                        if(Data[points[0], points[1]] != null) {
+                            Data[points[0], points[1]].Visibility = Vis.Visible;
+                        }
+                        foreach(Creature c in Creatures) {
+                            if(c.CoordY == points[0] && c.CoordX == points[1]) {
+                                c.Visibility = Vis.Visible;
+                            }
+                        }
+                        foreach(Effect e in Effects) {
+                            if(e.CoordY == points[0] && e.CoordX == points[1]) {
+                                e.Visibility = Vis.Visible;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
         #region Overrides
 

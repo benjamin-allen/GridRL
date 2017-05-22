@@ -17,7 +17,7 @@ namespace GridRL {
             Health = 10;
             Attack = 10;
             Defense = 10;
-            IsVisible = true;
+            Visibility = Vis.Visible;
             Abilities.Add(new FlameBurst());
             Abilities.Add(new AttackBoost(this));
         }

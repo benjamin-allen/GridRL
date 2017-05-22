@@ -9,7 +9,7 @@
             Health = 20;
             Attack = 0;
             Defense = 0;
-            IsVisible = true;
+            Visibility = Vis.Unseen;
         }
 
         #endregion

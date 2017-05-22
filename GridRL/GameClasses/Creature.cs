@@ -46,6 +46,12 @@ namespace GridRL {
         /// <summary> The abilities currently known by this monster. </summary>
         public List<Ability> Abilities { get; set; } = new List<Ability>();
 
+        public Weapon HeldWeapon { get; set; }
+
+        public Armor WornArmor { get; set; }
+
+        public Item HeldItem { get; set; }
+
         #endregion
         #region Methods
 
@@ -84,14 +90,15 @@ namespace GridRL {
             if(Damage > 0) {
                 Health -= Damage;
             }
-            Console.WriteLine(Name + " was hit!");
             if(Health <= 0) {
                 Remove(this);
                 Program.world.Creatures.Remove(this);
-                IsVisible = false;
+                Visibility = Vis.Unseen;
                 IsCollidable = false;
             }
         }
+
+        public virtual void AddNewAbility(Ability a) { }
 
         #endregion
         #region Overrides

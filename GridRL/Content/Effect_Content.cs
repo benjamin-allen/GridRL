@@ -13,7 +13,7 @@
             TurnsLeft = 1;
             CoordY = y;
             CoordX = x;
-            IsVisible = true;
+            Visibility = Vis.Unseen;
         }
 
         public override void OnCollide(Actor a) {

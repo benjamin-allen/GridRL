@@ -24,6 +24,7 @@ namespace GridRL {
             canvas.Update();
             world.CreaturesToRemove = new List<Creature>();
             world.EffectsToRemove = new List<Effect>();
+            world.UpdateVisibles();
             form.Refresh();
         }
 
