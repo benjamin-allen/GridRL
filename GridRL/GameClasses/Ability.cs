@@ -43,6 +43,10 @@ namespace GridRL {
             return false;
         }
 
+        public virtual void OnAddToGrid() { }
+
+        public virtual void OnRemoveFromGrid() { }
+
         #endregion
     }
 
@@ -61,9 +65,9 @@ namespace GridRL {
         #endregion
         #region Method
 
-        public virtual void OnAddToGrid() { }
+        public override void OnAddToGrid() { }
 
-        public virtual void OnRemoveFromGrid() { }
+        public override void OnRemoveFromGrid() { }
 
         #endregion
     }
@@ -96,7 +100,7 @@ namespace GridRL {
         public override bool Use(Creature user) {
             // if user is player, prompt for input
             if(user == Program.player) {
-                if(promptDirection()) {
+                if(promptDirection() && user.CanAccess(Program.lastDirection)) {
                     CreateEffect(user, Program.lastDirection);
                     Program.lastDirection = Direction.None;
                 }

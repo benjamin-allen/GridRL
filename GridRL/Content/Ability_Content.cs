@@ -26,4 +26,23 @@ namespace GridRL {
 
         #endregion
     }
+
+    public class AttackBoost : PassiveAbility {
+        #region Constructors
+
+        public AttackBoost(Creature owner) : base(owner) { }
+
+        #endregion
+        #region Overrides
+
+        public override void OnAddToGrid() {
+            Owner.Attack += 2;
+        }
+
+        public override void OnRemoveFromGrid() {
+            Owner.Attack -= 2;
+        }
+
+        #endregion
+    }
 }
