@@ -10,6 +10,7 @@ namespace GridRL {
         public static ScreenOutput console = new ScreenOutput();
         public static Sidebar sidebar = new Sidebar();
         public static World world = new World();
+        public static int[] GridMouseCoords = new int[2];
         public static int waitState = 0;
         public static Direction lastDirection = Direction.None;
 
@@ -27,6 +28,33 @@ namespace GridRL {
             turnCount++;
             canvas.Update();
             form.Refresh();
+        }
+
+        public static int[] GetMouseGridCoords(MouseEventArgs g) {
+
+            int[] coords = new int[2];
+            //X position checks
+            if(g.X < 1160) {
+               coords[1] = 0;
+            }
+            else if(g.X < 1240) {
+                coords[1] = 1;
+            }
+            else {
+                coords[1] = 2;
+            }
+
+            //Y position checks
+            if(g.Y < 530) {
+                coords[0] = 0;
+            }
+            else if(g.Y < 610) {
+                coords[0] = 1;
+            }
+            else {
+                coords[0] = 2;
+            }
+            return coords;
         }
 
         #endregion
@@ -50,6 +78,13 @@ namespace GridRL {
             }
             else {
                 waitState = 0;
+            }
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e) {
+            base.OnMouseClick(e);
+            if(e.X > 1080 && e.X < 1320 && e.Y > 450 && e.Y < 690) {
+                GridMouseCoords = GetMouseGridCoords(e);
             }
         }
 

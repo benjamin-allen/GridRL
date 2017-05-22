@@ -14,6 +14,8 @@ namespace GridRL {
         public Sidebar() : base() {
         }
 
+        
+
         protected override void Paint(Graphics g) {
             stats[0] = Program.player.Health;
             stats[1] = Program.player.Attack;
