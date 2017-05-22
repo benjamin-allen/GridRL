@@ -27,6 +27,20 @@ namespace GridRL {
         #endregion
     }
 
+    public class Wall : Tile {
+        #region Constructors
+
+        public Wall(int y, int x) : base(Properties.Resources.Wall, y, x) {
+            Name = "wall";
+            Description = "A simple stone wall.";
+            IsWalkable = false;
+            IsCollidable = true;
+            BlocksLight = true;
+        }
+
+        #endregion
+    }
+
     public enum DoorState { Closed, Broken, Open }
     public class Door : Tile {
         #region Constructors

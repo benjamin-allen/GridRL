@@ -23,6 +23,7 @@ namespace GridRL {
         static void Main() {
             gray.SetColorMatrix(grayMatrix);
             world.GenerateLevel();
+            world.UpdateVisibles();
             Application.Run(new Program());
         }
 

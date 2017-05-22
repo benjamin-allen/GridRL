@@ -141,12 +141,13 @@ namespace GridRL {
                 foreach(Direction d in dirs) {
                     for(int i = 1; i < 4; ++i) {
                         List<int> points = Program.player.DirectionToPoints(d, i);
-                        if(points[0] < 1 || points[0] > Data.GetLength(0) || points[1] < 1 || points[1] > Data.GetLength(1)
-                        || Data[points[0], points[1]] == null || Data[points[0], points[1]].BlocksLight) {
+                        if(points[0] < 0 || points[0] >= Data.GetLength(0) || points[1] < 0 || points[1] >= Data.GetLength(1)
+                        || Data[points[0], points[1]] == null) {
                             break;
                         }
-                        if(Data[points[0], points[1]] != null) {
+                        if(Data[points[0], points[1]].BlocksLight || !Data[points[0], points[1]].BlocksLight) {
                             Data[points[0], points[1]].Visibility = Vis.Visible;
+                            break;
                         }
                         foreach(Creature c in Creatures) {
                             if(c.CoordY == points[0] && c.CoordX == points[1]) {

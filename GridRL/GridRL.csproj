@@ -128,6 +128,7 @@
     <Content Include="Resources\Effects\Flame.png" />
     <Content Include="Resources\Tiles\Corridor.png" />
     <Content Include="Resources\Tiles\Door.png" />
+    <None Include="Resources\Tiles\Wall.png" />
     <None Include="Resources\Tiles\Door_Open.png" />
     <None Include="Resources\Tiles\Door_Closed.png" />
     <Content Include="Resources\Tiles\Floor.png" />
