@@ -9,6 +9,7 @@ namespace GridRL {
     public class Sidebar : Sprite {
 
         private static int[] stats = new int[3];
+        private static int InvCellSize = 32;
         Font ConsoleText = new Font("Courier New", 9);
 
         public Sidebar() : base() {
@@ -17,10 +18,12 @@ namespace GridRL {
         
 
         protected override void Paint(Graphics g) {
+
+            //Drawing stats box
             stats[0] = Program.player.Health;
             stats[1] = Program.player.Attack;
             stats[2] = Program.player.Defense;
-            Rectangle statsBox = new Rectangle(1050, 10, 300, 100);
+            Rectangle statsBox = new Rectangle(1080, 10, 300, 100);
             g.DrawRectangle(Pens.White, statsBox);
             string statOutput =
                 "Name: " + Program.player.Name + "\n" +
@@ -28,6 +31,15 @@ namespace GridRL {
                 "Attack: " + stats[1] + "\n" +
                 "Defense: " + stats[2];
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
+
+            //Drawing inventory slots
+            g.DrawString("Player Inventory", ConsoleText, Brushes.White, 1080, 150);
+            for(int i = 0 ; i < 2 ; i++) {
+                for(int j = 0 ; j < 10 ; j++) {
+                    Rectangle rect = new Rectangle(1080 + j * InvCellSize, 170 + i * InvCellSize, InvCellSize, InvCellSize);
+                    g.DrawRectangle(Pens.White, rect);
+                }
+            }
 
             //Drawing ability grid
             int cellSize = 80;
