@@ -84,6 +84,12 @@ namespace GridRL {
 
         public void UpdateVisibles() {
             bool playerIsInRoom = false;
+            foreach(Creature c in Creatures) {
+                c.Visibility = Vis.Unseen;
+            }
+            foreach(Effect e in Effects) {
+                e.Visibility = Vis.Unseen;
+            }
             for(int y = 0; y < Data.GetLength(0); ++y) {
                 for(int x = 0; x < Data.GetLength(1); ++x) {
                     if(Data[y, x] != null) {
@@ -105,14 +111,16 @@ namespace GridRL {
                             }
                         }
                     }
-                    foreach(Creature c in Creatures) {
-                        if(c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3]) {
+                    foreach (Creature c in Creatures) {
+                        c.Visibility = Vis.Unseen;
+                        if (c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3]) {
                             c.Visibility = Vis.Visible;
                         }
-                        foreach(Effect e in Effects) {
-                            if(e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
-                                e.Visibility = Vis.Visible;
-                            }
+                    }
+                    foreach(Effect e in Effects) {
+                        e.Visibility = Vis.Unseen;
+                        if (e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
+                            e.Visibility = Vis.Visible;
                         }
                     }
                 }
@@ -124,20 +132,22 @@ namespace GridRL {
                             }
                         }
                     }
-                    foreach(Creature c in Creatures) {
-                        if(c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3]) {
+                    foreach (Creature c in Creatures) {
+                        if (c.CoordY >= points[0] && c.CoordY < points[2] && c.CoordX >= points[1] && c.CoordX < points[3])
+                        {
                             c.Visibility = Vis.Unseen;
                         }
-                        foreach(Effect e in Effects) {
-                            if(e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
-                                e.Visibility = Vis.Unseen;
-                            }
+                    }
+                    foreach(Effect e in Effects) {
+                        if(e.CoordY >= points[0] && e.CoordY < points[2] && e.CoordX >= points[1] && e.CoordX < points[3]) {
+                            e.Visibility = Vis.Unseen;
                         }
                     }
                 }
             }
             if(!playerIsInRoom) {
                 var dirs = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToList();
+                List<List<int>> visiblePoints = new List<List<int>>();
                 foreach(Direction d in dirs) {
                     for(int i = 1; i < 4; ++i) {
                         List<int> points = Program.player.DirectionToPoints(d, i);
@@ -146,18 +156,21 @@ namespace GridRL {
                             break;
                         }
                         Data[points[0], points[1]].Visibility = Vis.Visible;
+                        visiblePoints.Add(new List<int>(new int[] { points[0], points[1] }));
                         if(Data[points[0], points[1]].BlocksLight) {
                             break;
                         }
-                        foreach(Creature c in Creatures) {
-                            if(c.CoordY == points[0] && c.CoordX == points[1]) {
-                                c.Visibility = Vis.Visible;
-                            }
+                    }
+                }
+                foreach(List<int> points in visiblePoints) {
+                    foreach(Creature c in Creatures) {
+                        if(c.CoordY == points[0] && c.CoordX == points[1]) {
+                            c.Visibility = Vis.Visible;
                         }
-                        foreach(Effect e in Effects) {
-                            if(e.CoordY == points[0] && e.CoordX == points[1]) {
-                                e.Visibility = Vis.Visible;
-                            }
+                    }
+                    foreach(Effect e in Effects) {
+                        if(e.CoordY == points[0] && e.CoordX == points[1]) {
+                            e.Visibility = Vis.Visible;
                         }
                     }
                 }

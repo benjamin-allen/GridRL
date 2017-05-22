@@ -63,7 +63,7 @@ namespace GridRL {
         public Creature Owner { get; set; }
 
         #endregion
-        #region Method
+        #region Overrides
 
         public override void OnAddToGrid() { }
 
