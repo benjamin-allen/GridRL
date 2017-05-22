@@ -2,9 +2,9 @@
     class FlameBurstEffect : Effect {
         #region Constructors
 
-        public FlameBurstEffect(int y, int x) : base(Properties.Resources.Fireball, y, x) { }
+        public FlameBurstEffect(int y, int x) : base(Properties.Resources.Flame, y, x) { }
 
-        public FlameBurstEffect() : base(Properties.Resources.Fireball) { }
+        public FlameBurstEffect() : base(Properties.Resources.Flame) { }
         
         #endregion
         #region Overrides

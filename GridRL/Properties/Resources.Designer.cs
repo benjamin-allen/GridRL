@@ -73,9 +73,19 @@ namespace GridRL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Door {
+        internal static System.Drawing.Bitmap Door_Closed {
             get {
-                object obj = ResourceManager.GetObject("Door", resourceCulture);
+                object obj = ResourceManager.GetObject("Door_Closed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Door_Open {
+            get {
+                object obj = ResourceManager.GetObject("Door_Open", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +103,9 @@ namespace GridRL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Fireball {
+        internal static System.Drawing.Bitmap Flame {
             get {
-                object obj = ResourceManager.GetObject("Fireball", resourceCulture);
+                object obj = ResourceManager.GetObject("Flame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +133,9 @@ namespace GridRL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Stair {
+        internal static System.Drawing.Bitmap Stair_Down {
             get {
-                object obj = ResourceManager.GetObject("Stair", resourceCulture);
+                object obj = ResourceManager.GetObject("Stair_Down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +143,9 @@ namespace GridRL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Weap {
+        internal static System.Drawing.Bitmap Stair_Up {
             get {
-                object obj = ResourceManager.GetObject("Weap", resourceCulture);
+                object obj = ResourceManager.GetObject("Stair_Up", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

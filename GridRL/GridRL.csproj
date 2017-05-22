@@ -77,18 +77,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -122,7 +122,22 @@
   <ItemGroup>
     <None Include="Resources\Fireball.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Creatures\Dummy.png" />
+    <Content Include="Resources\Creatures\Player.png" />
+    <Content Include="Resources\Effects\Flame.png" />
+    <Content Include="Resources\Tiles\Corridor.png" />
+    <Content Include="Resources\Tiles\Door.png" />
+    <None Include="Resources\Tiles\Door_Open.png" />
+    <None Include="Resources\Tiles\Door_Closed.png" />
+    <Content Include="Resources\Tiles\Floor.png" />
+    <Content Include="Resources\Tiles\Stair_Down.png" />
+    <Content Include="Resources\Tiles\Stair_Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Items\" />
+    <Folder Include="Resources\Misc\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
