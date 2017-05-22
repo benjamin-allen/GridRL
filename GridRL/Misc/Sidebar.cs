@@ -32,11 +32,20 @@ namespace GridRL {
                 "Defense: " + stats[2];
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
 
-            //Drawing inventory slots
+            //Drawing player inventory slots
             g.DrawString("Player Inventory", ConsoleText, Brushes.White, 1080, 150);
             for(int i = 0 ; i < 2 ; i++) {
                 for(int j = 0 ; j < 10 ; j++) {
                     Rectangle rect = new Rectangle(1080 + j * InvCellSize, 170 + i * InvCellSize, InvCellSize, InvCellSize);
+                    g.DrawRectangle(Pens.White, rect);
+                }
+            }
+
+            //Drawing tile inventory slots
+            g.DrawString("Tile Inventory", ConsoleText, Brushes.White, 1080, 250);
+            for(int i = 0; i < 2; i++) {
+                for(int j = 0; j < 10; j++) {
+                    Rectangle rect = new Rectangle(1080 + j * InvCellSize, 270 + i * InvCellSize, InvCellSize, InvCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
