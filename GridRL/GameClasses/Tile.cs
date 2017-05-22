@@ -28,6 +28,8 @@ namespace GridRL {
         /// <summary> The items located on this tile. </summary>
         public Inventory Inventory { get; set; } = new Inventory();
 
+        public bool BlocksLight { get; set; } = false;
+
         #endregion
         #region Methods
 

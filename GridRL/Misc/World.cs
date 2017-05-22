@@ -97,9 +97,10 @@ namespace GridRL {
                 if(Program.player.CoordY >= points[0] && Program.player.CoordY < points[2]
                 && Program.player.CoordX >= points[1] && Program.player.CoordX < points[3]) {
                     playerIsInRoom = true;
-                    for (int y = points[0]; y < points[2]; ++y) {
-                        for(int x = points[1]; x < points[3]; ++x) {
+                    for (int y = points[0] - 1; y <= points[2]; ++y) {
+                        for(int x = points[1] - 1; x <= points[3]; ++x) {
                             if(Data[y, x] != null) {
+                                // This needs  a flood fill for the whole room area.
                                 Data[y, x].Visibility = Vis.Visible;
                             }
                         }
@@ -141,7 +142,7 @@ namespace GridRL {
                     for(int i = 1; i < 4; ++i) {
                         List<int> points = Program.player.DirectionToPoints(d, i);
                         if(points[0] < 1 || points[0] > Data.GetLength(0) || points[1] < 1 || points[1] > Data.GetLength(1)
-                        || Data[points[0], points[1]] == null) {
+                        || Data[points[0], points[1]] == null || Data[points[0], points[1]].BlocksLight) {
                             break;
                         }
                         if(Data[points[0], points[1]] != null) {

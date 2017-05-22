@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
-using System.Linq;
 using System.Collections.Generic;
-using System;
 
 namespace GridRL {
     /// <summary> Determines how a creature acts. </summary>

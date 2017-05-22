@@ -36,6 +36,7 @@ namespace GridRL {
             Description = "An old wooden door placed here long ago. You might be able to open it.";
             Region = region;
             IsCollidable = true;
+            BlocksLight = true;
         }
 
         #endregion
@@ -51,6 +52,7 @@ namespace GridRL {
                 DoorState = DoorState.Open;
                 IsCollidable = false;
                 IsWalkable = true;
+                BlocksLight = false;
                 Image = Properties.Resources.Door_Open;
             }
         }
