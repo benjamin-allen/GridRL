@@ -28,7 +28,7 @@ namespace GridRL {
         /// <summary> Top-level function to capture and pass input to their sub-functions. </summary>
         /// <param name="e"> The KeyEventArgs thing. </param>
         /// <returns> A boolean indicating whether to advance the game. </returns>
-        public bool HandleGameInput(KeyEventArgs e) {
+        public bool HandleKeyInput(KeyEventArgs e) {
             if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2
             || e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6) {
                 Direction dir = KeyPressToDirection(e);
@@ -100,6 +100,9 @@ namespace GridRL {
             }
         }
 
+        public bool HandleMouseInput(MouseEventArgs e) {
+            return true;
+        }
         #endregion
     }
 }

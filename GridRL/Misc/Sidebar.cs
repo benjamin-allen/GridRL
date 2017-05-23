@@ -12,7 +12,7 @@ namespace GridRL {
         private static int InvCellSize = 16;
         private static int CellsY = 11;
         private static int CellsY2 = CellsY + 6;
-        private static int CellsX = 66;
+        private static int CellsX = 67;
         Font ConsoleText = new Font("Courier New", 9);
 
         public Sidebar() : base() {
@@ -36,18 +36,18 @@ namespace GridRL {
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
 
             //Drawing player inventory slots
-            g.DrawString("Player Inventory", ConsoleText, Brushes.White, 1080, 150);
+            g.DrawString("Player Inventory", ConsoleText, Brushes.White, 16*67, 16*10);
             for(int i = 0 ; i < 2 ; i++) {
-                for(int j = 0 ; j < 10 ; j++) {
+                for(int j = 0 ; j < 11 ; j++) {
                     Rectangle rect = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
 
             //Drawing tile inventory slots
-            g.DrawString("Tile Inventory", ConsoleText, Brushes.White, 1080, 250);
+            g.DrawString("Tile Inventory", ConsoleText, Brushes.White, 16*67, 16*16);
             for(int i = 0; i < 2; i++) {
-                for(int j = 0; j < 10; j++) {
+                for(int j = 0; j < 11; j++) {
                     Rectangle rect = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY2 * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }

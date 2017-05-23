@@ -11,6 +11,7 @@ namespace GridRL {
         public static ScreenOutput console = new ScreenOutput();
         public static Sidebar sidebar = new Sidebar();
         public static World world = new World();
+        public static int[] MouseCoords = new int[2];
         public static int[] GridMouseCoords = new int[2];
         public static int[] PlrInvMouseCoords = new int[2];
         public static int[] TileInvMouseCoords = new int[2];
@@ -60,7 +61,7 @@ namespace GridRL {
                     waitState = -1;
                 }
             }
-            else if(player.HandleGameInput(e)) {
+            else if(player.HandleKeyInput(e)) {
                 GameLoop();
             }
             else {
@@ -72,9 +73,12 @@ namespace GridRL {
             base.OnMouseClick(e);
             double X = e.X / 16;
             double Y = e.Y / 16;
-            int CoordX = (int)Math.Floor(X);
-            int CoordY = (int)Math.Floor(Y);
-            Console.WriteLine("(" + CoordX + "," + CoordY + ")");
+            MouseCoords[1] = (int)Math.Floor(X);
+            MouseCoords[0] = (int)Math.Floor(Y);
+            Console.WriteLine("(" + MouseCoords[0] + "," + MouseCoords[1] + ")");
+            if(player.HandleMouseInput(e)) {
+                GameLoop();
+            }
         }
 
         #endregion
