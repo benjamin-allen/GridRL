@@ -27,15 +27,30 @@ namespace GridRL {
         #endregion
     }
 
+    public class Wall : Tile {
+        #region Constructors
+
+        public Wall(int y, int x) : base(Properties.Resources.Wall, y, x) {
+            Name = "wall";
+            Description = "A simple stone wall.";
+            IsWalkable = false;
+            IsCollidable = true;
+            BlocksLight = true;
+        }
+
+        #endregion
+    }
+
     public enum DoorState { Closed, Broken, Open }
     public class Door : Tile {
         #region Constructors
 
-        public Door(int y, int x, int region) : base(Properties.Resources.Door, y, x) {
+        public Door(int y, int x, int region) : base(Properties.Resources.Door_Closed, y, x) {
             Name = "door";
             Description = "An old wooden door placed here long ago. You might be able to open it.";
             Region = region;
             IsCollidable = true;
+            BlocksLight = true;
         }
 
         #endregion
@@ -52,6 +67,8 @@ namespace GridRL {
                 IsCollidable = false;
                 Program.console.SetText("The door is opened...");
                 IsWalkable = true;
+                BlocksLight = false;
+                Image = Properties.Resources.Door_Open;
             }
         }
 
@@ -62,11 +79,12 @@ namespace GridRL {
     public class Stair : Tile {
         #region Constructors
 
-        public Stair(int y, int x, StairType s) : base(Properties.Resources.Stair, y, x) {
+        public Stair(int y, int x, StairType s) : base(Properties.Resources.Stair_Down, y, x) {
             Name = "stairway";
             StairType = s;
             if(s == StairType.Up) {
                 Description = "A set of stairs leading up.";
+                Image = Properties.Resources.Stair_Up;
             }
             else {
                 Description = "A set of stairs leading down.";

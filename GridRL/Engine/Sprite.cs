@@ -44,6 +44,9 @@ namespace GridRL {
         /// <summary> The children who will be rendered/updated when this sprite renders/updates. </summary>
         protected List<Sprite> children = new List<Sprite>();
 
+        /// <summary> The rotation to be applied to this sprite on render. </summary>
+        public float Rotation { get; set; }
+
         #endregion
         #region Methods 
 
@@ -99,6 +102,7 @@ namespace GridRL {
                 Matrix original = g.Transform.Clone();
                 g.TranslateTransform(X, Y);
                 g.ScaleTransform(Scale, Scale);
+                g.RotateTransform(Rotation);
                 Paint(g);
                 if(DrawingType == DrawingType.AllChildren) {
                     foreach(Sprite s in children) {

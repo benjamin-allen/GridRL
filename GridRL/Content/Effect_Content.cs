@@ -1,18 +1,23 @@
 ﻿namespace GridRL {
-    class FireballEffect : Effect {
+    class FlameBurstEffect : Effect {
         #region Constructors
 
-        public FireballEffect(int y, int x) : base(Properties.Resources.Fireball, y, x) {
-            TurnsLeft = 1;
-        }
+        public FlameBurstEffect(int y, int x) : base(Properties.Resources.Flame, y, x) { }
+
+        public FlameBurstEffect() : base(Properties.Resources.Flame) { }
         
         #endregion
         #region Overrides
 
-        protected override void Activate(int y, int x) {
+        public override void Activate(int y, int x) {
+            TurnsLeft = 1;
             CoordY = y;
             CoordX = x;
-            IsVisible = true;
+            Visibility = Vis.Unseen;
+        }
+
+        public override void OnCollide(Actor a) {
+            Program.world.CreaturesToRemove.Add((Creature)a);
         }
 
         #endregion
