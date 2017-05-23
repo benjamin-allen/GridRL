@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 
@@ -42,124 +43,6 @@ namespace GridRL {
             world.UpdateVisibles();
             form.Refresh();
         }
-
-        public static int[] GetMouseGridCoords(MouseEventArgs g, int option) {
-            int[] coords = new int[2];
-            if(option == 0) {
-                //Ability Grid Checks
-                //X position checks
-                if(g.X < 1160) {
-                    coords[1] = 0;
-                }
-                else if(g.X < 1240) {
-                    coords[1] = 1;
-                }
-                else {
-                    coords[1] = 2;
-                }
-
-                //Y position checks
-                if(g.Y < 530) {
-                    coords[0] = 0;
-                }
-                else if(g.Y < 610) {
-                    coords[0] = 1;
-                }
-                else {
-                    coords[0] = 2;
-                }
-            }
-
-            if(option == 1) {
-                //Player Inventory Check
-                //X coord checks
-                if(g.X < 1112) {
-                    coords[1] = 0;
-                }
-                else if(g.X < 1144) {
-                    coords[1] = 1;
-                }
-                else if(g.X < 1176) {
-                    coords[1] = 2;
-                }
-                else if(g.X < 1208) {
-                    coords[1] = 3;
-                }
-                else if(g.X < 1240) {
-                    coords[1] = 4;
-                }
-                else if(g.X < 1272) {
-                    coords[1] = 5;
-                }
-                else if(g.X < 1304) {
-                    coords[1] = 6;
-                }
-                else if(g.X < 1336) {
-                    coords[1] = 7;
-                }
-                else if(g.X < 1368) {
-                    coords[1] = 8;
-                }
-                else{
-                    coords[1] = 9;
-                }
-
-                //Y coord checks
-                if(g.Y < 202) {
-                    coords[0] = 0;
-                }
-                else {
-                    coords[0] = 1;
-                }
-
-            }
-
-            if(option == 2) {
-                //Tile Inventory Check
-                //X coord checks
-                if(g.X < 1112) {
-                    coords[1] = 0;
-                }
-                else if(g.X < 1144) {
-                    coords[1] = 1;
-                }
-                else if(g.X < 1176) {
-                    coords[1] = 2;
-                }
-                else if(g.X < 1208) {
-                    coords[1] = 3;
-                }
-                else if(g.X < 1240) {
-                    coords[1] = 4;
-                }
-                else if(g.X < 1272) {
-                    coords[1] = 5;
-                }
-                else if(g.X < 1304) {
-                    coords[1] = 6;
-                }
-                else if(g.X < 1336) {
-                    coords[1] = 7;
-                }
-                else if(g.X < 1368) {
-                    coords[1] = 8;
-                }
-                else {
-                    coords[1] = 9;
-                }
-
-                //Y coord checks
-                if(g.Y < 302) {
-                    coords[0] = 0;
-                }
-                else {
-                    coords[0] = 1;
-                }
-            }
-            return coords;
-            
-        }
-
         #endregion
         #region Overrides
 
@@ -187,20 +70,11 @@ namespace GridRL {
 
         protected override void OnMouseClick(MouseEventArgs e) {
             base.OnMouseClick(e);
-            //Check Ability Grid clicks
-            if(e.X > 1080 && e.X < 1320 && e.Y > 450 && e.Y < 690) {
-                GridMouseCoords = GetMouseGridCoords(e, 0);
-            }
-
-            //Check Player inventory clicks
-            if(e.X > 1080 && e.X < 1400 && e.Y > 170 && e.Y < 234) {
-                PlrInvMouseCoords = GetMouseGridCoords(e, 1);
-            }
-
-            //Check Tile inventory clicks
-            if(e.X > 1080 && e.X < 1400 && e.Y > 270 && e.Y < 334) {
-                TileInvMouseCoords = GetMouseGridCoords(e, 2);
-            }
+            double X = e.X / 16;
+            double Y = e.Y / 16;
+            int CoordX = (int)Math.Floor(X);
+            int CoordY = (int)Math.Floor(Y);
+            Console.WriteLine("(" + CoordX + "," + CoordY + ")");
         }
 
         #endregion
