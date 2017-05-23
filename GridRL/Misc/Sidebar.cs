@@ -9,7 +9,10 @@ namespace GridRL {
     public class Sidebar : Sprite {
 
         private static int[] stats = new int[3];
-        private static int InvCellSize = 32;
+        private static int InvCellSize = 16;
+        private static int CellsY = 11;
+        private static int CellsY2 = CellsY + 6;
+        private static int CellsX = 66;
         Font ConsoleText = new Font("Courier New", 9);
 
         public Sidebar() : base() {
@@ -36,7 +39,7 @@ namespace GridRL {
             g.DrawString("Player Inventory", ConsoleText, Brushes.White, 1080, 150);
             for(int i = 0 ; i < 2 ; i++) {
                 for(int j = 0 ; j < 10 ; j++) {
-                    Rectangle rect = new Rectangle(1080 + j * InvCellSize, 170 + i * InvCellSize, InvCellSize, InvCellSize);
+                    Rectangle rect = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
@@ -45,7 +48,7 @@ namespace GridRL {
             g.DrawString("Tile Inventory", ConsoleText, Brushes.White, 1080, 250);
             for(int i = 0; i < 2; i++) {
                 for(int j = 0; j < 10; j++) {
-                    Rectangle rect = new Rectangle(1080 + j * InvCellSize, 270 + i * InvCellSize, InvCellSize, InvCellSize);
+                    Rectangle rect = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY2 * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }

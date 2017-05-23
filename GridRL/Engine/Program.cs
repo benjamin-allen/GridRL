@@ -186,7 +186,6 @@ namespace GridRL {
         }
 
         protected override void OnMouseClick(MouseEventArgs e) {
-            Console.WriteLine(e.X + " " + e.Y);
             base.OnMouseClick(e);
             //Check Ability Grid clicks
             if(e.X > 1080 && e.X < 1320 && e.Y > 450 && e.Y < 690) {
@@ -196,13 +195,11 @@ namespace GridRL {
             //Check Player inventory clicks
             if(e.X > 1080 && e.X < 1400 && e.Y > 170 && e.Y < 234) {
                 PlrInvMouseCoords = GetMouseGridCoords(e, 1);
-                Console.WriteLine("Mouse Coords: (" + PlrInvMouseCoords[0] + "," + PlrInvMouseCoords[1] + ")");
             }
 
             //Check Tile inventory clicks
             if(e.X > 1080 && e.X < 1400 && e.Y > 270 && e.Y < 334) {
                 TileInvMouseCoords = GetMouseGridCoords(e, 2);
-                Console.WriteLine("Mouse Coords: (" + TileInvMouseCoords[0] + "," + TileInvMouseCoords[1] + ")");
             }
         }
 

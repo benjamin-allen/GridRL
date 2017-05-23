@@ -16,7 +16,6 @@ namespace GridRL {
                     if(Program.player.CoordY == points[0] && Program.player.CoordX == points[1] && WillCollideWith(Program.player)) {
                         foreach(Creature c in Program.world.Creatures) {
                             if(c != this && WillCollideWith(c) && c.CoordY == points[0] && c.CoordX == points[1]) {
-                                //c.OnCollide(this);
                                 PerformAttack(c);
                             }
                         }
@@ -36,6 +35,10 @@ namespace GridRL {
                     }
                 }
             }
+        }
+
+        private void FollowPlayer() {
+
         }
 
         #endregion
