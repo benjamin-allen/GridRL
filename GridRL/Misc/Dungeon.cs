@@ -137,6 +137,7 @@ namespace GridRL {
                 Carve(nextPoints, region);
             }
         }
+
         /// <summary> Helper function for room placement. Checks if the edges of the room made by the points overlap
         ///           with any other room. </summary>
         /// <param name="points"> The points of the room to be tested</param>
