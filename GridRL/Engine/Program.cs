@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 
 namespace GridRL {
+    public enum MouseArea { Hidden, Sidebar, PlayerInv, TileInv, World, Grid, Console}
+
     public class Program : Engine {
         #region Properties
 
@@ -23,6 +25,7 @@ namespace GridRL {
                                                                                new float[]{0, 0, 0, .25f, 0},
                                                                                new float[]{0, 0, 0, 0, 1} });
         public static ImageAttributes gray = new ImageAttributes();
+        public static MouseArea MA = MouseArea.Hidden;
 
         #endregion
         #region Methods
@@ -43,6 +46,33 @@ namespace GridRL {
             world.EffectsToRemove = new List<Effect>();
             world.UpdateVisibles();
             form.Refresh();
+        }
+
+        private static void setMouseArea() {
+            int y = MouseCoords[0];
+            int x = MouseCoords[1];
+            if(x < 65) {
+                if(y < 41) {
+                    MA = MouseArea.World;
+                }
+                else {
+                    MA = MouseArea.Console;
+                }
+            }
+            else {
+                if(x >= 67 && x < 78) {
+                    if(y >= 11 && y < 13) {
+                        MA = MouseArea.PlayerInv;
+                        PlrInvMouseCoords[0] = y - 11;
+                        PlrInvMouseCoords[1] = x - 67;
+                    }
+                    else if(y >= 17 && y < 19) {
+                        MA = MouseArea.TileInv;
+                        TileInvMouseCoords[0] = y - 17;
+                        TileInvMouseCoords[1] = x - 67;
+                    }
+                }
+            }
         }
         #endregion
         #region Overrides
@@ -70,12 +100,10 @@ namespace GridRL {
         }
 
         protected override void OnMouseClick(MouseEventArgs e) {
-            base.OnMouseClick(e);
-            double X = e.X / 16;
-            double Y = e.Y / 16;
-            MouseCoords[1] = (int)Math.Floor(X);
-            MouseCoords[0] = (int)Math.Floor(Y);
+            MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
+            MouseCoords[1] = (int)Math.Floor(e.X / 16f);
             Console.WriteLine("(" + MouseCoords[0] + "," + MouseCoords[1] + ")");
+            setMouseArea();
             if(player.HandleMouseInput(e)) {
                 GameLoop();
             }
