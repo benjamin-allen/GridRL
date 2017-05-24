@@ -26,6 +26,7 @@ namespace GridRL {
                                                                                new float[]{0, 0, 0, 0, 1} });
         public static ImageAttributes gray = new ImageAttributes();
         public static MouseArea MA = MouseArea.Hidden;
+        public static string HoverString;
 
         #endregion
         #region Methods
@@ -59,20 +60,30 @@ namespace GridRL {
                     MA = MouseArea.Console;
                 }
             }
-            else {
-                if(x >= 67 && x < 78) {
-                    if(y >= 11 && y < 13) {
-                        MA = MouseArea.PlayerInv;
-                        PlrInvMouseCoords[0] = y - 11;
-                        PlrInvMouseCoords[1] = x - 67;
-                    }
-                    else if(y >= 17 && y < 19) {
-                        MA = MouseArea.TileInv;
-                        TileInvMouseCoords[0] = y - 17;
-                        TileInvMouseCoords[1] = x - 67;
-                    }
+            else if(x >= sidebar.CellsX && x < sidebar.CellsX + 11) {
+                if(y >= sidebar.CellsY && y < sidebar.CellsY + 2) {
+                    MA = MouseArea.PlayerInv;
+                    PlrInvMouseCoords[0] = y - sidebar.CellsY;
+                    PlrInvMouseCoords[1] = x - sidebar.CellsX;
+                }
+                else if(y >= sidebar.CellsY2 && y < sidebar.CellsY2 + 2) {
+                    MA = MouseArea.TileInv;
+                    TileInvMouseCoords[0] = y - sidebar.CellsY2;
+                    TileInvMouseCoords[1] = x - sidebar.CellsX;
+                }
+                else if(x >= sidebar.GridX && x < sidebar.GridX + 9 && y >= sidebar.GridY && y < sidebar.GridY + 9)  {
+                    MA = MouseArea.Grid;
+                    GridMouseCoords[0] = (y - sidebar.GridY) / 3;
+                    GridMouseCoords[1] = (x - sidebar.GridX) / 3;
+                }
+                else {
+                    MA = MouseArea.Sidebar;
                 }
             }
+            else {
+                MA = MouseArea.Sidebar;
+            }
+            HoverString = MA.ToString();
         }
         #endregion
         #region Overrides

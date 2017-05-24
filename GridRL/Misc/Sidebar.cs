@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 namespace GridRL {
     public class Sidebar : Sprite {
 
-        private static int[] stats = new int[3];
-        private static int InvCellSize = 16;
-        private static int CellsY = 25;
-        private static int CellsY2 = CellsY + 4;
-        private static int CellsX = 67;
+        public int[] stats { get; } = new int[3];
+        public int InvCellSize { get; } = 16;
+        public int CellsY { get; } = 25;
+        public int CellsY2 { get; } = 29;
+        public int CellsX { get; } = 67;
+        public int GridX { get; } = 68;
+        public int GridY { get; } = 33;
+        public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
 
         public Sidebar() : base() {
@@ -35,6 +38,7 @@ namespace GridRL {
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
             Rectangle descBox = new Rectangle(66 * 16, 16 * 10, 13 * 16, 8 * 16);
             g.DrawRectangle(Pens.White, descBox);
+            g.DrawString(Program.HoverString, ConsoleText, Brushes.White, descBox);
 
             //Drawing player inventory slots
             g.DrawString("Player Inventory", ConsoleText, Brushes.White, 16 * 67, 16 * (CellsY - 1));
@@ -56,23 +60,29 @@ namespace GridRL {
                     g.DrawRectangle(Pens.White, rect2);
                 }
             }
-            if(selectPoints[0] != -1) {
+            if(selectPoints[0] != -1 && (Program.MA == MouseArea.PlayerInv || Program.MA == MouseArea.TileInv)) {
                 int temp = CellsY;
                 if(Program.MA == MouseArea.TileInv) {
-                    CellsY = CellsY2;
+                    temp = CellsY2;
                 }
-                Rectangle rect = new Rectangle((CellsX * InvCellSize) + selectPoints[1] * InvCellSize, (CellsY * InvCellSize) + selectPoints[0] * InvCellSize, InvCellSize, InvCellSize);
+                Rectangle rect = new Rectangle((CellsX * InvCellSize) + selectPoints[1] * InvCellSize, (temp * InvCellSize) + selectPoints[0] * InvCellSize, InvCellSize, InvCellSize);
                 g.DrawRectangle(new Pen(Color.FromArgb(208, 70, 72)), rect);
-                CellsY = temp;
             }
 
             //Drawing ability grid
-            int cellSize = 16 * 3;
             for(int i = 0; i < 3; i++) {
                 for(int j = 0; j < 3; j++) {
-                    Rectangle rect = new Rectangle(16 * 68 + i * cellSize, 33 * 16 + j * cellSize, cellSize, cellSize);
+                    if(Program.MA == MouseArea.Grid && j == Program.GridMouseCoords[1] && i == Program.GridMouseCoords[0]) {
+                        selectPoints[0] = i;
+                        selectPoints[1] = j;
+                    }
+                    Rectangle rect = new Rectangle(16 * GridX + i * GridCellSize, GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
+            }
+            if(selectPoints[0] != -1 && Program.MA == MouseArea.Grid) {
+                Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
+                g.DrawRectangle(new Pen(Color.FromArgb(208, 70, 72)), rect);
             }
         }
     }
