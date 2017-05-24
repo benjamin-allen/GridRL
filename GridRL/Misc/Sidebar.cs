@@ -119,6 +119,11 @@ namespace GridRL {
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
+            if(Program.waitState == 3) {
+                foreach(List<int> points in Program.AbilityPlacePoints) {
+                    g.FillRectangle(Brushes.Green, 16 * GridX + points[1] * GridCellSize + 1, 16 * GridY + points[0] * GridCellSize + 1, GridCellSize - 1, GridCellSize - 1);
+                }
+            }
             if(selectPoints[0] != -1 && Program.MA == MouseArea.Grid) {
                 Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
                 g.DrawRectangle(red, rect);
@@ -152,7 +157,7 @@ namespace GridRL {
                 for(int j = y; j < y + h; ++j) {
                     for(int i = x; i < x + w; ++i) {
                         int index = Program.player.Abilities.IndexOf(a);
-                        Rectangle rect = new Rectangle((GridX * 16) + (i * GridCellSize), (GridY * 16) + (j * GridCellSize), GridCellSize, GridCellSize);
+                        Rectangle rect = new Rectangle((GridX * 16) + (i * GridCellSize), (GridY * 16) + (j * GridCellSize), GridCellSize + 1, GridCellSize + 1);
                         g.FillRectangle(new SolidBrush(Colors[index]), rect);
                         if(!isPrinted) {
                             g.DrawString(text, new Font("Courier New", 8), new SolidBrush(InvColors[index]), rect);

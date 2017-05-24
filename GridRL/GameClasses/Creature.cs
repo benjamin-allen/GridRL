@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace GridRL {
     /// <summary> Determines how a creature acts. </summary>
@@ -101,7 +102,66 @@ namespace GridRL {
             }
         }
 
-        public virtual bool AddNewAbility(Ability a) { return true; }
+        private void calculatePositionsFor(Ability a) {
+            bool[,] grid = new bool[3, 3];
+            foreach(Ability ab in Abilities) {
+                for(int y = ab.GridY; y < ab.GridY + ab.GridHeight; ++y) {
+                    for(int x = ab.GridX; x < ab.GridX + ab.GridWidth; ++x) {
+                        grid[y, x] = true;
+                    }
+                }
+            }
+            for(int y = 0; y < 4 - a.GridHeight; ++y) {
+                for(int x = 0; x < 4 - a.GridWidth; ++x) {
+                    bool canUseSquare = true;
+                    for(int j = 0; j < a.GridHeight; ++j) {
+                        for(int i = 0; i < a.GridWidth; ++i) {
+                            if(grid[y + j, x + i] == true) {
+                                canUseSquare = false;
+                            }
+                        }
+                    }
+                    if(canUseSquare) {
+                        Program.AbilityPlacePoints.Add(new List<int>(new int[] { y, x }));
+                    }
+                }
+            }
+        }
+
+        public virtual bool AddNewAbility(Ability a) {
+            int y = a.GridY;
+            int x = a.GridX;
+            int w = a.GridWidth;
+            int h = a.GridHeight;
+            Program.waitState = 3;
+            calculatePositionsFor(a);
+            if(Program.AbilityPlacePoints.Count == 0) {
+                Program.console.SetText("The orb's glow fades");
+                return false;
+            }
+            while(Program.waitState == 3) {
+                Application.DoEvents();
+                Engine.form.Refresh();
+            }
+            if(Program.waitState == -1) {
+                Program.console.SetText("The orb's glow fades");
+                return false;
+            }
+            foreach(List<int> points in Program.AbilityPlacePoints) {
+                if(Program.GridMouseCoords[0] == points[0] && Program.GridMouseCoords[1] == points[1]) {
+                    a.GridY = Program.GridMouseCoords[0];
+                    a.GridX = Program.GridMouseCoords[1];
+                    Program.player.Abilities.Add(a);
+                    Program.console.SetText("The orb vanishes in a flash of light!");
+                    Program.console.SetText("You gain the skill of " + a.Name + "!");
+                    Program.AbilityPlacePoints = new List<List<int>>();
+                    return true;
+                }
+            }
+            Program.console.SetText("The orb's glow fades.");
+            Program.AbilityPlacePoints = new List<List<int>>();
+            return true;
+        }
 
         #endregion
         #region Overrides

@@ -13,6 +13,7 @@ namespace GridRL {
         public static ScreenOutput console = new ScreenOutput();
         public static Sidebar sidebar = new Sidebar();
         public static World world = new World();
+        public static List<List<int>> AbilityPlacePoints = new List<List<int>>();
         public static int[] MouseCoords = new int[2];
         public static int[] GridMouseCoords = new int[2];
         public static int[] PlrInvMouseCoords = new int[2];
@@ -136,6 +137,14 @@ namespace GridRL {
                     waitState = 0;
                 }
             }
+            else if(waitState == 3) {
+                if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
+                    waitState = -1;
+                }
+                else if(MA == MouseArea.Grid) {
+                    waitState = 0;
+                }
+            }
             else if(player.HandleMouseInput(e)) {
                 PlrInvMouseCoords = new int[] { -1, -1 };
                 TileInvMouseCoords = new int[] { -1, -1 };
@@ -148,6 +157,8 @@ namespace GridRL {
                 form.Refresh();
             }
         }
+
+        
 
         #endregion
         #region Utilities

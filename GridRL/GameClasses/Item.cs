@@ -36,7 +36,7 @@ namespace GridRL {
 
         /// <summary> Called when an actor uses this item. </summary>
         /// <param name="activator"> The creature that activated this item. </param>
-        public virtual bool Activate(Creature activator) { return true; }
+        public virtual bool Activate(Creature activator) { return false; }
 
         /// <summary> Called when a creature picks up this item. </summary>
         /// <param name="grabber"> The creature that picked up this item.</param>
@@ -218,6 +218,8 @@ namespace GridRL {
         #region Methods
 
         public override bool Activate(Creature activator) {
+            Program.console.SetText("The orb begins to glow...");
+            Program.HoverString = ("Select a spot on the grid.");
             return activator.AddNewAbility(Ability);
         }
 
