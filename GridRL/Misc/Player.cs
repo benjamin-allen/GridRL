@@ -160,7 +160,7 @@ namespace GridRL {
                             Program.console.SetText("You shuffle some items in your pack.");
                             return true;
                         }
-                        else if (Program.world[pY, pX].Inventory.AddItem(HeldItem)) {
+                        else if(Program.world[pY, pX].Inventory.AddItem(HeldItem)) {
                             HeldItem = toWorkWith;
                             Inventory.RemoveItem(HeldItem);
                             Program.console.SetText("You lose your grip and some things tumble to the floor.");
@@ -264,45 +264,42 @@ namespace GridRL {
                         return true;
                     }
                 }
-                else if(Program.MA == MouseArea.WearBox) {
-                    if(HeldItem is Armor) {
-                        if(WornArmor == null) {
-                            WornArmor = (Armor)HeldItem;
-                            HeldItem = null;
-                        }
-                        else {
-                            var temp = WornArmor;
-                            WornArmor = (Armor)HeldItem;
-                            HeldItem = temp;
-                        }
-                        Program.console.SetText("You shuffle some items.");
-                        return true;
-                    }
-                    else {
-                        Program.console.SetText("You can't do that!.");
-                    }
-                }
-                else if(Program.MA == MouseArea.WieldBox) {
-                    if(HeldItem is Weapon) {
-                        if(HeldWeapon == null) {
-                            HeldWeapon = (Weapon)HeldItem;
-                            HeldItem = null;
-                        }
-                        else {
-                            var temp = HeldWeapon;
-                            HeldWeapon = (Weapon)HeldItem;
-                            HeldItem = temp;
-                        }
-                        Program.console.SetText("You shuffle some items.");
-                        return true;
-                    }
-                    else {
-                        Program.console.SetText("You can't do that!.");
-                    }
-                }
                 #endregion
             }
+            else if(Program.MA == MouseArea.WearBox) {
+                #region WearBox
+                if(WornArmor == null) {
+                    return false;
+                }
+                Program.waitState = 2;
+                while(Program.waitState == 2) {
+                    Application.DoEvents();
+                }
+                if(Program.waitState == -1) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                if(Program.MA == MouseArea.Grid || Program.MA == MouseArea.WearBox) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                else if(Program.MA == MouseArea.PlayerInv) {
+                    if(Inventory.AddItem(WornArmor)) {
+                        Program.console.SetText("You put the " + WornArmor.Name + " into your pack.");
+                        WornArmor = null;
+                        return true;
+                    }
+                }
+                else if(Program.MA == MouseArea.TileInv) {
+                    if(Program.world[pY, pX].Inventory.AddItem(WornArmor)) {
+                        Program.console.SetText("You place the " + WornArmor.Name + " on the floor below.");
+                        WornArmor = null;
+                        return true;
+                    }
+                }
+            }
             return false;
+            #endregion
         }
         #endregion
     }
