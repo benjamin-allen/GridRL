@@ -130,6 +130,7 @@
     <Content Include="Resources\Creatures\Player.png" />
     <Content Include="Resources\Effects\Flame.png" />
     <None Include="Resources\Items\Sword.png" />
+    <None Include="Resources\Items\Shirt.png" />
     <Content Include="Resources\Tiles\Corridor.png" />
     <Content Include="Resources\Tiles\Door.png" />
     <None Include="Resources\Tiles\Wall.png" />

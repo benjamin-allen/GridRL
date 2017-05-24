@@ -6,4 +6,12 @@
             MaxStack = 1;
         }
     }
+
+    public class Shirt : Armor {
+        public Shirt(int y, int x) : base(Properties.Resources.Shirt, y, x) {
+            Name = "shirt";
+            Description = "A cotton T-shirt. You're not sure why you have this.";
+            MaxStack = 1;
+        }
+    }
 }

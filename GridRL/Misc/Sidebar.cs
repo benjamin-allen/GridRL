@@ -117,6 +117,12 @@ namespace GridRL {
             if(Program.player.HeldItem != null) {
                 g.DrawImage(Program.player.HeldItem.Image, 74 * 16, 16 * 18);
             }
+            if(Program.player.WornArmor != null) {
+                g.DrawImage(Program.player.WornArmor.Image, 74 * 16, 16 * 20);
+            }
+            if(Program.player.HeldWeapon != null) {
+                g.DrawImage(Program.player.HeldWeapon.Image, 74 * 16, 16 * 22);
+            }
             // render abilities
         }
     }

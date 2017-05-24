@@ -138,6 +138,9 @@ namespace GridRL {
             if(player.HandleMouseInput(e)) {
                 GameLoop();
             }
+            else {
+                form.Refresh();
+            }
         }
 
         #endregion
