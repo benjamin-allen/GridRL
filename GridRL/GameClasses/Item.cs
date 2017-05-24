@@ -18,7 +18,7 @@ namespace GridRL {
         /// <param name="image"> The sprite to use. </param>
         /// <param name="y"> The Y coordinate to render at. </param>
         /// <param name="x"> The X coordinate to render</param>
-        public Item(Image image, int y, int x) : base(image, y, x) {
+        public Item(Image image, int y, int x) : base(image, 0, 0) {
             Name = "Dummy Item";
             Description = "If you can see this, file a bug report for an improperly initialized item.";
             IsCollidable = false;

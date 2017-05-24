@@ -26,6 +26,7 @@ namespace GridRL {
                                                                                new float[]{0, 0, 0, 0, 1} });
         public static ImageAttributes gray = new ImageAttributes();
         public static MouseArea MA = MouseArea.Hidden;
+        public static MouseArea LastMA = MouseArea.Hidden;
         public static string HoverString;
 
         #endregion
@@ -102,7 +103,7 @@ namespace GridRL {
         protected override void OnKeyDown(KeyEventArgs e) {
             Keys kc = e.KeyCode;
             // Do this if we're waiting for key input. 
-            if(waitState != 0) {
+            if(waitState == 1) {
                 if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right || 
                 kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
                     waitState = 0;
@@ -124,9 +125,16 @@ namespace GridRL {
         protected override void OnMouseClick(MouseEventArgs e) {
             MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
             MouseCoords[1] = (int)Math.Floor(e.X / 16f);
-            Console.WriteLine("(" + MouseCoords[0] + "," + MouseCoords[1] + ")");
             setMouseArea();
             form.Refresh();
+            if(waitState == 2) {
+                if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
+                    waitState = -1;
+                }
+                else if(MA != LastMA) {
+                    waitState = 0;
+                }
+            }
             if(player.HandleMouseInput(e)) {
                 GameLoop();
             }

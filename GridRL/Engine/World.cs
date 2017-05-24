@@ -227,9 +227,6 @@ namespace GridRL {
                     if(Data[y, x] != null) {
                         Data[y, x].Render(g);
                         Item i = Data[y, x].Inventory.Items.FirstOrDefault();
-                        if(i != null) {
-                            i.Render(g);
-                        }
                     }
                 }
             }

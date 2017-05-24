@@ -118,6 +118,36 @@ namespace GridRL {
                 }
                 return false;
             }
+            else if(Program.MA == MouseArea.PlayerInv) {
+                // check for item relevance
+                int index = (Program.PlrInvMouseCoords[0] * 11) + Program.PlrInvMouseCoords[1];
+                Item toWorkWith = Program.player.Inventory.Items[index];
+                if(toWorkWith == null) {
+                    return false;
+                }
+                // Wait for the next mouseclick
+                Program.waitState = 2;
+                while(Program.waitState == 2) {
+                    Application.DoEvents();
+                }
+                if(Program.waitState == -1) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                if(Program.MA == MouseArea.Grid || Program.MA == MouseArea.PlayerInv) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                if(Program.MA == MouseArea.TileInv) {  // DROP ITEM
+                    // get the index of where we clicked
+                    if(Program.world[Program.player.CoordY, Program.player.CoordX].Inventory.AddItem(toWorkWith)) {
+                        Program.player.Inventory.RemoveItem(toWorkWith);
+                        Program.console.SetText("You drop the " + toWorkWith.Name + ".");
+                        return true;
+                    }
+                }
+                // held, worn. wield, drop
+            }
             return false;
         }
         #endregion
