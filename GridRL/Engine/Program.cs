@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 
 namespace GridRL {
-    public enum MouseArea { Hidden, Sidebar, PlayerInv, TileInv, World, Grid, Console}
+    public enum MouseArea { Hidden, Sidebar, HoldBox, WearBox, WieldBox, PlayerInv, TileInv, World, Grid, Console}
 
     public class Program : Engine {
         #region Properties
@@ -61,6 +61,20 @@ namespace GridRL {
                 }
             }
             else if(x >= sidebar.CellsX && x < sidebar.CellsX + 11) {
+                if(x == 74) {
+                    if(y == 18) {
+                        MA = MouseArea.HoldBox;
+                    }
+                    else if(y == 20) {
+                        MA = MouseArea.WearBox;
+                    }
+                    else if(y == 22) {
+                        MA = MouseArea.WieldBox;
+                    }
+                }
+                else {
+                    MA = MouseArea.Sidebar;
+                }
                 if(y >= sidebar.CellsY && y < sidebar.CellsY + 2) {
                     MA = MouseArea.PlayerInv;
                     PlrInvMouseCoords[0] = y - sidebar.CellsY;
@@ -75,9 +89,6 @@ namespace GridRL {
                     MA = MouseArea.Grid;
                     GridMouseCoords[0] = (y - sidebar.GridY) / 3;
                     GridMouseCoords[1] = (x - sidebar.GridX) / 3;
-                }
-                else {
-                    MA = MouseArea.Sidebar;
                 }
             }
             else {
@@ -115,9 +126,10 @@ namespace GridRL {
             MouseCoords[1] = (int)Math.Floor(e.X / 16f);
             Console.WriteLine("(" + MouseCoords[0] + "," + MouseCoords[1] + ")");
             setMouseArea();
-            if(player.HandleMouseInput(e)) {
+            form.Refresh();
+            /*if(player.HandleMouseInput(e)) {
                 GameLoop();
-            }
+            }*/
         }
 
         #endregion

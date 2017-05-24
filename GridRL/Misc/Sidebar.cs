@@ -24,7 +24,8 @@ namespace GridRL {
         
 
         protected override void Paint(Graphics g) {
-            //Drawing stats box
+            Pen red = new Pen(Color.FromArgb(208, 70, 72), 3f);
+            //Drawing stats box + desc box
             stats[0] = Program.player.Health;
             stats[1] = Program.player.Attack;
             stats[2] = Program.player.Defense;
@@ -36,9 +37,28 @@ namespace GridRL {
                 "Attack: " + stats[1] + "\n" +
                 "Defense: " + stats[2];
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
-            Rectangle descBox = new Rectangle(66 * 16, 16 * 10, 13 * 16, 8 * 16);
+            Rectangle descBox = new Rectangle(66 * 16, 16 * 10, 13 * 16, 6 * 16);
             g.DrawRectangle(Pens.White, descBox);
             g.DrawString(Program.HoverString, ConsoleText, Brushes.White, descBox);
+
+            Rectangle holdBox =  new Rectangle(74 * 16, 16 * 18, 16, 16);
+            Rectangle wearBox =  new Rectangle(74 * 16, 16 * 20, 16, 16);
+            Rectangle wieldBox = new Rectangle(74 * 16, 16 * 22, 16, 16);
+            g.DrawString("Holding  : ", ConsoleText, Brushes.White, 67 * 16, 16 * 18);
+            g.DrawString("Wearing  : ", ConsoleText, Brushes.White, 67 * 16, 16 * 20);
+            g.DrawString("Wielding : ", ConsoleText, Brushes.White, 67 * 16, 16 * 22);
+            g.DrawRectangle(Pens.White, holdBox);
+            g.DrawRectangle(Pens.White, wearBox);
+            g.DrawRectangle(Pens.White, wieldBox);
+            if(Program.MA == MouseArea.HoldBox) {
+                g.DrawRectangle(red, holdBox);
+            }
+            else if(Program.MA == MouseArea.WearBox) {
+                g.DrawRectangle(red, wearBox);
+            }
+            else if(Program.MA == MouseArea.WieldBox) {
+                g.DrawRectangle(red, wieldBox);
+            }
 
             //Drawing player inventory slots
             g.DrawString("Player Inventory", ConsoleText, Brushes.White, 16 * 67, 16 * (CellsY - 1));
@@ -66,7 +86,7 @@ namespace GridRL {
                     temp = CellsY2;
                 }
                 Rectangle rect = new Rectangle((CellsX * InvCellSize) + selectPoints[1] * InvCellSize, (temp * InvCellSize) + selectPoints[0] * InvCellSize, InvCellSize, InvCellSize);
-                g.DrawRectangle(new Pen(Color.FromArgb(208, 70, 72)), rect);
+                g.DrawRectangle(red, rect);
             }
 
             //Drawing ability grid
@@ -82,7 +102,7 @@ namespace GridRL {
             }
             if(selectPoints[0] != -1 && Program.MA == MouseArea.Grid) {
                 Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
-                g.DrawRectangle(new Pen(Color.FromArgb(208, 70, 72)), rect);
+                g.DrawRectangle(red, rect);
             }
         }
     }
