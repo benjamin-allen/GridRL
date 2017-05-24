@@ -101,6 +101,7 @@ namespace GridRL {
             // if user is player, prompt for input
             if(user == Program.player) {
                 if(promptDirection() && user.CanAccess(Program.lastDirection)) {
+                    Program.console.SetText("Used the " + Name + " Ability!");
                     CreateEffect(user, Program.lastDirection);
                     Program.lastDirection = Direction.None;
                 }

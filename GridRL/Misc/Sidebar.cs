@@ -17,6 +17,16 @@ namespace GridRL {
         public int GridY { get; } = 33;
         public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
+        static ColorConverter cc = new ColorConverter();
+        Color[] Colors = new Color[9] {(Color)cc.ConvertFromString("#FF30346D"),
+                                       (Color)cc.ConvertFromString("#FF854C30"),
+                                       (Color)cc.ConvertFromString("#FF346524"),
+                                       (Color)cc.ConvertFromString("#FF757161"),
+                                       (Color)cc.ConvertFromString("#FF597DCE"),
+                                       (Color)cc.ConvertFromString("#FFD27D2C"),
+                                       (Color)cc.ConvertFromString("#FF8595A1"),
+                                       (Color)cc.ConvertFromString("#FF6DAA2C"),
+                                       (Color)cc.ConvertFromString("#FF6DC2CA"), };
 
         public Sidebar() : base() {
         }
@@ -96,7 +106,7 @@ namespace GridRL {
                         selectPoints[0] = i;
                         selectPoints[1] = j;
                     }
-                    Rectangle rect = new Rectangle(16 * GridX + i * GridCellSize, GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
+                    Rectangle rect = new Rectangle((16 * GridX + i * GridCellSize), GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
@@ -123,7 +133,19 @@ namespace GridRL {
             if(Program.player.HeldWeapon != null) {
                 g.DrawImage(Program.player.HeldWeapon.Image, 74 * 16, 16 * 22);
             }
-            // render abilities
+            foreach(Ability a in Program.player.Abilities) {
+                int y = a.GridY;
+                int x = a.GridX;
+                int w = a.GridWidth;
+                int h = a.GridHeight;
+                for(int j = y; j < y + h; ++j) {
+                    for(int i = x; i < x + w; ++i) {
+                        int index = Program.player.Abilities.IndexOf(a);
+                        Rectangle rect = new Rectangle((GridX * 16) + (i * GridCellSize), (GridY * 16) + (j * GridCellSize), GridCellSize, GridCellSize);
+                        g.FillRectangle(new SolidBrush(Colors[index]), rect);
+                    }
+                }
+            }
         }
     }
 }

@@ -19,7 +19,10 @@ namespace GridRL {
             Defense = 10;
             Visibility = Vis.Visible;
             Abilities.Add(new FlameBurst());
-            Abilities.Add(new AttackBoost(this));
+            AttackBoost a = new AttackBoost(this);
+            a.GridY = 1;
+            a.GridX = 1;
+            Abilities.Add(a);
         }
 
         #endregion
@@ -61,7 +64,6 @@ namespace GridRL {
                 return true;
             }
             else if(e.KeyCode == Keys.A) {
-                Program.console.SetText("Used the " + Abilities[0].Name + " Ability!");
                 return Abilities[0].Use(this);
             }
             else if(e.KeyCode == Keys.B) {
