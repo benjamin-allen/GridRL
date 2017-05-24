@@ -297,9 +297,42 @@ namespace GridRL {
                         return true;
                     }
                 }
+                #endregion
+            }
+            else if(Program.MA == MouseArea.WieldBox) {
+                #region WieldBox
+                if(HeldWeapon == null) {
+                    return false;
+                }
+                Program.waitState = 2;
+                while(Program.waitState == 2) {
+                    Application.DoEvents();
+                }
+                if(Program.waitState == -1) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                if(Program.MA == MouseArea.Grid || Program.MA == MouseArea.WieldBox) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                else if(Program.MA == MouseArea.PlayerInv) {
+                    if(Inventory.AddItem(HeldWeapon)) {
+                        Program.console.SetText("You put the " + HeldWeapon.Name + " into your pack.");
+                        HeldWeapon = null;
+                        return true;
+                    }
+                }
+                else if(Program.MA == MouseArea.TileInv) {
+                    if(Program.world[pY, pX].Inventory.AddItem(HeldWeapon)) {
+                        Program.console.SetText("You place the " + HeldWeapon.Name + " on the floor below.");
+                        HeldWeapon = null;
+                        return true;
+                    }
+                }
+                #endregion
             }
             return false;
-            #endregion
         }
         #endregion
     }
