@@ -127,9 +127,9 @@ namespace GridRL {
             Console.WriteLine("(" + MouseCoords[0] + "," + MouseCoords[1] + ")");
             setMouseArea();
             form.Refresh();
-            /*if(player.HandleMouseInput(e)) {
+            if(player.HandleMouseInput(e)) {
                 GameLoop();
-            }*/
+            }
         }
 
         #endregion
