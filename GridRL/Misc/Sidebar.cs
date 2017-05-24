@@ -108,10 +108,7 @@ namespace GridRL {
             // Render player inventory
             for(int i = 0; i < 22; ++i) {
                 if(Program.player.Inventory.Items[i] != null) {
-                    Program.player.Inventory.Items[i].CoordY = (i / 11) + CellsY;
-                    Program.player.Inventory.Items[i].CoordX = (i % 11) + CellsX;
-                    Program.player.Inventory.Items[i].Visibility = Vis.Visible;
-                    g.DrawImage(Program.player.Inventory.Items[i].Image, Program.player.Inventory.Items[i].CoordX * 16, Program.player.Inventory.Items[i].CoordY * 16);
+                    g.DrawImage(Program.player.Inventory.Items[i].Image, ((i % 11) + CellsX) * 16, ((i / 11) + CellsY) * 16);
                 }
             }
             for(int i = 0; i < 22; ++i) {
