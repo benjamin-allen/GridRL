@@ -104,7 +104,7 @@ namespace GridRL {
             int pY = CoordY;
             int pX = CoordX;
             if(Program.MA == MouseArea.TileInv) {
-                // get the index of the item
+                #region TileInv
                 int index = (Program.TileInvMouseCoords[0] * 11) + Program.TileInvMouseCoords[1];
                 // get the item from the inv
                 Item toPickUp = Program.world.Data[pY, pX].Inventory.Items[index];
@@ -116,9 +116,10 @@ namespace GridRL {
                         return true;
                     }
                 }
-                return false;
+                #endregion
             }
             else if(Program.MA == MouseArea.PlayerInv) {
+                #region PlayerInv
                 // check for item relevance
                 int index = (Program.PlrInvMouseCoords[0] * 11) + Program.PlrInvMouseCoords[1];
                 Item toWorkWith = Inventory.Items[index];
@@ -147,20 +148,20 @@ namespace GridRL {
                 }
                 else if(Program.MA == MouseArea.HoldBox) {
                     if(HeldItem == null) {
-                        HeldItem = Inventory.Items[index];
+                        HeldItem = toWorkWith;
                         Inventory.RemoveItem(HeldItem);
                         Program.console.SetText("You grasp the " + HeldItem.Name + " in your off hand.");
                         return true;
                     }
                     else {
                         if(Inventory.AddItem(HeldItem)) {
-                            HeldItem = Inventory.Items[index];
+                            HeldItem = toWorkWith;
                             Inventory.RemoveItem(HeldItem);
                             Program.console.SetText("You shuffle some items in your pack.");
                             return true;
                         }
                         else if (Program.world[pY, pX].Inventory.AddItem(HeldItem)) {
-                            HeldItem = Inventory.Items[index];
+                            HeldItem = toWorkWith;
                             Inventory.RemoveItem(HeldItem);
                             Program.console.SetText("You lose your grip and some things tumble to the floor.");
                             return true;
@@ -171,22 +172,22 @@ namespace GridRL {
                     }
                 }
                 else if(Program.MA == MouseArea.WearBox) {
-                    if(Inventory.Items[index] is Armor) {
+                    if(toWorkWith is Armor) {
                         if(WornArmor == null) {
-                            WornArmor = (Armor)Inventory.Items[index];
+                            WornArmor = (Armor)toWorkWith;
                             Inventory.RemoveItem(WornArmor);
                             Program.console.SetText("You don your " + WornArmor.Name + ".");
                             return true;
                         }
                         else {
                             if(Inventory.AddItem(WornArmor)) {
-                                WornArmor = (Armor)Inventory.Items[index];
+                                WornArmor = (Armor)toWorkWith;
                                 Inventory.RemoveItem(WornArmor);
                                 Program.console.SetText("You shuffle some items in your pack.");
                                 return true;
                             }
                             else if(Program.world[pY, pX].Inventory.AddItem(WornArmor)) {
-                                WornArmor = (Armor)Inventory.Items[index];
+                                WornArmor = (Armor)toWorkWith;
                                 Inventory.RemoveItem(WornArmor);
                                 Program.console.SetText("You lose your grip and some things tumble to the floor.");
                                 return true;
@@ -201,22 +202,22 @@ namespace GridRL {
                     }
                 }
                 else if(Program.MA == MouseArea.WieldBox) {
-                    if(Inventory.Items[index] is Weapon) {
+                    if(toWorkWith is Weapon) {
                         if(HeldWeapon == null) {
-                            HeldWeapon = (Weapon)Inventory.Items[index];
+                            HeldWeapon = (Weapon)toWorkWith;
                             Inventory.RemoveItem(HeldWeapon);
                             Program.console.SetText("You grasp your " + HeldWeapon.Name + ".");
                             return true;
                         }
                         else {
                             if(Inventory.AddItem(HeldWeapon)) {
-                                HeldWeapon = (Weapon)Inventory.Items[index];
+                                HeldWeapon = (Weapon)toWorkWith;
                                 Inventory.RemoveItem(HeldWeapon);
                                 Program.console.SetText("You shuffle some items in your pack.");
                                 return true;
                             }
                             else if(Program.world[pY, pX].Inventory.AddItem(HeldWeapon)) {
-                                HeldWeapon = (Weapon)Inventory.Items[index];
+                                HeldWeapon = (Weapon)toWorkWith;
                                 Inventory.RemoveItem(HeldWeapon);
                                 Program.console.SetText("You lose your grip and some things tumble to the floor.");
                                 return true;
@@ -230,7 +231,76 @@ namespace GridRL {
                         Program.console.SetText("You can't wield that!");
                     }
                 }
-                // held, worn. wield, drop
+                #endregion
+            }
+            else if(Program.MA == MouseArea.HoldBox) {
+                #region HoldBox
+                if(HeldItem == null) {
+                    return false;
+                }
+                Program.waitState = 2;
+                while(Program.waitState == 2) {
+                    Application.DoEvents();
+                }
+                if(Program.waitState == -1) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                if(Program.MA == MouseArea.Grid || Program.MA == MouseArea.HoldBox) {
+                    Program.LastMA = MouseArea.Hidden;
+                    return false;
+                }
+                else if(Program.MA == MouseArea.PlayerInv) {
+                    if(Inventory.AddItem(HeldItem)) {
+                        Program.console.SetText("You put the " + HeldItem.Name + " into your pack.");
+                        HeldItem = null;
+                        return true;
+                    }
+                }
+                else if(Program.MA == MouseArea.TileInv) {
+                    if(Program.world[pY, pX].Inventory.AddItem(HeldItem)) {
+                        Program.console.SetText("You place the " + HeldItem.Name + " on the floor below.");
+                        HeldItem = null;
+                        return true;
+                    }
+                }
+                else if(Program.MA == MouseArea.WearBox) {
+                    if(HeldItem is Armor) {
+                        if(WornArmor == null) {
+                            WornArmor = (Armor)HeldItem;
+                            HeldItem = null;
+                        }
+                        else {
+                            var temp = WornArmor;
+                            WornArmor = (Armor)HeldItem;
+                            HeldItem = temp;
+                        }
+                        Program.console.SetText("You shuffle some items.");
+                        return true;
+                    }
+                    else {
+                        Program.console.SetText("You can't do that!.");
+                    }
+                }
+                else if(Program.MA == MouseArea.WieldBox) {
+                    if(HeldItem is Weapon) {
+                        if(HeldWeapon == null) {
+                            HeldWeapon = (Weapon)HeldItem;
+                            HeldItem = null;
+                        }
+                        else {
+                            var temp = HeldWeapon;
+                            HeldWeapon = (Weapon)HeldItem;
+                            HeldItem = temp;
+                        }
+                        Program.console.SetText("You shuffle some items.");
+                        return true;
+                    }
+                    else {
+                        Program.console.SetText("You can't do that!.");
+                    }
+                }
+                #endregion
             }
             return false;
         }
