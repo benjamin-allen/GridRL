@@ -17,6 +17,7 @@ namespace GridRL {
         public int GridY { get; } = 33;
         public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
+        public Inventory copyTileInv;
 
         public Sidebar() : base() {
         }
@@ -104,6 +105,24 @@ namespace GridRL {
                 Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
                 g.DrawRectangle(red, rect);
             }
+
+            // Render player inventory
+            for(int i = 0; i < 22; ++i) {
+                if(Program.player.Inventory.Items[i] != null) {
+                    Program.player.Inventory.Items[i].CoordY = (i / 11) + CellsY;
+                    Program.player.Inventory.Items[i].CoordX = (i % 11) + CellsX;
+                    Program.player.Inventory.Items[i].Visibility = Vis.Visible;
+                    g.DrawImage(Program.player.Inventory.Items[i].Image, Program.player.Inventory.Items[i].CoordX * 16, Program.player.Inventory.Items[i].CoordY * 16);
+                }
+            }
+            copyTileInv = Program.world[Program.player.CoordY, Program.player.CoordX].Inventory;
+            for(int i = 0; i < 22; ++i) {
+                if(copyTileInv.Items[i] != null) {
+                    g.DrawImage(copyTileInv.Items[i].Image, (i % 11) + CellsX * 16, (i / 11) + CellsY2 * 16);
+                }
+            }
+            // render tile inventory
+            // render abilities
         }
     }
 }

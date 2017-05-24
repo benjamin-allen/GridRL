@@ -101,7 +101,24 @@ namespace GridRL {
         }
 
         public bool HandleMouseInput(MouseEventArgs e) {
-            return true;
+            int pY = Program.player.CoordY;
+            int pX = Program.player.CoordX;
+            if(Program.MA == MouseArea.TileInv) {
+                // get the index of the item
+                int index = (Program.TileInvMouseCoords[0] * 11) + Program.TileInvMouseCoords[1];
+                // get the item from the inv
+                Item toPickUp = Program.world.Data[pY, pX].Inventory.Items[index];
+                // if it's not null, try to add
+                if(toPickUp != null) {
+                    if(Program.player.Inventory.AddItem(toPickUp)) {
+                        Program.world.Data[pY, pX].Inventory.RemoveItem(toPickUp);
+                        Program.console.SetText("You pick up the " + toPickUp.Name + ".");
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
         }
         #endregion
     }

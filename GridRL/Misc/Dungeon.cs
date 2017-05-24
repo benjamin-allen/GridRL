@@ -38,6 +38,7 @@ namespace GridRL {
             int exitX = Engine.rand.Next(RoomPoints[exitRoom][1], RoomPoints[exitRoom][3]);
             Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
+            Data[entryY + 1, entryX + 1].Inventory.AddItem(new Sword(entryY + 1, entryX + 1));
 
             foreach(List<int> points in RoomPoints) {
                 for(int y = points[0] - 1; y < points[2] + 1; ++y) {
@@ -51,6 +52,7 @@ namespace GridRL {
 
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
+            Program.player.Inventory.AddItem(new Sword(Program.player.CoordY, Program.player.CoordX));
             DummyCreature dummy = new DummyCreature(entryY + 3, entryX + 3);
             Creatures.Add(dummy);
         }

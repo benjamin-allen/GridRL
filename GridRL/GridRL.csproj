@@ -125,11 +125,11 @@
     <None Include="Resources\Fireball.png" />
   </ItemGroup>
   <ItemGroup>
-
     <None Include="Resources\Sidebar.png" />
     <Content Include="Resources\Creatures\Dummy.png" />
     <Content Include="Resources\Creatures\Player.png" />
     <Content Include="Resources\Effects\Flame.png" />
+    <None Include="Resources\Items\Sword.png" />
     <Content Include="Resources\Tiles\Corridor.png" />
     <Content Include="Resources\Tiles\Door.png" />
     <None Include="Resources\Tiles\Wall.png" />
@@ -140,7 +140,6 @@
     <Content Include="Resources\Tiles\Stair_Up.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Items\" />
     <Folder Include="Resources\Misc\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

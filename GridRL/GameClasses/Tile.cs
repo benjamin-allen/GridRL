@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 
 namespace GridRL {
@@ -46,6 +47,20 @@ namespace GridRL {
                 Console.WriteLine("There is a " + items[0].Name + " here.");
                 if(items.Count > 1) {
                     Console.WriteLine("There are other items here as well.");
+                }
+            }
+        }
+
+        #endregion
+        #region Overrides
+
+        protected override void Paint(Graphics g) {
+            base.Paint(g);
+            if(Visibility == Vis.Visible) {
+                Item i = Inventory.Items.FirstOrDefault();
+                if(i != null) {
+                    i.Visibility = Vis.Visible;
+                    i.Render(g);
                 }
             }
         }
