@@ -135,7 +135,12 @@ namespace GridRL {
                     waitState = 0;
                 }
             }
-            if(player.HandleMouseInput(e)) {
+            else if(player.HandleMouseInput(e)) {
+                PlrInvMouseCoords = new int[] { -1, -1 };
+                TileInvMouseCoords = new int[] { -1, -1 };
+                MouseCoords = new int[] { -1, -1 };
+                GridMouseCoords = new int[] { -1, -1 };
+                Program.MA = MouseArea.Hidden;
                 GameLoop();
             }
             else {

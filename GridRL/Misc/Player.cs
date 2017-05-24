@@ -235,6 +235,7 @@ namespace GridRL {
             }
             else if(Program.MA == MouseArea.HoldBox) {
                 #region HoldBox
+
                 if(HeldItem == null) {
                     return false;
                 }
@@ -296,6 +297,9 @@ namespace GridRL {
                         WornArmor = null;
                         return true;
                     }
+                }
+                else if(Program.MA == MouseArea.HoldBox) {
+
                 }
                 #endregion
             }
