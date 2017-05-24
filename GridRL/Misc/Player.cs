@@ -101,8 +101,8 @@ namespace GridRL {
         }
 
         public bool HandleMouseInput(MouseEventArgs e) {
-            int pY = Program.player.CoordY;
-            int pX = Program.player.CoordX;
+            int pY = CoordY;
+            int pX = CoordX;
             if(Program.MA == MouseArea.TileInv) {
                 // get the index of the item
                 int index = (Program.TileInvMouseCoords[0] * 11) + Program.TileInvMouseCoords[1];
@@ -110,7 +110,7 @@ namespace GridRL {
                 Item toPickUp = Program.world.Data[pY, pX].Inventory.Items[index];
                 // if it's not null, try to add
                 if(toPickUp != null) {
-                    if(Program.player.Inventory.AddItem(toPickUp)) {
+                    if(Inventory.AddItem(toPickUp)) {
                         Program.world.Data[pY, pX].Inventory.RemoveItem(toPickUp);
                         Program.console.SetText("You pick up the " + toPickUp.Name + ".");
                         return true;
@@ -121,7 +121,7 @@ namespace GridRL {
             else if(Program.MA == MouseArea.PlayerInv) {
                 // check for item relevance
                 int index = (Program.PlrInvMouseCoords[0] * 11) + Program.PlrInvMouseCoords[1];
-                Item toWorkWith = Program.player.Inventory.Items[index];
+                Item toWorkWith = Inventory.Items[index];
                 if(toWorkWith == null) {
                     return false;
                 }
@@ -139,12 +139,20 @@ namespace GridRL {
                     return false;
                 }
                 if(Program.MA == MouseArea.TileInv) {  // DROP ITEM
-                    // get the index of where we clicked
                     if(Program.world[Program.player.CoordY, Program.player.CoordX].Inventory.AddItem(toWorkWith)) {
-                        Program.player.Inventory.RemoveItem(toWorkWith);
+                        Inventory.RemoveItem(toWorkWith);
                         Program.console.SetText("You drop the " + toWorkWith.Name + ".");
                         return true;
                     }
+                }
+                else if(Program.MA == MouseArea.HoldBox) {
+                    if(HeldItem == null) {
+                        HeldItem = Inventory.Items[index];
+                        Inventory.RemoveItem(HeldItem);
+                        Program.console.SetText("You grasp the " + HeldItem.Name + "in your off hand.");
+                        return true;
+                    }
+                    //if(Program.player.Inventory.AddItem(HeldItem))
                 }
                 // held, worn. wield, drop
             }

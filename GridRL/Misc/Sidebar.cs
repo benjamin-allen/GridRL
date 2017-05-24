@@ -104,8 +104,6 @@ namespace GridRL {
                 Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
                 g.DrawRectangle(red, rect);
             }
-
-            // Render player inventory
             for(int i = 0; i < 22; ++i) {
                 if(Program.player.Inventory.Items[i] != null) {
                     g.DrawImage(Program.player.Inventory.Items[i].Image, ((i % 11) + CellsX) * 16, ((i / 11) + CellsY) * 16);
@@ -116,7 +114,9 @@ namespace GridRL {
                     g.DrawImage(Program.world[Program.player.CoordY, Program.player.CoordX].Inventory.Items[i].Image, ((i % 11) + CellsX) * 16, ((i / 11) + CellsY2) * 16);
                 }
             }
-            // render tile inventory
+            if(Program.player.HeldItem != null) {
+                g.DrawImage(Program.player.HeldItem.Image, 74 * 16, 16 * 18);
+            }
             // render abilities
         }
     }
