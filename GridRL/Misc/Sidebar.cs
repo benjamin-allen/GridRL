@@ -18,7 +18,7 @@ namespace GridRL {
         public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
         static ColorConverter cc = new ColorConverter();
-        Color[] Colors = new Color[9] {(Color)cc.ConvertFromString("#FF30346D"),
+        static Color[] Colors = new Color[9] {(Color)cc.ConvertFromString("#FF30346D"),
                                        (Color)cc.ConvertFromString("#FF854C30"),
                                        (Color)cc.ConvertFromString("#FF346524"),
                                        (Color)cc.ConvertFromString("#FF757161"),
@@ -27,6 +27,15 @@ namespace GridRL {
                                        (Color)cc.ConvertFromString("#FF8595A1"),
                                        (Color)cc.ConvertFromString("#FF6DAA2C"),
                                        (Color)cc.ConvertFromString("#FF6DC2CA"), };
+        Color[] InvColors = new Color[9] {Color.FromArgb(Colors[0].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[1].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[2].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[3].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[4].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[5].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[6].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[7].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[8].ToArgb() ^ 0x00ffffff), };
 
         public Sidebar() : base() {
         }
@@ -138,11 +147,17 @@ namespace GridRL {
                 int x = a.GridX;
                 int w = a.GridWidth;
                 int h = a.GridHeight;
+                String text = a.Name;
+                bool isPrinted = false;
                 for(int j = y; j < y + h; ++j) {
                     for(int i = x; i < x + w; ++i) {
                         int index = Program.player.Abilities.IndexOf(a);
                         Rectangle rect = new Rectangle((GridX * 16) + (i * GridCellSize), (GridY * 16) + (j * GridCellSize), GridCellSize, GridCellSize);
                         g.FillRectangle(new SolidBrush(Colors[index]), rect);
+                        if(!isPrinted) {
+                            g.DrawString(text, new Font("Courier New", 8), new SolidBrush(InvColors[index]), rect);
+                            isPrinted = true;
+                        }
                     }
                 }
             }

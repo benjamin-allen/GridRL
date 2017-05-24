@@ -31,6 +31,8 @@ namespace GridRL {
         #region Constructors
 
         public AttackBoost(Creature owner) : base(owner) {
+            Name = "Attack Boost";
+            Description = "A passive boost to your attack.";
             GridHeight = 1;
             GridWidth = 1;
         }

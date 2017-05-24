@@ -63,9 +63,6 @@ namespace GridRL {
             else if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
                 return true;
             }
-            else if(e.KeyCode == Keys.A) {
-                return Abilities[0].Use(this);
-            }
             else if(e.KeyCode == Keys.B) {
                 Abilities[1].OnAddToGrid();
                 return false;
@@ -337,6 +334,21 @@ namespace GridRL {
                     }
                 }
                 #endregion
+            }
+            else if(Program.MA == MouseArea.Grid) {
+                int y = Program.GridMouseCoords[0];
+                int x = Program.GridMouseCoords[1];
+                int index = -1;
+                foreach(Ability a in Abilities) {
+                    if(y >= a.GridY && y < a.GridY + a.GridHeight && x >= a.GridX && x < a.GridX + a.GridWidth) {
+                        index = Abilities.IndexOf(a);
+                    }
+                }
+                if(index != -1) {
+                    if(Abilities[index].Use(this)) {
+                        return true;
+                    }
+                }
             }
             return false;
         }
