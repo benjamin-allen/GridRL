@@ -239,6 +239,7 @@ namespace GridRL {
                     return false;
                 }
                 Program.waitState = 2;
+                Program.Exception = MouseArea.HoldBox;
                 while(Program.waitState == 2) {
                     Application.DoEvents();
                 }
@@ -246,9 +247,15 @@ namespace GridRL {
                     Program.LastMA = MouseArea.Hidden;
                     return false;
                 }
-                if(Program.MA == MouseArea.Grid || Program.MA == MouseArea.HoldBox) {
+                if(Program.MA == MouseArea.Grid) {
                     Program.LastMA = MouseArea.Hidden;
                     return false;
+                }
+                else if(Program.MA == MouseArea.HoldBox) {
+                    if(HeldItem.Activate(this)) {
+                        HeldItem = null;
+                        return true;
+                    }
                 }
                 else if(Program.MA == MouseArea.PlayerInv) {
                     if(Inventory.AddItem(HeldItem)) {
@@ -336,6 +343,7 @@ namespace GridRL {
                 #endregion
             }
             else if(Program.MA == MouseArea.Grid) {
+                #region Grid
                 int y = Program.GridMouseCoords[0];
                 int x = Program.GridMouseCoords[1];
                 int index = -1;
@@ -349,6 +357,7 @@ namespace GridRL {
                         return true;
                     }
                 }
+                #endregion
             }
             return false;
         }

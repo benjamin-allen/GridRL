@@ -14,4 +14,10 @@
             MaxStack = 1;
         }
     }
+
+    public class FlameBurstOrb : Orb {
+        public FlameBurstOrb() : base(Properties.Resources.FBOrb) {
+            Ability = new FlameBurst();
+        }
+    }
 }

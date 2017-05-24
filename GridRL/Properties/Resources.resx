@@ -130,6 +130,9 @@
   <data name="Dummy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Creatures\Dummy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FBOrb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Items\FBOrb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Flame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Effects\Flame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

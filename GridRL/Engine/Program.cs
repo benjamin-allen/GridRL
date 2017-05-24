@@ -27,6 +27,7 @@ namespace GridRL {
         public static ImageAttributes gray = new ImageAttributes();
         public static MouseArea MA = MouseArea.Hidden;
         public static MouseArea LastMA = MouseArea.Hidden;
+        public static MouseArea Exception = MouseArea.Hidden;
         public static string HoverString;
 
         #endregion
@@ -131,7 +132,7 @@ namespace GridRL {
                 if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
                     waitState = -1;
                 }
-                else if(MA != LastMA) {
+                else if(MA != LastMA || MA == Exception) {
                     waitState = 0;
                 }
             }

@@ -35,12 +35,12 @@ namespace GridRL {
         #region Methods
 
         /// <summary> Called when an actor uses this item. </summary>
-        /// <param name="activator"> The actor that activated this item. </param>
-        public virtual void Activate(Actor activator) { }
+        /// <param name="activator"> The creature that activated this item. </param>
+        public virtual bool Activate(Creature activator) { return true; }
 
         /// <summary> Called when a creature picks up this item. </summary>
         /// <param name="grabber"> The creature that picked up this item.</param>
-        public virtual void PickUp(Creature grabber) { }
+        public virtual void OnPickUp(Creature grabber) { }
 
         /// <summary> Called when this item is activated. </summary>
         /// <param name="activator"> The creature that activated this. </param>
@@ -200,12 +200,12 @@ namespace GridRL {
         #endregion
     }
 
-    class Orb : Item {
+    public class Orb : Item {
         #region Constructors
 
         public Orb(Image image) : base(image) {
-            Name = "Dummy Orb";
-            Description = "If you can see this, file a report for an improperly initialized orb.";
+            Name = "Mysterious Orb";
+            Description = "An orb of unknown origin. It confers new skills when used.";
             MaxStack = 1;
         }
 
@@ -217,8 +217,8 @@ namespace GridRL {
         #endregion
         #region Methods
 
-        public void Activate(Creature activator) {
-            activator.AddNewAbility(Ability);
+        public override bool Activate(Creature activator) {
+            return activator.AddNewAbility(Ability);
         }
 
         #endregion

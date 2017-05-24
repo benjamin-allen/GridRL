@@ -101,7 +101,7 @@ namespace GridRL {
             }
         }
 
-        public virtual void AddNewAbility(Ability a) { }
+        public virtual bool AddNewAbility(Ability a) { return true; }
 
         #endregion
         #region Overrides
