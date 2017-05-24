@@ -28,7 +28,7 @@ namespace GridRL {
         /// <summary> Top-level function to capture and pass input to their sub-functions. </summary>
         /// <param name="e"> The KeyEventArgs thing. </param>
         /// <returns> A boolean indicating whether to advance the game. </returns>
-        public bool HandleGameInput(KeyEventArgs e) {
+        public bool HandleKeyInput(KeyEventArgs e) {
             if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2
             || e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6) {
                 Direction dir = KeyPressToDirection(e);
@@ -61,6 +61,7 @@ namespace GridRL {
                 return true;
             }
             else if(e.KeyCode == Keys.A) {
+                Program.console.SetText("Used the " + Abilities[0].Name + " Ability!");
                 return Abilities[0].Use(this);
             }
             else if(e.KeyCode == Keys.B) {
@@ -75,7 +76,7 @@ namespace GridRL {
                 Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
                 if(i != null) {
                     PickUp(i);
-                    Console.WriteLine("You pick up the " + i.Name + ".");
+                    Program.console.SetText("You pick up the " + i.Name + ".");
                 }
             }
             return false;
@@ -99,6 +100,9 @@ namespace GridRL {
             }
         }
 
+        public bool HandleMouseInput(MouseEventArgs e) {
+            return true;
+        }
         #endregion
     }
 }

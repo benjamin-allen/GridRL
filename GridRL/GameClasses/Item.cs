@@ -55,8 +55,8 @@ namespace GridRL {
 
         /// <summary> Creates an empty inventory. </summary>
         public Inventory() {
-            Items = new Item[20];
-            Counts = new byte[20];
+            Items = new Item[22];
+            Counts = new byte[22];
         }
 
         #endregion
