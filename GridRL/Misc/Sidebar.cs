@@ -17,7 +17,25 @@ namespace GridRL {
         public int GridY { get; } = 33;
         public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
-        public Inventory copyTileInv;
+        static ColorConverter cc = new ColorConverter();
+        static Color[] Colors = new Color[9] {(Color)cc.ConvertFromString("#FF30346D"),
+                                       (Color)cc.ConvertFromString("#FF854C30"),
+                                       (Color)cc.ConvertFromString("#FF346524"),
+                                       (Color)cc.ConvertFromString("#FF757161"),
+                                       (Color)cc.ConvertFromString("#FF597DCE"),
+                                       (Color)cc.ConvertFromString("#FFD27D2C"),
+                                       (Color)cc.ConvertFromString("#FF8595A1"),
+                                       (Color)cc.ConvertFromString("#FF6DAA2C"),
+                                       (Color)cc.ConvertFromString("#FF6DC2CA"), };
+        Color[] InvColors = new Color[9] {Color.FromArgb(Colors[0].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[1].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[2].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[3].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[4].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[5].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[6].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[7].ToArgb() ^ 0x00ffffff),
+                                          Color.FromArgb(Colors[8].ToArgb() ^ 0x00ffffff), };
 
         public Sidebar() : base() {
         }
@@ -25,7 +43,6 @@ namespace GridRL {
         
 
         protected override void Paint(Graphics g) {
-            Pen red = new Pen(Color.FromArgb(208, 70, 72), 3f);
             //Drawing stats box + desc box
             stats[0] = Program.player.Health;
             stats[1] = Program.player.Attack;
@@ -51,78 +68,69 @@ namespace GridRL {
             g.DrawRectangle(Pens.White, holdBox);
             g.DrawRectangle(Pens.White, wearBox);
             g.DrawRectangle(Pens.White, wieldBox);
-            if(Program.MA == MouseArea.HoldBox) {
-                g.DrawRectangle(red, holdBox);
-            }
-            else if(Program.MA == MouseArea.WearBox) {
-                g.DrawRectangle(red, wearBox);
-            }
-            else if(Program.MA == MouseArea.WieldBox) {
-                g.DrawRectangle(red, wieldBox);
-            }
 
             //Drawing player inventory slots
             g.DrawString("Player Inventory", ConsoleText, Brushes.White, 16 * 67, 16 * (CellsY - 1));
             g.DrawString("Tile Inventory", ConsoleText, Brushes.White, 16 * 67, 16 * (CellsY2 - 1));
-            int[] selectPoints = new int[2] { -1, -1 };
             for(int i = 0 ; i < 2 ; i++) {
                 for(int j = 0 ; j < 11 ; j++) {
                     Rectangle rect = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
                     Rectangle rect2 = new Rectangle((CellsX * InvCellSize) + j * InvCellSize, (CellsY2 * InvCellSize) + i * InvCellSize, InvCellSize, InvCellSize);
-                    if(j == Program.PlrInvMouseCoords[1] && i == Program.PlrInvMouseCoords[0] && Program.MA == MouseArea.PlayerInv) {
-                        selectPoints[0] = i;
-                        selectPoints[1] = j;
-                    }
-                    else if(j == Program.TileInvMouseCoords[1] && i == Program.TileInvMouseCoords[0] && Program.MA == MouseArea.TileInv) {
-                        selectPoints[0] = i;
-                        selectPoints[1] = j;
-                    }
                     g.DrawRectangle(Pens.White, rect);
                     g.DrawRectangle(Pens.White, rect2);
                 }
-            }
-            if(selectPoints[0] != -1 && (Program.MA == MouseArea.PlayerInv || Program.MA == MouseArea.TileInv)) {
-                int temp = CellsY;
-                if(Program.MA == MouseArea.TileInv) {
-                    temp = CellsY2;
-                }
-                Rectangle rect = new Rectangle((CellsX * InvCellSize) + selectPoints[1] * InvCellSize, (temp * InvCellSize) + selectPoints[0] * InvCellSize, InvCellSize, InvCellSize);
-                g.DrawRectangle(red, rect);
             }
 
             //Drawing ability grid
             for(int i = 0; i < 3; i++) {
                 for(int j = 0; j < 3; j++) {
-                    if(Program.MA == MouseArea.Grid && j == Program.GridMouseCoords[1] && i == Program.GridMouseCoords[0]) {
-                        selectPoints[0] = i;
-                        selectPoints[1] = j;
-                    }
-                    Rectangle rect = new Rectangle(16 * GridX + i * GridCellSize, GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
+                    Rectangle rect = new Rectangle((16 * GridX + i * GridCellSize), GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
                     g.DrawRectangle(Pens.White, rect);
                 }
             }
-            if(selectPoints[0] != -1 && Program.MA == MouseArea.Grid) {
-                Rectangle rect = new Rectangle((16 * GridX) + selectPoints[1] * GridCellSize, (16 * GridY) + selectPoints[0] * GridCellSize, GridCellSize, GridCellSize);
-                g.DrawRectangle(red, rect);
+            if(Program.waitState == 3) {
+                foreach(List<int> points in Program.AbilityPlacePoints) {
+                    g.FillRectangle(Brushes.Green, 16 * GridX + points[1] * GridCellSize + 1, 16 * GridY + points[0] * GridCellSize + 1, GridCellSize - 1, GridCellSize - 1);
+                }
             }
-
-            // Render player inventory
             for(int i = 0; i < 22; ++i) {
                 if(Program.player.Inventory.Items[i] != null) {
-                    Program.player.Inventory.Items[i].CoordY = (i / 11) + CellsY;
-                    Program.player.Inventory.Items[i].CoordX = (i % 11) + CellsX;
-                    Program.player.Inventory.Items[i].Visibility = Vis.Visible;
-                    g.DrawImage(Program.player.Inventory.Items[i].Image, Program.player.Inventory.Items[i].CoordX * 16, Program.player.Inventory.Items[i].CoordY * 16);
+                    g.DrawImage(Program.player.Inventory.Items[i].Image, ((i % 11) + CellsX) * 16, ((i / 11) + CellsY) * 16);
                 }
             }
-            copyTileInv = Program.world[Program.player.CoordY, Program.player.CoordX].Inventory;
             for(int i = 0; i < 22; ++i) {
-                if(copyTileInv.Items[i] != null) {
-                    g.DrawImage(copyTileInv.Items[i].Image, (i % 11) + CellsX * 16, (i / 11) + CellsY2 * 16);
+                if(Program.world[Program.player.CoordY, Program.player.CoordX].Inventory.Items[i] != null) {
+                    g.DrawImage(Program.world[Program.player.CoordY, Program.player.CoordX].Inventory.Items[i].Image, ((i % 11) + CellsX) * 16, ((i / 11) + CellsY2) * 16);
                 }
             }
-            // render tile inventory
-            // render abilities
+            if(Program.player.HeldItem != null) {
+                g.DrawImage(Program.player.HeldItem.Image, 74 * 16, 16 * 18);
+            }
+            if(Program.player.WornArmor != null) {
+                g.DrawImage(Program.player.WornArmor.Image, 74 * 16, 16 * 20);
+            }
+            if(Program.player.HeldWeapon != null) {
+                g.DrawImage(Program.player.HeldWeapon.Image, 74 * 16, 16 * 22);
+            }
+            foreach(Ability a in Program.player.Abilities) {
+                int y = a.GridY;
+                int x = a.GridX;
+                int w = a.GridWidth;
+                int h = a.GridHeight;
+                String text = a.Name;
+                bool isPrinted = false;
+                for(int j = y; j < y + h; ++j) {
+                    for(int i = x; i < x + w; ++i) {
+                        int index = Program.player.Abilities.IndexOf(a);
+                        Rectangle rect = new Rectangle((GridX * 16) + (i * GridCellSize), (GridY * 16) + (j * GridCellSize), GridCellSize + 1, GridCellSize + 1);
+                        g.FillRectangle(new SolidBrush(Colors[index]), rect);
+                        if(!isPrinted) {
+                            g.DrawString(text, new Font("Courier New", 8), new SolidBrush(InvColors[index]), rect);
+                            isPrinted = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

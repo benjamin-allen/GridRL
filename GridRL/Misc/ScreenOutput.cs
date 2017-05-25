@@ -8,7 +8,8 @@ namespace GridRL {
         public static string text1 = "";
         public static string text2 = "";
         public static string text3 = "";
-        Rectangle box = new Rectangle(5,645, 1000, 50);
+        public static string text4 = "";
+        Rectangle box = new Rectangle(16,16 * 41, 16 * 64, 16 * 4);
         Font ConsoleText = new Font("Courier New", 9);
 
         public ScreenOutput() : base() {
@@ -16,6 +17,7 @@ namespace GridRL {
         }
 
         public void SetText(string str) {
+            text4 = text3;
             text3 = text2;
             text2 = text1;
             text1 = str;
@@ -23,7 +25,7 @@ namespace GridRL {
 
         protected override void Paint(Graphics g) {
             base.Paint(g);
-            string output = text3 + "\n" + text2 + "\n" + text1;
+            string output = text4 + "\n" + text3 + "\n" + text2 + "\n" + text1;
             g.FillRectangle(Brushes.Black, box);
             g.DrawString(output, ConsoleText ,Brushes.White, box);
         }

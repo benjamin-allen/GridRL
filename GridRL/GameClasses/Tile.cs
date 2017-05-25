@@ -44,9 +44,9 @@ namespace GridRL {
                 }
             }
             if(items.Count >= 1) {
-                Console.WriteLine("There is a " + items[0].Name + " here.");
+                Program.console.SetText("There is a " + items[0].Name + " here.");
                 if(items.Count > 1) {
-                    Console.WriteLine("There are other items here as well.");
+                    Program.console.SetText("There are other items here as well.");
                 }
             }
         }
