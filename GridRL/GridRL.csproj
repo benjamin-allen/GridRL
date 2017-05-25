@@ -50,9 +50,13 @@
     <Compile Include="GameClasses\Actor.cs" />
     <Compile Include="Misc\AI.cs" />
     <Compile Include="Content\Ability_Content.cs" />
-    <Compile Include="Content\Creature_Content.cs" />
+    <Compile Include="Content\Creature_Content.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Content\Effect_Content.cs" />
-    <Compile Include="Content\Item_Content.cs" />
+    <Compile Include="Content\Item_Content.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Content\Tile_Content.cs" />
     <Compile Include="GameClasses\Creature.cs" />
     <Compile Include="Misc\Dungeon.cs" />
@@ -128,6 +132,7 @@
     <None Include="Resources\Sidebar.png" />
     <Content Include="Resources\Creatures\Dummy.png" />
     <Content Include="Resources\Creatures\Player.png" />
+    <None Include="Resources\Creatures\Skeleton.png" />
     <Content Include="Resources\Effects\Flame.png" />
     <None Include="Resources\Items\Sword.png" />
     <None Include="Resources\Items\Shirt.png" />
