@@ -105,6 +105,7 @@ namespace GridRL {
                 // if it's not null, try to add
                 if(toPickUp != null) {
                     if(Inventory.AddItem(toPickUp)) {
+                        toPickUp.OnPickUp(this);
                         Program.world.Data[pY, pX].Inventory.RemoveItem(toPickUp);
                         Program.console.SetText("You pick up the " + toPickUp.Name + ".");
                         return true;

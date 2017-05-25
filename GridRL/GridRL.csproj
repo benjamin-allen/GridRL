@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Engine\ImageSprite.cs" />
     <Compile Include="GameClasses\Item.cs" />
+    <Compile Include="Misc\Final.cs" />
     <Compile Include="Misc\Player.cs" />
     <Compile Include="Engine\Program.cs">
       <SubType>Form</SubType>
@@ -131,6 +132,7 @@
   <ItemGroup>
     <None Include="Resources\Sidebar.png" />
     <Content Include="Resources\Creatures\Dummy.png" />
+    <None Include="Resources\Creatures\Macguffin.png" />
     <Content Include="Resources\Creatures\Player.png" />
     <None Include="Resources\Creatures\Skeleton.png" />
     <Content Include="Resources\Effects\Flame.png" />

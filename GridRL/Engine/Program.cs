@@ -47,6 +47,8 @@ namespace GridRL {
             canvas.Add(console);
             canvas.Add(sidebar);
             world.UpdateVisibles();
+            player.Inventory.AddItem(new Weapon(Engine.MasterWeapons[0]));
+            player.Inventory.AddItem(new Armor(Engine.MasterArmors[0]));
             Application.Run(new Program());
         }
 

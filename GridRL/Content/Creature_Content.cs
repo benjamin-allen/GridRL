@@ -11,12 +11,16 @@ namespace GridRL {
             dummy.DeathMessage = "The " + dummy.Name + "dies!";
             dummy.Health = 20;
             dummy.Visibility = Vis.Unseen;
+            dummy.AI = AIType.Monster;
             MasterCreatures.Add(dummy);
 
             mrbones.Name = "Skeledoot";
             mrbones.Description = "I want to get off Mr Bones' Wild Ride.\n:(";
             mrbones.DeathMessage = "2spooky";
             mrbones.Health = 30;
+            mrbones.Attack = 20;
+            mrbones.Defense = 5;
+            dummy.AI = AIType.Monster;
             MasterCreatures.Add(mrbones);
         }
     }

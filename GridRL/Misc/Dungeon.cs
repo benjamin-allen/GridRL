@@ -50,8 +50,6 @@ namespace GridRL {
 
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
-            Program.player.Inventory.AddItem(new Weapon(Engine.MasterWeapons[0]));
-            Program.player.Inventory.AddItem(new Armor(Engine.MasterArmors[0]));
             foreach(List<int> room in RoomPoints) {
                 int cY = Engine.rand.Next(room[0], room[2]);
                 int cX = Engine.rand.Next(room[1], room[3]);
@@ -91,13 +89,13 @@ namespace GridRL {
                     RoomPoints.Add(points);
                 }
                 // Otherwise place it 1/5 of the time even if there is an overlap
-                else {
-                    if(Engine.rand.NextDouble() < .2 || i == roomCount - 1) {
+                /*else {
+                    if(Engine.rand.NextDouble() < .05 || i == roomCount - 1) {
                         LastRegionID++;
                         BuildRoom(points, LastRegionID);
                         RoomPoints.Add(points);
                     }
-                }
+                }*/
             }
         }
 
