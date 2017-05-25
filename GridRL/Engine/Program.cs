@@ -67,12 +67,15 @@ namespace GridRL {
         private static void setMouseArea(bool isHovering = false) {
             int y = MouseCoords[0];
             int x = MouseCoords[1];
-            if(x < 65) {
-                if(y < 41) {
+            if(x < 65 && x >= 0) {
+                if(y < 41 && y >= 0) {
                     MA = MouseArea.World;
                 }
-                else {
+                else if(y >= 41 && y <= 44) {
                     MA = MouseArea.Console;
+                }
+                else {
+                    MA = MouseArea.Hidden;
                 }
             }
             else if(x >= sidebar.CellsX && x < sidebar.CellsX + 11) {
@@ -166,8 +169,8 @@ namespace GridRL {
                 canvas.Update();
             }
             else {
-                MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
-                MouseCoords[1] = (int)Math.Floor(e.X / 16f);
+                MouseCoords[0] = (int)Math.Floor((e.Y - canvas.Y) / 16f);
+                MouseCoords[1] = (int)Math.Floor((e.X - canvas.X) / 16f);
                 setMouseArea();
                 form.Refresh();
                 if(waitState == 2) {
@@ -201,8 +204,8 @@ namespace GridRL {
         }
 
         protected override void OnMouseMove(MouseEventArgs e) {
-            MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
-            MouseCoords[1] = (int)Math.Floor(e.X / 16f);
+            MouseCoords[0] = (int)Math.Floor((e.Y - canvas.Y) / 16f);
+            MouseCoords[1] = (int)Math.Floor((e.X - canvas.X) / 16f);
             setMouseArea(true);
             if(MA == MouseArea.World) {
                 if(world[MouseCoords[0], MouseCoords[1]] != null) {
