@@ -18,11 +18,6 @@ namespace GridRL {
             Attack = 10;
             Defense = 10;
             Visibility = Vis.Visible;
-            Abilities.Add(new FlameBurst());
-            AttackBoost a = new AttackBoost(this);
-            a.GridY = 1;
-            a.GridX = 1;
-            Abilities.Add(a);
         }
 
         #endregion

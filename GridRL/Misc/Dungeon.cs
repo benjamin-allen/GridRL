@@ -33,13 +33,11 @@ namespace GridRL {
                 exitRoom = (exitRoom + 1) % RoomPoints.Count;
             }
             int entryY = Engine.rand.Next(RoomPoints[entryRoom][0], RoomPoints[entryRoom][2]);
-            int entryX = Engine.rand.Next(RoomPoints[entryRoom][1], RoomPoints[entryRoom][1]);
+            int entryX = Engine.rand.Next(RoomPoints[entryRoom][1], RoomPoints[entryRoom][3]);
             int exitY = Engine.rand.Next(RoomPoints[exitRoom][0], RoomPoints[exitRoom][2]);
             int exitX = Engine.rand.Next(RoomPoints[exitRoom][1], RoomPoints[exitRoom][3]);
             Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
-            Data[entryY + 1, entryX + 1].Inventory.AddItem(new Weapon(Engine.MasterWeapons[0]));
-            Data[entryY + 1, entryX + 1].Inventory.AddItem(new Orb(Engine.MasterOrbs[0]));
             foreach(List<int> points in RoomPoints) {
                 for(int y = points[0] - 1; y < points[2] + 1; ++y) {
                     for(int x = points[1] - 1; x < points[3] + 1; ++x) {
@@ -53,6 +51,7 @@ namespace GridRL {
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
             Program.player.Inventory.AddItem(new Weapon(Engine.MasterWeapons[0]));
+            Program.player.Inventory.AddItem(new Armor(Engine.MasterArmors[0]));
             foreach(List<int> room in RoomPoints) {
                 int cY = Engine.rand.Next(room[0], room[2]);
                 int cX = Engine.rand.Next(room[1], room[3]);
@@ -63,6 +62,14 @@ namespace GridRL {
                 c.CoordY = cY;
                 c.CoordX = cX;
                 Creatures.Add(c);
+            }
+            foreach(List<int> room in RoomPoints) {
+                if(Engine.rand.Next(0, 10) < 2) {
+                    int index = Engine.rand.Next(0, Engine.MasterOrbs.Count);
+                    int y = Engine.rand.Next(room[0], room[2]);
+                    int x = Engine.rand.Next(room[1], room[3]);
+                    Data[y, x].Inventory.AddItem(new Orb(Engine.MasterOrbs[index]));
+                }
             }
         }
 
