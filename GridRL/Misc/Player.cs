@@ -59,21 +59,6 @@ namespace GridRL {
             else if(e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.OemPeriod) {
                 return true;
             }
-            else if(e.KeyCode == Keys.B) {
-                Abilities[1].OnAddToGrid();
-                return false;
-            }
-            else if(e.KeyCode == Keys.C) {
-                Abilities[1].OnRemoveFromGrid();
-                return false;
-            }
-            else if(e.KeyCode == Keys.G) {
-                Item i = Program.world[CoordY, CoordX].Inventory.Items.FirstOrDefault();
-                if(i != null) {
-                    PickUp(i);
-                    Program.console.SetText("You pick up the " + i.Name + ".");
-                }
-            }
             return false;
         }
 
