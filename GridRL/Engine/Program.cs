@@ -141,7 +141,8 @@ namespace GridRL {
                 // Do this if we're waiting for key input. 
                 if(waitState == 1) {
                     if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right ||
-                    kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
+                    kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6 ||
+                    kc == Keys.NumPad1 || kc == Keys.NumPad3 || kc == Keys.NumPad9 || kc == Keys.NumPad7) {
                         waitState = 0;
                         Direction d = player.KeyPressToDirection(e);
                         lastDirection = d;
