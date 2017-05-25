@@ -128,6 +128,7 @@
     <None Include="Resources\Sidebar.png" />
     <Content Include="Resources\Creatures\Dummy.png" />
     <Content Include="Resources\Creatures\Player.png" />
+    <None Include="Resources\Credits.jpg" />
     <Content Include="Resources\Effects\Flame.png" />
     <None Include="Resources\Items\Sword.png" />
     <None Include="Resources\Items\Shirt.png" />

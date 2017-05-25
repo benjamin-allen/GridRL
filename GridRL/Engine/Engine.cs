@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace GridRL {
@@ -29,6 +30,8 @@ namespace GridRL {
         public static Random rand = new Random(1);
         public static int turnCount = 0;
         public static bool start = false;
+        public static bool WinGame = false;
+        public static bool LoseGame = true;
 
         #endregion
         #region Overrides
@@ -37,8 +40,18 @@ namespace GridRL {
             if(!start) {
                 e.Graphics.DrawImage(Properties.Resources.StartMenu,0,0, ClientSize.Width, ClientSize.Height);
             }
-            else {
+            else if(!WinGame && !LoseGame){
                 canvas.Render(e.Graphics);
+            }
+            else {
+                e.Graphics.DrawImage(Properties.Resources.Credits, 0, 0, ClientSize.Width, ClientSize.Height);
+                Font font = new Font("Algerian", 100);
+                if(WinGame) {
+                    e.Graphics.DrawString("You Win!",font, Brushes.Black, ClientSize.Width/4 + 50, 200);
+                }
+                else {
+                    e.Graphics.DrawString("You Lose!", font, Brushes.Black, ClientSize.Width / 4 + 50, 200);
+                }
             }
         }
 
