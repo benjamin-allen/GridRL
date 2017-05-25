@@ -45,7 +45,6 @@ namespace GridRL {
             int x = (int)X / 16;
             int px = (int)Program.player.X / 16;
             int py = (int)Program.player.Y / 16;
-            //Console.WriteLine(Program.world.Data[y,x]);
             Point creature = new Point(x, y);
             Point player = new Point(px, py);
             Line line = new Line(creature, player);
@@ -63,7 +62,6 @@ namespace GridRL {
                 }
             }
             if(distance < 5 && canSee) {
-                Console.WriteLine("Can see player");
                 if(points.Capacity > 1) {
                     if(points[1].X == px && points[1].Y == py && distance < 2) {
                         PerformAttack(Program.player);
@@ -82,7 +80,6 @@ namespace GridRL {
                 }
             }
             else {
-                Console.WriteLine("Can't see player?");
                 RandomWalk();
             }
         }
