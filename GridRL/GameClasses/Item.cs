@@ -241,4 +241,30 @@ namespace GridRL {
 
         #endregion
     }
+
+    public class PassiveOrb : Item {
+        #region Constructors
+
+        public PassiveOrb(Image image) : base(image) {
+            Name = "Mysterious Orb";
+            Description = "An orb of unknown origin. It confers new skills when used.";
+            MaxStack = 1;
+        }
+
+        #endregion
+        #region Properties
+
+        public PassiveAbility Ability { get; set; }
+
+        #endregion
+        #region Methods
+
+        public override bool Activate(Creature activator) {
+            Program.console.SetText("The orb begins to glow...");
+            Program.HoverString = ("Select a spot on the grid.");
+            return activator.AddNewAbility(Ability);
+        }
+
+        #endregion
+    }
 }

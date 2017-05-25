@@ -50,4 +50,17 @@ namespace GridRL {
 
         #endregion
     }
+
+    public class FireWall : DirectedAbility {
+        #region Constructors
+
+        public FireWall() : base() {
+            Name = "Fire Wall";
+            Description = "Creates a wall of pure flame.";
+            GridHeight = 2;
+            GridWidth = 1;
+            Effect = new FireWallEffect();
+        }
+        #endregion
+    }
 }

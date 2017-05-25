@@ -20,4 +20,10 @@
             Ability = new FlameBurst();
         }
     }
+
+    public class AttackBoostOrb : PassiveOrb {
+        public AttackBoostOrb(Creature owner) : base(Properties.Resources.FBOrb) {
+            Ability = new AttackBoost(owner);
+        }
+    }
 }

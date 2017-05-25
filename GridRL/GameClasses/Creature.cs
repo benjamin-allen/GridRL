@@ -179,6 +179,7 @@ namespace GridRL {
                     Program.console.SetText("The orb vanishes in a flash of light!");
                     Program.console.SetText("You gain the skill of " + a.Name + "!");
                     Program.AbilityPlacePoints = new List<List<int>>();
+                    a.OnAddToGrid();
                     return true;
                 }
             }

@@ -13,7 +13,6 @@ namespace GridRL {
         Font ConsoleText = new Font("Courier New", 9);
 
         public ScreenOutput() : base() {
-            SetText("Dummy Test message to see if the scrolling text will work??? Maybe if this text gets long enough I can test the line breaks too....");
         }
 
         public void SetText(string str) {

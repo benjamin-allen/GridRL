@@ -18,11 +18,6 @@ namespace GridRL {
             Attack = 10;
             Defense = 10;
             Visibility = Vis.Visible;
-            Abilities.Add(new FlameBurst());
-            AttackBoost a = new AttackBoost(this);
-            a.GridY = 1;
-            a.GridX = 1;
-            Abilities.Add(a);
         }
 
         #endregion
@@ -141,8 +136,11 @@ namespace GridRL {
                 // Wait for the next mouseclick
                 Program.waitState = 2;
                 while(Program.waitState == 2) {
+                    String prompt = "Click to shuffle items.";
+                    Program.sidebar.promptText = prompt;
                     Application.DoEvents();
                 }
+                Program.sidebar.promptText = "";
                 if(Program.waitState == -1) {
                     Program.LastMA = MouseArea.Hidden;
                     return false;
