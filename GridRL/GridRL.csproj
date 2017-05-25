@@ -134,6 +134,7 @@
     <None Include="Resources\Items\Shirt.png" />
     <None Include="Resources\Items\FBOrb.png" />
     <None Include="Resources\StartMenu.jpg" />
+    <None Include="Resources\Macguffin.png" />
     <Content Include="Resources\Tiles\Corridor.png" />
     <Content Include="Resources\Tiles\Door.png" />
     <None Include="Resources\Tiles\Wall.png" />
