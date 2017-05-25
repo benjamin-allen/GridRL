@@ -62,6 +62,11 @@ namespace GridRL {
             }
         }
 
+        protected override void OnResize(EventArgs e) {
+            canvas.X = (form.ClientSize.Width / 2) - 640;
+            canvas.Y = (form.ClientSize.Height / 2) - 360;
+        }
+
         #endregion
     }
 }
