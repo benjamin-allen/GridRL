@@ -38,6 +38,7 @@ namespace GridRL {
         public static bool start = false;
         public static bool WinGame = false;
         public static bool LoseGame = false;
+        public static bool HasMacguffin = false;
 
         #endregion
         #region Overrides

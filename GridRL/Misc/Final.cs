@@ -10,16 +10,17 @@ namespace GridRL {
 
         public override void OnPickUp(Creature grabber) {
             if(grabber == Program.player) {
-                for(int i = 0; i < 30; ++i) {
+                for(int i = 0; i < 20; ++i) {
                     int y = Engine.rand.Next(Program.world.RoomPoints[0][0], Program.world.RoomPoints[0][2]);
                     int x = Engine.rand.Next(Program.world.RoomPoints[0][1], Program.world.RoomPoints[0][3]);
                     Creature c = new GridRL.Creature(Engine.MasterCreatures[1]);
                     c.CoordY = y;
                     c.CoordX = x;
                     Program.world.Creatures.Add(c);
-                    Program.console.SetText("Welcome to Mr. Bones' Wild Ride!");
                 }
             }
+            Program.console.SetText("Welcome to Mr. Bones' Wild Ride!");
+            Engine.HasMacguffin = true;
         }
     }
 

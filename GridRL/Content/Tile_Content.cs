@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Linq;
 
 namespace GridRL {
     public class Corridor : Tile {
@@ -110,8 +111,8 @@ namespace GridRL {
                     Program.world.Level++;
                     Program.world.GenerateLevel();
                 }
-                else {
-                    Application.Exit();
+                else if(Engine.HasMacguffin){
+                    Engine.WinGame = true;
                 }
             }
         }

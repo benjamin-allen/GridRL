@@ -112,7 +112,7 @@ namespace GridRL {
             HitChance += GetRandomNumber(-.2, .2);
             int damage = 0;
             if(HeldWeapon != null) {
-                damage = (int)Math.Round((1.5 * Attack + HeldWeapon.GetDamage()) / Math.Sqrt(attacked.Defense));
+                damage = (int)Math.Round((1.5 * Attack + HeldWeapon.GetDamage()) / Math.Sqrt(attacked.BaseDefense));
             }
             else {
                 damage = (int)Math.Round((1.5 * Attack) / Math.Sqrt(attacked.BaseDefense));

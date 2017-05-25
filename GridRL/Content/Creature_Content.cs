@@ -19,8 +19,8 @@ namespace GridRL {
             mrbones.Name = "Skeledoot";
             mrbones.Description = "I want to get off Mr Bones' Wild Ride.\n:(";
             mrbones.DeathMessage = "2spooky";
-            mrbones.Health = 30;
-            mrbones.Attack = 20;
+            mrbones.Health = 20;
+            mrbones.Attack = 10;
             mrbones.BaseDefense = 5;
             dummy.AI = AIType.Monster;
             MasterCreatures.Add(mrbones);
