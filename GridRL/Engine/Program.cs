@@ -158,7 +158,31 @@ namespace GridRL {
             }
         }
 
-        
+        protected override void OnMouseMove(MouseEventArgs e) {
+            MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
+            MouseCoords[1] = (int)Math.Floor(e.X / 16f);
+            setMouseArea();
+            if(MA == MouseArea.World) {
+                if(world[MouseCoords[0], MouseCoords[1]] != null) {
+                    if(world[MouseCoords[0], MouseCoords[1]].Visibility == Vis.Visible) {
+                        HoverString = world[MouseCoords[0], MouseCoords[1]].Description;
+                    }
+                    foreach(Creature c in world.Creatures) {
+                        if(c.CoordY == MouseCoords[0] && c.CoordX == MouseCoords[1]) {
+                            HoverString = c.Description;
+                            break;
+                        }
+                    }
+                    foreach(Effect ef in world.Effects) {
+                        if(ef.CoordY == MouseCoords[0] && ef.CoordX == MouseCoords[1]) {
+                            HoverString = ef.Description;
+                            break;
+                        }
+                    }
+                    form.Refresh();
+                }
+            }
+        }
 
         #endregion
         #region Utilities
