@@ -55,6 +55,8 @@ namespace GridRL {
         /// <summary> List of effects to remove. </summary>
         public List<Effect> EffectsToRemove { get; set; }
 
+        private int Momentum { get; set; }
+
         #endregion
         #region Methods
 
@@ -74,8 +76,11 @@ namespace GridRL {
             RoomPoints = new List<List<int>>();
             Effects = new List<Effect>();
             EffectsToRemove = new List<Effect>();
+            if(Level == 2) {
+                GenerateFinal();
+            }
             // Generate the new world
-            if(WorldType == WorldType.Dungeon) {
+            else if(WorldType == WorldType.Dungeon) {
                 GenerateDungeon();
             }
             // Add the world to the canvas

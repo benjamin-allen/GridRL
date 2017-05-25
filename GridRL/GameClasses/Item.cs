@@ -7,6 +7,13 @@ namespace GridRL {
     public class Item : Actor {
         #region Constructors
 
+        public Item(Item other) : base(other.Image) {
+            IsCollidable = other.IsCollidable;
+            Description = other.Description;
+            Name = other.Name;
+            MaxStack = other.MaxStack;
+        }
+
         /// <summary> Constructs a new item. </summary>
         /// <param name="image"></param>
         public Item(Image image) : base(image) {
@@ -137,6 +144,11 @@ namespace GridRL {
     public class Weapon : Item {
         #region Constructors
 
+        public Weapon(Weapon other) : base(other) {
+            Attack = other.Attack;
+            EffectChance = other.EffectChance;
+        }
+
         /// <summary> Creates a new weapon with the given parameters. </summary>
         /// <param name="image"> The image to be used for this weapon. </param>
         /// <param name="y"> The y coordinate of this weapon. </param>
@@ -186,6 +198,11 @@ namespace GridRL {
     public class Armor : Item {
         #region Constructors
 
+        public Armor(Armor other) : base(other) {
+            Defense = other.Defense;
+            EffectChance = other.EffectChance;
+        }
+
         /// <summary> Creates a new armor with the given parameters. </summary>
         /// <param name="image"> The image to be used for this armor. </param>
         /// <param name="y"> The y coordinate of this armor. </param>
@@ -218,6 +235,10 @@ namespace GridRL {
 
     public class Orb : Item {
         #region Constructors
+
+        public Orb(Orb other) : base(other) {
+            Ability = other.Ability;
+        }
 
         public Orb(Image image) : base(image) {
             Name = "Mysterious Orb";

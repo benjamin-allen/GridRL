@@ -13,7 +13,7 @@ namespace GridRL {
                 MakeDoor(pointSet);
             }
             // Retract the maze starting at the dead ends
-            for(int i = 0; i < 50; i++) {
+            for(int i = 0; i < 500; i++) {
                 List<List<int>> mazeEnds = GetMazeEndPoints();
                 foreach(List<int> endPoints in mazeEnds) {
                     Data[endPoints[0], endPoints[1]] = null;
@@ -33,14 +33,11 @@ namespace GridRL {
                 exitRoom = (exitRoom + 1) % RoomPoints.Count;
             }
             int entryY = Engine.rand.Next(RoomPoints[entryRoom][0], RoomPoints[entryRoom][2]);
-            int entryX = Engine.rand.Next(RoomPoints[entryRoom][1], RoomPoints[entryRoom][1]);
+            int entryX = Engine.rand.Next(RoomPoints[entryRoom][1], RoomPoints[entryRoom][3]);
             int exitY = Engine.rand.Next(RoomPoints[exitRoom][0], RoomPoints[exitRoom][2]);
             int exitX = Engine.rand.Next(RoomPoints[exitRoom][1], RoomPoints[exitRoom][3]);
             Data[entryY, entryX] = new Stair(entryY, entryX, StairType.Up);
             Data[exitY, exitX] = new Stair(exitY, exitX, StairType.Down);
-            Data[entryY + 1, entryX + 1].Inventory.AddItem(new Sword(entryY + 1, entryX + 1));
-            Data[entryY + 1, entryX + 1].Inventory.AddItem(new FlameBurstOrb());
-            Data[entryY + 1, entryX + 1].Inventory.AddItem(new AttackBoostOrb(Program.player));
             foreach(List<int> points in RoomPoints) {
                 for(int y = points[0] - 1; y < points[2] + 1; ++y) {
                     for(int x = points[1] - 1; x < points[3] + 1; ++x) {
@@ -53,9 +50,25 @@ namespace GridRL {
 
             Program.player.CoordX = entryX;
             Program.player.CoordY = entryY;
-            Program.player.Inventory.AddItem(new Sword(Program.player.CoordY, Program.player.CoordX));
-            DummyCreature dummy = new DummyCreature(entryY + 3, entryX + 3);
-            Creatures.Add(dummy);
+            foreach(List<int> room in RoomPoints) {
+                int cY = Engine.rand.Next(room[0], room[2]);
+                int cX = Engine.rand.Next(room[1], room[3]);
+                // randomly select index
+                // get type of that index
+                // make new object of that type with cast of that type
+                Creature c = new Creature(Engine.MasterCreatures[0]);
+                c.CoordY = cY;
+                c.CoordX = cX;
+                Creatures.Add(c);
+            }
+            foreach(List<int> room in RoomPoints) {
+                if(Engine.rand.Next(0, 10) < 2) {
+                    int index = Engine.rand.Next(0, Engine.MasterOrbs.Count);
+                    int y = Engine.rand.Next(room[0], room[2]);
+                    int x = Engine.rand.Next(room[1], room[3]);
+                    Data[y, x].Inventory.AddItem(new Orb(Engine.MasterOrbs[index]));
+                }
+            }
         }
 
         /// <summary> Builds the rooms of the dungeon. </summary>
@@ -76,13 +89,13 @@ namespace GridRL {
                     RoomPoints.Add(points);
                 }
                 // Otherwise place it 1/5 of the time even if there is an overlap
-                else {
-                    if(Engine.rand.NextDouble() < .2 || i == roomCount - 1) {
+                /*else {
+                    if(Engine.rand.NextDouble() < .05 || i == roomCount - 1) {
                         LastRegionID++;
                         BuildRoom(points, LastRegionID);
                         RoomPoints.Add(points);
                     }
-                }
+                }*/
             }
         }
 
@@ -117,7 +130,7 @@ namespace GridRL {
         /// <summary> RBT maze generation function. </summary>
         /// <param name="points"> Points to carve. </param>
         /// <param name="region"> Region to use for this maze. </param>
-        private void Carve(List<int> points, int region) {
+        private void Carve(List<int> points, int region, Direction previous = Direction.None) {
             // Make a corridor at the points if it's null
             if(Data[points[0], points[1]] == null) {
                 Data[points[0], points[1]] = new Corridor(points[0], points[1], region);
@@ -127,8 +140,19 @@ namespace GridRL {
             if(validDirs.Count == 0) {
                 return;
             }
+            if(validDirs.Contains(previous)) {
+                if(Engine.rand.NextDouble() > .75) {
+                    Program.Shuffle(validDirs);
+                }
+                else {
+                    Direction d = previous;
+                    validDirs.Remove(previous);
+                    Program.Shuffle(validDirs);
+                    validDirs.Insert(0, previous);
+                }
+            }
             // If so, shuffle directions, pick each direction, place corridors, and call Carve()
-            Program.Shuffle(validDirs);
+            
             foreach(Direction d in validDirs) {
                 if(Data[points[0], points[1]].CanAccess(d, 2)) {
                     continue;
@@ -137,7 +161,8 @@ namespace GridRL {
                 List<int> nextPoints = Data[points[0], points[1]].DirectionToPoints(d, 2);
                 Data[interPoints[0], interPoints[1]] = new Corridor(interPoints[0], interPoints[1], region);
                 Data[nextPoints[0], nextPoints[1]] = new Corridor(nextPoints[0], nextPoints[1], region);
-                Carve(nextPoints, region);
+                previous = d;
+                Carve(nextPoints, region, previous);
             }
         }
 

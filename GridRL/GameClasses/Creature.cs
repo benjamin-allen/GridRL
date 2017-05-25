@@ -11,6 +11,29 @@ namespace GridRL {
     public partial class Creature : Actor {
         #region Constructors
 
+        public Creature(Creature other) : base(other.Image) {
+            Health = other.Health;
+            Attack = other.Attack;
+            Defense = other.Defense;
+            DeathMessage = other.DeathMessage;
+            Inventory = other.Inventory;
+            AI = other.AI;
+            Abilities = other.Abilities;
+            HeldItem = other.HeldItem;
+            HeldWeapon = other.HeldWeapon;
+            WornArmor = other.WornArmor;
+            IsCollidable = other.IsCollidable;
+            Description = other.Description;
+            Name = other.Name;
+        }
+
+        public Creature(Image image) : base(image) {
+            Name = "Dummy Creature";
+            Description = "If you can see this, file a bug report for an improperly initialized creature.";
+            DeathMessage = "The " + Name + " dies";
+            IsCollidable = true;
+        }
+
         /// <summary> A constructor that creates a creature with a given image and x/y coordinates. </summary>
         /// <param name="image"> The image used for this creature's sprite. </param>
         /// <param name="y"> The creature's Y position on the world data. </param>
@@ -29,7 +52,7 @@ namespace GridRL {
         public int Health { get; set; } = 0;
 
         /// <summary> Creature's Attack Stat. </summary>
-        public int Attack { get; set; } = 0;
+        public int Attack { get; set; } = 1;
 
         /// <summary> Creature's Base Defense stat. </summary>
         public int BaseDefense { get; set; } =1;
