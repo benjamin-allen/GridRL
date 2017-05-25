@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Linq;
+using System;
 
 namespace GridRL {
     /// <summary> Represents an actor that can exist in an inventory. </summary>
@@ -152,6 +153,8 @@ namespace GridRL {
         /// <summary> The attack bonus from this weapon. </summary>
         public int Attack { get; set; } = 0;
 
+        public int AttackChances { get; set; } = 0;
+
         /// <summary> The chance this weapon has of performing any special effects. </summary>
         public float EffectChance { get; set; } = 0;
 
@@ -163,6 +166,19 @@ namespace GridRL {
         /// <param name="struck"> The creature being struck. </param>
         public virtual void OnStrike(Creature owner, Creature struck) { }
 
+        public int GetDamage() {
+            Random r = new Random();
+            int damage = 0;
+            for(int i = 0 ; i < AttackChances ; i++) {
+                damage += (int)GetRandomNumber(0, (double)Attack);
+            }
+            return damage;
+        }
+
+        public double GetRandomNumber(double min, double max) {
+            Random r = new Random();
+            return r.NextDouble() * (max - min) + min;
+        }
         #endregion
     }
 

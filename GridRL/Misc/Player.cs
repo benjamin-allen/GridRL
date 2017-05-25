@@ -14,7 +14,7 @@ namespace GridRL {
             Name = "player";
             Description = "You don't have a mirror...";
             DeathMessage = "The " + Name + "dies!";
-            Health = 10;
+            Health = 30;
             Attack = 10;
             Defense = 10;
             Visibility = Vis.Visible;

@@ -7,8 +7,8 @@
             Description = "A mobile training dummy. ";
             DeathMessage = "The " + Name + "dies!";
             Health = 20;
-            Attack = 0;
-            Defense = 0;
+            Attack = 10;
+            Defense = 10;
             Visibility = Vis.Unseen;
         }
 
