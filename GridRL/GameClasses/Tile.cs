@@ -36,14 +36,14 @@ namespace GridRL {
 
         /// <summary> Called when a tile is stepped on. </summary>
         /// <param name="s">The sprite that stepped on this tile. </param>
-        public virtual void OnStepOn(Sprite s) {
+        public virtual void OnStepOn(Actor a) {
             List<Item> items = new List<Item>();
             foreach(Item i in Inventory.Items) {
                 if(i != null) {
                     items.Add(i);
                 }
             }
-            if(items.Count >= 1) {
+            if(items.Count >= 1 && a.Visibility == Vis.Visible) {
                 Program.console.SetText("There is a " + items[0].Name + " here.");
                 if(items.Count > 1) {
                     Program.console.SetText("There are other items here as well.");

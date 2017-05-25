@@ -100,7 +100,7 @@ namespace GridRL {
         #endregion
         #region Overrides
 
-        public override void OnStepOn(Sprite s) {
+        public override void OnStepOn(Actor s) {
             if(s.GetType() == typeof(Player)) {
                 if(StairType == StairType.Up && Program.world.Level > 1) {
                     Program.world.Level--;
