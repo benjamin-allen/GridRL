@@ -108,14 +108,14 @@ namespace GridRL {
         /// <summary> Executes an attack on the given creature. </summary>
         /// <param name="attacked"> The creature to be attacked. </param>
         protected virtual void PerformAttack(Creature attacked) {
-            double HitChance = (double)Attack / (double)(2 * attacked.Defense);
+            double HitChance = (double)Attack / (double)(2 * attacked.BaseDefense);
             HitChance += GetRandomNumber(-.2, .2);
             int damage = 0;
             if(HeldWeapon != null) {
                 damage = (int)Math.Round((1.5 * Attack + HeldWeapon.GetDamage()) / Math.Sqrt(attacked.Defense));
             }
             else {
-                damage = (int)Math.Round((1.5 * Attack) / Math.Sqrt(attacked.Defense));
+                damage = (int)Math.Round((1.5 * Attack) / Math.Sqrt(attacked.BaseDefense));
             }
             attacked.OnAttack(this, HitChance, damage +1);
         }
@@ -127,11 +127,11 @@ namespace GridRL {
             if(chance > bar) {
                 if(damage > 0) {
                     Health -= damage;
+                    if(attacker.Visibility == Vis.Visible) {
+                        Program.console.SetText(Name + " was hit!");
+                    }
                 }
 
-                if(attacker.Visibility == Vis.Visible) {
-                    Program.console.SetText(Name + " was hit!");
-                }
                 if(Health <= 0) {
                     Remove(this);
                     Program.world.Creatures.Remove(this);

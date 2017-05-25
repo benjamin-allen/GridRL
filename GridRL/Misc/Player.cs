@@ -16,7 +16,7 @@ namespace GridRL {
             DeathMessage = "The " + Name + "dies!";
             Health = 30;
             Attack = 10;
-            Defense = 10;
+            BaseDefense = 10;
             Visibility = Vis.Visible;
         }
 

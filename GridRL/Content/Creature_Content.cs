@@ -10,6 +10,8 @@ namespace GridRL {
             dummy.Description = "A mobile training dummy. Like you, but nakeder.";
             dummy.DeathMessage = "The " + dummy.Name + "dies!";
             dummy.Health = 20;
+            dummy.BaseDefense = 1;
+            dummy.Attack = 5;
             dummy.Visibility = Vis.Unseen;
             dummy.AI = AIType.Monster;
             MasterCreatures.Add(dummy);
@@ -19,7 +21,7 @@ namespace GridRL {
             mrbones.DeathMessage = "2spooky";
             mrbones.Health = 30;
             mrbones.Attack = 20;
-            mrbones.Defense = 5;
+            mrbones.BaseDefense = 5;
             dummy.AI = AIType.Monster;
             MasterCreatures.Add(mrbones);
         }
