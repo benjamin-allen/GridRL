@@ -62,5 +62,20 @@ namespace GridRL {
             Effect = new FireWallEffect();
         }
         #endregion
+
+        public override void CreateEffect(Creature user, Direction dir) {
+            List<int> points = user.DirectionToPoints(dir);
+            Effect.CoordY = points[0];
+            Effect.CoordX = points[1];
+            bool horizontal = false;
+            if(dir == Direction.Up || dir == Direction.Down) {
+                horizontal = true;
+            }
+            else {
+                horizontal = false;
+            }
+            Effect.Activate(Effect.CoordY, Effect.CoordX, horizontal);
+            Program.world.Effects.Add(Effect);
+        }
     }
 }

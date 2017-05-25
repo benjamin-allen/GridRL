@@ -40,12 +40,14 @@
                 int mag = 1;
                 while(CanAccess(Direction.Left, mag)) {
                     FlameBurstEffect f = new FlameBurstEffect(y, x - mag);
+                    Program.world.Effects.Add(f);
                     mag++;
                 }
 
                 mag = 1;
                 while(CanAccess(Direction.Right, mag)) {
                     FlameBurstEffect f = new FlameBurstEffect(y, x + mag);
+                    Program.world.Effects.Add(f);
                     mag++;
                 }
             }
@@ -53,12 +55,14 @@
                 int mag = 1;
                 while(CanAccess(Direction.Up, mag)) {
                     FlameBurstEffect f = new FlameBurstEffect(y - mag, x);
+                    Program.world.Effects.Add(f);
                     mag++;
                 }
 
                 mag = 1;
                 while(CanAccess(Direction.Down, mag)) {
                     FlameBurstEffect f = new FlameBurstEffect(y + mag, x);
+                    Program.world.Effects.Add(f);
                     mag++;
                 }
             }

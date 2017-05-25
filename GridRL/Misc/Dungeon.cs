@@ -62,7 +62,7 @@ namespace GridRL {
                 Creatures.Add(c);
             }
             foreach(List<int> room in RoomPoints) {
-                if(Engine.rand.Next(0, 10) < 2) {
+                if(Engine.rand.Next(0, 10) < 3) {
                     int index = Engine.rand.Next(0, Engine.MasterOrbs.Count);
                     int y = Engine.rand.Next(room[0], room[2]);
                     int x = Engine.rand.Next(room[1], room[3]);

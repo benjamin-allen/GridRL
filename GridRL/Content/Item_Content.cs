@@ -4,7 +4,8 @@ namespace GridRL {
     public partial class Program : Engine {
         private static Weapon sword = new Weapon(Properties.Resources.Sword, 0, 0);
         private static Armor shirt = new Armor(Properties.Resources.Shirt, 0, 0);
-        private static Orb fburst = new Orb(Properties.Resources.FBOrb); 
+        private static Orb fburst = new Orb(Properties.Resources.FBOrb);
+        private static Orb fwall = new Orb(Properties.Resources.FBOrb);
 
         static void InitializeWeapons() {
             sword.Name = "sword";
@@ -24,9 +25,10 @@ namespace GridRL {
         }
 
         static void InitializeOrbs() {
-            
+            fwall.Ability = new FireWall();
             fburst.Ability = new FlameBurst();
             MasterOrbs.Add(fburst);
+            MasterOrbs.Add(fwall);
         }
     }
 
