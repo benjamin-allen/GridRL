@@ -256,7 +256,7 @@ namespace GridRL {
 
         public override bool Activate(Creature activator) {
             Program.console.SetText("The orb begins to glow...");
-            Program.HoverString = ("Select a spot on the grid.");
+            Program.sidebar.promptText = ("Select a spot on the grid.");
             return activator.AddNewAbility(Ability);
         }
 
@@ -282,7 +282,7 @@ namespace GridRL {
 
         public override bool Activate(Creature activator) {
             Program.console.SetText("The orb begins to glow...");
-            Program.HoverString = ("Select a spot on the grid.");
+            Program.sidebar.promptText = ("Select a spot on the grid.");
             return activator.AddNewAbility(Ability);
         }
 
