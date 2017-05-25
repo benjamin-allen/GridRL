@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 namespace GridRL {
     public enum MouseArea { Hidden, Sidebar, HoldBox, WearBox, WieldBox, PlayerInv, TileInv, World, Grid, Console}
 
-    public class Program : Engine {
+    public partial class Program : Engine {
         #region Properties
 
         public static Player player = new Player(0, 0);
@@ -39,6 +39,10 @@ namespace GridRL {
 
         static void Main() {
             gray.SetColorMatrix(grayMatrix);
+            InitializeCreatures();
+            InitializeArmors();
+            InitializeOrbs();
+            InitializeWeapons();
             world.GenerateLevel();
             canvas.Add(console);
             canvas.Add(sidebar);

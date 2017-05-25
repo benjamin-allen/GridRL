@@ -1,17 +1,16 @@
-﻿namespace GridRL {
-    public class DummyCreature : Creature {
-        #region Constructors
+﻿
+namespace GridRL {
 
-        public DummyCreature(int y, int x) : base(Properties.Resources.Dummy, y, x) {
-            Name = "Dummy";
-            Description = "A mobile training dummy. ";
-            DeathMessage = "The " + Name + "dies!";
-            Health = 20;
-            Attack = 0;
-            Defense = 0;
-            Visibility = Vis.Unseen;
+    public partial class Program : Engine {
+        private static Creature dummy = new Creature(Properties.Resources.Dummy);
+
+        static void InitializeCreatures() {
+            dummy.Name = "Dummy";
+            dummy.Description = "A mobile training dummy.";
+            dummy.DeathMessage = "The " + dummy.Name + "dies!";
+            dummy.Health = 20;
+            dummy.Visibility = Vis.Unseen;
+            MasterCreatures.Add(dummy);
         }
-
-        #endregion
     }
 }

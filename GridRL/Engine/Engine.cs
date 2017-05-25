@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace GridRL {
     public partial class Engine : Form {
@@ -28,6 +29,11 @@ namespace GridRL {
         public static int tilesHigh = 45;
         public static Random rand = new Random(1);
         public static int turnCount = 0;
+        public static List<Creature> MasterCreatures = new List<Creature>();
+        public static List<Item> MasterItems = new List<Item>();
+        public static List<Weapon> MasterWeapons = new List<Weapon>();
+        public static List<Armor> MasterArmors = new List<Armor>();
+        public static List<Orb> MasterOrbs = new List<Orb>();
 
         #endregion
         #region Overrides

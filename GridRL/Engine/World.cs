@@ -177,13 +177,6 @@ namespace GridRL {
                     }
                 }
             }
-            for(int y = 0; y < Data.GetLength(0); ++y) {
-                for(int x = 0; x < Data.GetLength(1); ++x) {
-                    if(Data[y, x] != null) {
-                        Data[y, x].Visibility = Vis.Visible;
-                    }
-                }
-            }
         }
 
         #endregion
