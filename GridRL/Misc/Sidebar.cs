@@ -82,13 +82,13 @@ namespace GridRL {
             }
 
             //Drawing ability grid
-            for(int i = 0; i < 3; i++) {
-                for(int j = 0; j < 3; j++) {
-                    Rectangle rect = new Rectangle((16 * GridX + i * GridCellSize), GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
-                    g.DrawRectangle(Pens.White, rect);
-                }
-            }
             if(Program.waitState == 3) {
+                for(int i = 0; i < 3; i++) {
+                    for(int j = 0; j < 3; j++) {
+                        Rectangle rect = new Rectangle((16 * GridX + i * GridCellSize), GridY * 16 + j * GridCellSize, GridCellSize, GridCellSize);
+                        g.DrawRectangle(Pens.White, rect);
+                    }
+                }
                 foreach(List<int> points in Program.AbilityPlacePoints) {
                     g.FillRectangle(Brushes.Green, 16 * GridX + points[1] * GridCellSize + 1, 16 * GridY + points[0] * GridCellSize + 1, GridCellSize - 1, GridCellSize - 1);
                 }
