@@ -28,12 +28,18 @@ namespace GridRL {
         public static int tilesHigh = 45;
         public static Random rand = new Random(1);
         public static int turnCount = 0;
+        public static bool start = false;
 
         #endregion
         #region Overrides
 
         protected override void OnPaint(PaintEventArgs e) {
-            canvas.Render(e.Graphics);
+            if(!start) {
+                e.Graphics.DrawImage(Properties.Resources.StartMenu,0,0, ClientSize.Width, ClientSize.Height);
+            }
+            else {
+                canvas.Render(e.Graphics);
+            }
         }
 
         #endregion
