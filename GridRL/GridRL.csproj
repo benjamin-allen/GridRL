@@ -135,10 +135,13 @@
     <None Include="Resources\Creatures\Macguffin.png" />
     <Content Include="Resources\Creatures\Player.png" />
     <None Include="Resources\Creatures\Skeleton.png" />
+    <None Include="Resources\Credits.jpg" />
     <Content Include="Resources\Effects\Flame.png" />
     <None Include="Resources\Items\Sword.png" />
     <None Include="Resources\Items\Shirt.png" />
     <None Include="Resources\Items\FBOrb.png" />
+    <None Include="Resources\StartMenu.jpg" />
+    <None Include="Resources\Macguffin.png" />
     <Content Include="Resources\Tiles\Corridor.png" />
     <Content Include="Resources\Tiles\Door.png" />
     <None Include="Resources\Tiles\Wall.png" />

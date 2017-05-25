@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -34,12 +35,30 @@ namespace GridRL {
         public static List<Weapon> MasterWeapons = new List<Weapon>();
         public static List<Armor> MasterArmors = new List<Armor>();
         public static List<Orb> MasterOrbs = new List<Orb>();
+        public static bool start = false;
+        public static bool WinGame = false;
+        public static bool LoseGame = false;
 
         #endregion
         #region Overrides
 
         protected override void OnPaint(PaintEventArgs e) {
-            canvas.Render(e.Graphics);
+            if(!start) {
+                e.Graphics.DrawImage(Properties.Resources.StartMenu,0,0, ClientSize.Width, ClientSize.Height);
+            }
+            else if(!WinGame && !LoseGame){
+                canvas.Render(e.Graphics);
+            }
+            else {
+                e.Graphics.DrawImage(Properties.Resources.Credits, 0, 0, ClientSize.Width, ClientSize.Height);
+                Font font = new Font("Algerian", 100);
+                if(WinGame) {
+                    e.Graphics.DrawString("You Win!",font, Brushes.Black, ClientSize.Width/4 + 50, 200);
+                }
+                else {
+                    e.Graphics.DrawString("You Lose!", font, Brushes.Black, ClientSize.Width / 4 + 10, 200);
+                }
+            }
         }
 
         #endregion

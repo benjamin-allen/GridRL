@@ -179,6 +179,8 @@ namespace GridRL {
         /// <param name="x"></param>
         public virtual void Activate(int y, int x) { }
 
+        public virtual void Activate(int y, int x, bool horizontal) { }
+
         /// <summary> Base implementation decrements the lifetime of the effect. </summary>
         protected override void Act() {
             TurnsLeft--;

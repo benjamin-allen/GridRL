@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 namespace GridRL {
     public class Sidebar : Sprite {
 
-        public int[] stats { get; } = new int[3];
+        public int[] stats { get; } = new int[4];
         public int InvCellSize { get; } = 16;
         public int CellsY { get; } = 25;
         public int CellsY2 { get; } = 29;
         public int CellsX { get; } = 67;
         public int GridX { get; } = 68;
         public int GridY { get; } = 33;
+        public string promptText = "";
         public int GridCellSize { get; } = 48;
         Font ConsoleText = new Font("Courier New", 9);
         static ColorConverter cc = new ColorConverter();
@@ -47,14 +48,19 @@ namespace GridRL {
             stats[0] = Program.player.Health;
             stats[1] = Program.player.Attack;
             stats[2] = Program.player.Defense;
-            Rectangle statsBox = new Rectangle(66 * 16, 16 * 2, 13 * 16, 8 * 16);
+            stats[3] = Program.world.Level;
+            Rectangle statsBox = new Rectangle(66 * 16, 2*16, 13 * 16, 8 * 16);
             g.DrawRectangle(Pens.White, statsBox);
             string statOutput =
                 Program.player.Name + "\n" +
                 "Health: " + stats[0] + "\n" +
                 "Attack: " + stats[1] + "\n" +
-                "Defense: " + stats[2];
+                "Defense: " + stats[2] + "\n" +
+                "Dungeon Level: " + stats[3];
             g.DrawString(statOutput,ConsoleText ,Brushes.White, statsBox);
+            Rectangle promptBox = new Rectangle(66 * 16, 8*16, 13 * 16, 2 * 16);
+            g.DrawString(promptText, ConsoleText, Brushes.White, promptBox);
+            g.DrawRectangle(Pens.White, promptBox);
             Rectangle descBox = new Rectangle(66 * 16, 16 * 10, 13 * 16, 6 * 16);
             g.DrawRectangle(Pens.White, descBox);
             g.DrawString(Program.HoverString, ConsoleText, Brushes.White, descBox);

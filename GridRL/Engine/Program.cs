@@ -55,6 +55,9 @@ namespace GridRL {
         public static void GameLoop() {
             turnCount++;
             canvas.Update();
+            if(player.Health <= 0) {
+                LoseGame = true;
+            }
             world.CreaturesToRemove = new List<Creature>();
             world.EffectsToRemove = new List<Effect>();
             world.UpdateVisibles();
@@ -129,58 +132,70 @@ namespace GridRL {
         #region Overrides
 
         protected override void OnKeyDown(KeyEventArgs e) {
-            Keys kc = e.KeyCode;
-            // Do this if we're waiting for key input. 
-            if(waitState == 1) {
-                if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right || 
-                kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
-                    waitState = 0;
-                    Direction d = player.KeyPressToDirection(e);
-                    lastDirection = d;
-                }
-                else if(kc == Keys.Escape) {
-                    waitState = -1;
-                }
-            }
-            else if(player.HandleKeyInput(e)) {
-                GameLoop();
+            if(!Engine.start) {
+                Engine.start = true;
+                canvas.Update();
             }
             else {
-                waitState = 0;
+                Keys kc = e.KeyCode;
+                // Do this if we're waiting for key input. 
+                if(waitState == 1) {
+                    if(kc == Keys.Up || kc == Keys.Down || kc == Keys.Left || kc == Keys.Right ||
+                    kc == Keys.NumPad8 || kc == Keys.NumPad2 || kc == Keys.NumPad4 || kc == Keys.NumPad6) {
+                        waitState = 0;
+                        Direction d = player.KeyPressToDirection(e);
+                        lastDirection = d;
+                    }
+                    else if(kc == Keys.Escape) {
+                        waitState = -1;
+                    }
+                }
+                else if(player.HandleKeyInput(e)) {
+                    GameLoop();
+                }
+                else {
+                    waitState = 0;
+                }
             }
         }
 
         protected override void OnMouseClick(MouseEventArgs e) {
-            MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
-            MouseCoords[1] = (int)Math.Floor(e.X / 16f);
-            setMouseArea();
-            form.Refresh();
-            if(waitState == 2) {
-                if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
-                    waitState = -1;
-                }
-                else if(MA != LastMA || MA == Exception) {
-                    waitState = 0;
-                }
-            }
-            else if(waitState == 3) {
-                if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
-                    waitState = -1;
-                }
-                else if(MA == MouseArea.Grid) {
-                    waitState = 0;
-                }
-            }
-            else if(player.HandleMouseInput(e)) {
-                PlayerInvClickCoords = new int[] { -1, -1 };
-                TileInvClickCoords = new int[] { -1, -1 };
-                MouseCoords = new int[] { -1, -1 };
-                GridClickCoords = new int[] { -1, -1 };
-                Program.MA = MouseArea.Hidden;
-                GameLoop();
+            if(!Engine.start) {
+                Engine.start = true;
+                canvas.Update();
             }
             else {
+                MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
+                MouseCoords[1] = (int)Math.Floor(e.X / 16f);
+                setMouseArea();
                 form.Refresh();
+                if(waitState == 2) {
+                    if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
+                        waitState = -1;
+                    }
+                    else if(MA != LastMA || MA == Exception) {
+                        waitState = 0;
+                    }
+                }
+                else if(waitState == 3) {
+                    if(MA == MouseArea.World || MA == MouseArea.Console || MA == MouseArea.Sidebar) {
+                        waitState = -1;
+                    }
+                    else if(MA == MouseArea.Grid) {
+                        waitState = 0;
+                    }
+                }
+                else if(player.HandleMouseInput(e)) {
+                    PlayerInvClickCoords = new int[] { -1, -1 };
+                    TileInvClickCoords = new int[] { -1, -1 };
+                    MouseCoords = new int[] { -1, -1 };
+                    GridClickCoords = new int[] { -1, -1 };
+                    Program.MA = MouseArea.Hidden;
+                    GameLoop();
+                }
+                else {
+                    form.Refresh();
+                }
             }
         }
 

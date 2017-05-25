@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System;
 
 namespace GridRL {
     /// <summary> Determines how a creature acts. </summary>
@@ -50,11 +51,14 @@ namespace GridRL {
         /// <summary> Creature's HP stat. </summary>
         public int Health { get; set; } = 0;
 
-        /// <summary> Creature's Attack stat. </summary>
+        /// <summary> Creature's Attack Stat. </summary>
         public int Attack { get; set; } = 1;
 
-        /// <summary> Creature's Defense stat. </summary>
-        public int Defense { get; set; } = 1;
+        /// <summary> Creature's Base Defense stat. </summary>
+        public int BaseDefense { get; set; } =1;
+
+        /// <summary> Creature's modified Defense stat. </summary>
+        public int Defense { get; set; } = 0;
 
         /// <summary> A message to be printed when the creature dies. </summary>
         public string DeathMessage { get; set; }
@@ -76,12 +80,6 @@ namespace GridRL {
 
         #endregion
         #region Methods
-
-        /// <summary> Executes an attack on the given creature. </summary>
-        /// <param name="attacked"> The creature to be attacked. </param>
-        protected virtual void PerformAttack(Creature attacked) {
-            attacked.OnAttack(this);
-        }
 
         /// <summary> Attempt to add an item to the invetory of this creature. </summary>
         /// <param name="i"> The item being obtained. </param>
@@ -107,22 +105,48 @@ namespace GridRL {
             return false;
         }
 
+        /// <summary> Executes an attack on the given creature. </summary>
+        /// <param name="attacked"> The creature to be attacked. </param>
+        protected virtual void PerformAttack(Creature attacked) {
+            double HitChance = (double)Attack / (double)(2 * attacked.Defense);
+            HitChance += GetRandomNumber(-.2, .2);
+            int damage = 0;
+            if(HeldWeapon != null) {
+                damage = (int)Math.Round((1.5 * Attack + HeldWeapon.GetDamage()) / Math.Sqrt(attacked.Defense));
+            }
+            else {
+                damage = (int)Math.Round((1.5 * Attack) / Math.Sqrt(attacked.Defense));
+            }
+            attacked.OnAttack(this, HitChance, damage +1);
+        }
+
         /// <summary> Called when a creature is attacked. </summary>
         /// <param name="attacker"> The creature attacking this. </param>
-        protected virtual void OnAttack(Creature attacker) {
-            int Damage = attacker.Attack - Defense;
-            if(Damage > 0) {
-                Health -= Damage;
-            }
+        protected virtual void OnAttack(Creature attacker, double chance, int damage) {
+            double bar = GetRandomNumber(0,1);
+            if(chance > bar) {
+                if(damage > 0) {
+                    Health -= damage;
+                }
 
-            Program.console.SetText(Name + " was hit!");
-            if(Health <= 0) {
-                Remove(this);
-                Program.world.Creatures.Remove(this);
-                Program.console.SetText(Name + " was killed!");
-                Visibility = Vis.Unseen;
-                IsCollidable = false;
+                if(attacker.Visibility == Vis.Visible) {
+                    Program.console.SetText(Name + " was hit!");
+                }
+                if(Health <= 0) {
+                    Remove(this);
+                    Program.world.Creatures.Remove(this);
+                    if(attacker.Visibility == Vis.Visible) {
+                        Program.console.SetText(Name + " was killed!");
+                    }
+                    Visibility = Vis.Unseen;
+                    IsCollidable = false;
+                }
             }
+        }
+
+        public double GetRandomNumber(double min, double max) {
+            Random r = new Random();
+            return r.NextDouble() * (max - min) + min;
         }
 
         private void calculatePositionsFor(Ability a) {
@@ -178,6 +202,7 @@ namespace GridRL {
                     Program.console.SetText("The orb vanishes in a flash of light!");
                     Program.console.SetText("You gain the skill of " + a.Name + "!");
                     Program.AbilityPlacePoints = new List<List<int>>();
+                    a.OnAddToGrid();
                     return true;
                 }
             }
@@ -193,8 +218,9 @@ namespace GridRL {
         protected override void Act() {
             base.Act();
             if(AI == AIType.Monster) {
-                RandomWalk();
+                FollowPlayer();
             }
+            if(WornArmor != null)Defense = BaseDefense + WornArmor.Defense;
         }
 
         #endregion

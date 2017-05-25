@@ -65,7 +65,7 @@ namespace GridRL {
             if(DoorState == DoorState.Closed) {
                 DoorState = DoorState.Open;
                 IsCollidable = false;
-                Program.console.SetText("The door is opened...");
+                if(a.Visibility == Vis.Visible)Program.console.SetText("The door is opened...");
                 IsWalkable = true;
                 BlocksLight = false;
                 Image = Properties.Resources.Door_Open;
@@ -100,7 +100,7 @@ namespace GridRL {
         #endregion
         #region Overrides
 
-        public override void OnStepOn(Sprite s) {
+        public override void OnStepOn(Actor s) {
             if(s.GetType() == typeof(Player)) {
                 if(StairType == StairType.Up && Program.world.Level > 1) {
                     Program.world.Level--;

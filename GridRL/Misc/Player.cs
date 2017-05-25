@@ -14,7 +14,7 @@ namespace GridRL {
             Name = "player";
             Description = "You don't have a mirror...";
             DeathMessage = "The " + Name + "dies!";
-            Health = 10;
+            Health = 30;
             Attack = 10;
             Defense = 10;
             Visibility = Vis.Visible;
@@ -28,7 +28,8 @@ namespace GridRL {
         /// <returns> A boolean indicating whether to advance the game. </returns>
         public bool HandleKeyInput(KeyEventArgs e) {
             if(e.KeyCode == Keys.Up || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.Down || e.KeyCode == Keys.NumPad2
-            || e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6) {
+            || e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6
+            || e.KeyCode == Keys.NumPad7 || e.KeyCode == Keys.NumPad9 || e.KeyCode == Keys.NumPad1 || e.KeyCode == Keys.NumPad3) {
                 Direction dir = KeyPressToDirection(e);
                 // Check if access is possible from this actor
                 if(CanAccess(dir)) {
@@ -89,8 +90,20 @@ namespace GridRL {
             else if(e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4) {
                 return Direction.Left;
             }
-            else {
+            else if(e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6){
                 return Direction.Right;
+            }
+            else if(e.KeyCode == Keys.NumPad7) {
+                return Direction.UpLeft;
+            }
+            else if(e.KeyCode == Keys.NumPad9) {
+                return Direction.UpRight;
+            }
+            else if(e.KeyCode == Keys.NumPad1) {
+                return Direction.DownLeft;
+            }
+            else {
+                return Direction.DownRight;
             }
         }
 
@@ -124,8 +137,11 @@ namespace GridRL {
                 // Wait for the next mouseclick
                 Program.waitState = 2;
                 while(Program.waitState == 2) {
+                    String prompt = "Click to shuffle items.";
+                    Program.sidebar.promptText = prompt;
                     Application.DoEvents();
                 }
+                Program.sidebar.promptText = "";
                 if(Program.waitState == -1) {
                     Program.LastMA = MouseArea.Hidden;
                     return false;
