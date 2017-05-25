@@ -55,6 +55,8 @@ namespace GridRL {
         /// <summary> List of effects to remove. </summary>
         public List<Effect> EffectsToRemove { get; set; }
 
+        private int Momentum { get; set; }
+
         #endregion
         #region Methods
 
@@ -172,6 +174,13 @@ namespace GridRL {
                         if(e.CoordY == points[0] && e.CoordX == points[1]) {
                             e.Visibility = Vis.Visible;
                         }
+                    }
+                }
+            }
+            for(int y = 0; y < Data.GetLength(0); ++y) {
+                for(int x = 0; x < Data.GetLength(1); ++x) {
+                    if(Data[y, x] != null) {
+                        Data[y, x].Visibility = Vis.Visible;
                     }
                 }
             }

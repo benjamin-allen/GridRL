@@ -13,7 +13,7 @@ namespace GridRL {
                 MakeDoor(pointSet);
             }
             // Retract the maze starting at the dead ends
-            for(int i = 0; i < 50; i++) {
+            for(int i = 0; i < 500; i++) {
                 List<List<int>> mazeEnds = GetMazeEndPoints();
                 foreach(List<int> endPoints in mazeEnds) {
                     Data[endPoints[0], endPoints[1]] = null;
@@ -116,7 +116,7 @@ namespace GridRL {
         /// <summary> RBT maze generation function. </summary>
         /// <param name="points"> Points to carve. </param>
         /// <param name="region"> Region to use for this maze. </param>
-        private void Carve(List<int> points, int region) {
+        private void Carve(List<int> points, int region, Direction previous = Direction.None) {
             // Make a corridor at the points if it's null
             if(Data[points[0], points[1]] == null) {
                 Data[points[0], points[1]] = new Corridor(points[0], points[1], region);
@@ -126,8 +126,19 @@ namespace GridRL {
             if(validDirs.Count == 0) {
                 return;
             }
+            if(validDirs.Contains(previous)) {
+                if(Engine.rand.NextDouble() > .75) {
+                    Program.Shuffle(validDirs);
+                }
+                else {
+                    Direction d = previous;
+                    validDirs.Remove(previous);
+                    Program.Shuffle(validDirs);
+                    validDirs.Insert(0, previous);
+                }
+            }
             // If so, shuffle directions, pick each direction, place corridors, and call Carve()
-            Program.Shuffle(validDirs);
+            
             foreach(Direction d in validDirs) {
                 if(Data[points[0], points[1]].CanAccess(d, 2)) {
                     continue;
@@ -136,7 +147,8 @@ namespace GridRL {
                 List<int> nextPoints = Data[points[0], points[1]].DirectionToPoints(d, 2);
                 Data[interPoints[0], interPoints[1]] = new Corridor(interPoints[0], interPoints[1], region);
                 Data[nextPoints[0], nextPoints[1]] = new Corridor(nextPoints[0], nextPoints[1], region);
-                Carve(nextPoints, region);
+                previous = d;
+                Carve(nextPoints, region, previous);
             }
         }
 
