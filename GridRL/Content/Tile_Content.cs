@@ -65,7 +65,7 @@ namespace GridRL {
             if(DoorState == DoorState.Closed) {
                 DoorState = DoorState.Open;
                 IsCollidable = false;
-                Program.console.SetText("The door is opened...");
+                if(a.Visibility == Vis.Visible)Program.console.SetText("The door is opened...");
                 IsWalkable = true;
                 BlocksLight = false;
                 Image = Properties.Resources.Door_Open;

@@ -106,11 +106,15 @@ namespace GridRL {
                     Health -= damage;
                 }
 
-                Program.console.SetText(Name + " was hit!");
+                if(attacker.Visibility == Vis.Visible) {
+                    Program.console.SetText(Name + " was hit!");
+                }
                 if(Health <= 0) {
                     Remove(this);
                     Program.world.Creatures.Remove(this);
-                    Program.console.SetText(Name + " was killed!");
+                    if(attacker.Visibility == Vis.Visible) {
+                        Program.console.SetText(Name + " was killed!");
+                    }
                     Visibility = Vis.Unseen;
                     IsCollidable = false;
                 }

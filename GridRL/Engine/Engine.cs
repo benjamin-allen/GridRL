@@ -31,7 +31,7 @@ namespace GridRL {
         public static int turnCount = 0;
         public static bool start = false;
         public static bool WinGame = false;
-        public static bool LoseGame = true;
+        public static bool LoseGame = false;
 
         #endregion
         #region Overrides
@@ -50,7 +50,7 @@ namespace GridRL {
                     e.Graphics.DrawString("You Win!",font, Brushes.Black, ClientSize.Width/4 + 50, 200);
                 }
                 else {
-                    e.Graphics.DrawString("You Lose!", font, Brushes.Black, ClientSize.Width / 4 + 50, 200);
+                    e.Graphics.DrawString("You Lose!", font, Brushes.Black, ClientSize.Width / 4 + 10, 200);
                 }
             }
         }

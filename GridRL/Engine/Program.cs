@@ -49,6 +49,9 @@ namespace GridRL {
         public static void GameLoop() {
             turnCount++;
             canvas.Update();
+            if(player.Health <= 0) {
+                LoseGame = true;
+            }
             world.CreaturesToRemove = new List<Creature>();
             world.EffectsToRemove = new List<Effect>();
             world.UpdateVisibles();

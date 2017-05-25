@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GridRL {
     /// <summary> Represents cardinal directions for movement and directional abilities. </summary>
-    public enum Direction {None, Up, Down, Left, Right }
+    public enum Direction {None, Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight}
 
     /// <summary> Represents the visibility status of an actor. </summary>
     public enum Vis { Unseen, Memory, Visible}
@@ -82,6 +82,18 @@ namespace GridRL {
             else if(d == Direction.Right) {
                 output = Program.world.Data[CoordY, CoordX + (1 * magnitude)] == null ? false : true;
             }
+            else if(d == Direction.UpLeft) {
+                output = Program.world.Data[CoordY - (1 * magnitude), CoordX - (1 * magnitude)] == null ? false : true;
+            }
+            else if(d == Direction.UpRight) {
+                output = Program.world.Data[CoordY - (1 * magnitude), CoordX + (1 * magnitude)] == null ? false : true;
+            }
+            else if(d == Direction.DownLeft) {
+                output = Program.world.Data[CoordY + (1 * magnitude), CoordX - (1 * magnitude)] == null ? false : true;
+            }
+            else if(d == Direction.DownRight) {
+                output = Program.world.Data[CoordY + (1 * magnitude), CoordX + (1 * magnitude)] == null ? false : true;
+            }
             return output;
         }
 
@@ -114,6 +126,22 @@ namespace GridRL {
                 output[1] = output[1] - (1 * magnitude);
             }
             else if(d == Direction.Right) {
+                output[1] = output[1] + (1 * magnitude);
+            }
+            else if(d == Direction.UpLeft) {
+                output[0] = output[0] - (1 * magnitude);
+                output[1] = output[1] - (1 * magnitude);
+            }
+            else if(d == Direction.UpRight) {
+                output[0] = output[0] - (1 * magnitude);
+                output[1] = output[1] + (1 * magnitude);
+            }
+            else if(d == Direction.DownLeft) {
+                output[0] = output[0] + (1 * magnitude);
+                output[1] = output[1] - (1 * magnitude);
+            }
+            else if(d == Direction.DownRight) {
+                output[0] = output[0] + (1 * magnitude);
                 output[1] = output[1] + (1 * magnitude);
             }
             return output;
