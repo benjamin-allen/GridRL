@@ -167,6 +167,9 @@ namespace GridRL {
                     if(world[MouseCoords[0], MouseCoords[1]].Visibility == Vis.Visible) {
                         HoverString = world[MouseCoords[0], MouseCoords[1]].Description;
                     }
+                    else {
+                        HoverString = "";
+                    }
                     foreach(Creature c in world.Creatures) {
                         if(c.CoordY == MouseCoords[0] && c.CoordX == MouseCoords[1]) {
                             HoverString = c.Description;
@@ -180,7 +183,39 @@ namespace GridRL {
                         }
                     }
                     form.Refresh();
+                    return;
                 }
+            }
+            else if(MA == MouseArea.PlayerInv || MA == MouseArea.TileInv) {
+                int index = PlrInvMouseCoords[0] * 11 + PlrInvMouseCoords[1];
+                if(player.Inventory.Items[index] != null) {
+                    HoverString = player.Inventory.Items[index].Description;
+                    form.Refresh();
+                    return;
+                }
+                index = TileInvMouseCoords[0] * 11 + TileInvMouseCoords[1];
+                if(world[player.CoordY, player.CoordX].Inventory.Items[index] != null) {
+                    HoverString = world[player.CoordY, player.CoordX].Inventory.Items[index].Description;
+                    form.Refresh();
+                    return;
+                }
+            }
+            else if(MA == MouseArea.Grid) {
+                foreach(Ability a in player.Abilities) {
+                    for(int y = a.GridY; y < a.GridY + a.GridHeight; ++y) {
+                        for(int x = a.GridX; x < a.GridX + a.GridWidth; ++x) {
+                            if(GridMouseCoords[0] == y && GridMouseCoords[1] == x) {
+                                HoverString = a.Description;
+                                form.Refresh();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                HoverString = "";
+                form.Refresh();
             }
         }
 
