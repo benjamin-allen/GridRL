@@ -15,9 +15,12 @@ namespace GridRL {
         public static World world = new World();
         public static List<List<int>> AbilityPlacePoints = new List<List<int>>();
         public static int[] MouseCoords = new int[2];
-        public static int[] GridMouseCoords = new int[2];
-        public static int[] PlrInvMouseCoords = new int[2];
-        public static int[] TileInvMouseCoords = new int[2];
+        public static int[] GridClickCoords = new int[2];
+        public static int[] PlayerInvClickCoords = new int[2];
+        public static int[] TileInvClickCoords = new int[2];
+        public static int[] GridHoverCoords = new int[2];
+        public static int[] PlayerInvHoverCoords = new int[2];
+        public static int[] TileInvHoverCoords= new int[2];
         public static int waitState = 0;
         public static Direction lastDirection = Direction.None;
         public static ColorMatrix grayMatrix = new ColorMatrix(new float[][] { new float[]{1, 0, 0, 0, 0},
@@ -52,7 +55,7 @@ namespace GridRL {
             form.Refresh();
         }
 
-        private static void setMouseArea() {
+        private static void setMouseArea(bool isHovering = false) {
             int y = MouseCoords[0];
             int x = MouseCoords[1];
             if(x < 65) {
@@ -80,24 +83,41 @@ namespace GridRL {
                 }
                 if(y >= sidebar.CellsY && y < sidebar.CellsY + 2) {
                     MA = MouseArea.PlayerInv;
-                    PlrInvMouseCoords[0] = y - sidebar.CellsY;
-                    PlrInvMouseCoords[1] = x - sidebar.CellsX;
+                    if(isHovering) {
+                        PlayerInvHoverCoords[0] = y - sidebar.CellsY;
+                        PlayerInvHoverCoords[1] = x - sidebar.CellsX;
+                    }
+                    else {
+                        PlayerInvClickCoords[0] = y - sidebar.CellsY;
+                        PlayerInvClickCoords[1] = x - sidebar.CellsX;
+                    }
                 }
                 else if(y >= sidebar.CellsY2 && y < sidebar.CellsY2 + 2) {
                     MA = MouseArea.TileInv;
-                    TileInvMouseCoords[0] = y - sidebar.CellsY2;
-                    TileInvMouseCoords[1] = x - sidebar.CellsX;
+                    if(isHovering) {
+                        TileInvHoverCoords[0] = y - sidebar.CellsY2;
+                        TileInvHoverCoords[1] = x - sidebar.CellsX;
+                    }
+                    else {
+                        TileInvClickCoords[0] = y - sidebar.CellsY2;
+                        TileInvClickCoords[1] = x - sidebar.CellsX;
+                    }
                 }
                 else if(x >= sidebar.GridX && x < sidebar.GridX + 9 && y >= sidebar.GridY && y < sidebar.GridY + 9)  {
                     MA = MouseArea.Grid;
-                    GridMouseCoords[0] = (y - sidebar.GridY) / 3;
-                    GridMouseCoords[1] = (x - sidebar.GridX) / 3;
+                    if(isHovering) {
+                        GridHoverCoords[0] = (y - sidebar.GridY) / 3;
+                        GridHoverCoords[1] = (x - sidebar.GridX) / 3;
+                    }
+                    else {
+                        GridClickCoords[0] = (y - sidebar.GridY) / 3;
+                        GridClickCoords[1] = (x - sidebar.GridX) / 3;
+                    }
                 }
             }
             else {
                 MA = MouseArea.Sidebar;
             }
-            HoverString = MA.ToString();
         }
         #endregion
         #region Overrides
@@ -146,10 +166,10 @@ namespace GridRL {
                 }
             }
             else if(player.HandleMouseInput(e)) {
-                PlrInvMouseCoords = new int[] { -1, -1 };
-                TileInvMouseCoords = new int[] { -1, -1 };
+                PlayerInvClickCoords = new int[] { -1, -1 };
+                TileInvClickCoords = new int[] { -1, -1 };
                 MouseCoords = new int[] { -1, -1 };
-                GridMouseCoords = new int[] { -1, -1 };
+                GridClickCoords = new int[] { -1, -1 };
                 Program.MA = MouseArea.Hidden;
                 GameLoop();
             }
@@ -161,7 +181,7 @@ namespace GridRL {
         protected override void OnMouseMove(MouseEventArgs e) {
             MouseCoords[0] = (int)Math.Floor(e.Y / 16f);
             MouseCoords[1] = (int)Math.Floor(e.X / 16f);
-            setMouseArea();
+            setMouseArea(true);
             if(MA == MouseArea.World) {
                 if(world[MouseCoords[0], MouseCoords[1]] != null) {
                     if(world[MouseCoords[0], MouseCoords[1]].Visibility == Vis.Visible) {
@@ -187,13 +207,13 @@ namespace GridRL {
                 }
             }
             else if(MA == MouseArea.PlayerInv || MA == MouseArea.TileInv) {
-                int index = PlrInvMouseCoords[0] * 11 + PlrInvMouseCoords[1];
+                int index = PlayerInvHoverCoords[0] * 11 + PlayerInvHoverCoords[1];
                 if(player.Inventory.Items[index] != null) {
                     HoverString = player.Inventory.Items[index].Description;
                     form.Refresh();
                     return;
                 }
-                index = TileInvMouseCoords[0] * 11 + TileInvMouseCoords[1];
+                index = TileInvHoverCoords[0] * 11 + TileInvHoverCoords[1];
                 if(world[player.CoordY, player.CoordX].Inventory.Items[index] != null) {
                     HoverString = world[player.CoordY, player.CoordX].Inventory.Items[index].Description;
                     form.Refresh();
@@ -204,13 +224,34 @@ namespace GridRL {
                 foreach(Ability a in player.Abilities) {
                     for(int y = a.GridY; y < a.GridY + a.GridHeight; ++y) {
                         for(int x = a.GridX; x < a.GridX + a.GridWidth; ++x) {
-                            if(GridMouseCoords[0] == y && GridMouseCoords[1] == x) {
+                            if(GridHoverCoords[0] == y && GridHoverCoords[1] == x) {
                                 HoverString = a.Description;
                                 form.Refresh();
                                 return;
                             }
                         }
                     }
+                }
+            }
+            else if(MA == MouseArea.HoldBox) {
+                if(player.HeldItem != null) {
+                    HoverString = player.HeldItem.Description;
+                    form.Refresh();
+                    return;
+                }
+            }
+            else if(MA == MouseArea.WearBox) {
+                if(player.WornArmor != null) {
+                    HoverString = player.WornArmor.Description;
+                    form.Refresh();
+                    return;
+                }
+            }
+            else if(MA == MouseArea.WieldBox) {
+                if(player.HeldWeapon != null) {
+                    HoverString = player.HeldWeapon.Description;
+                    form.Refresh();
+                    return;
                 }
             }
             else {

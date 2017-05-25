@@ -148,9 +148,9 @@ namespace GridRL {
                 return false;
             }
             foreach(List<int> points in Program.AbilityPlacePoints) {
-                if(Program.GridMouseCoords[0] == points[0] && Program.GridMouseCoords[1] == points[1]) {
-                    a.GridY = Program.GridMouseCoords[0];
-                    a.GridX = Program.GridMouseCoords[1];
+                if(Program.GridClickCoords[0] == points[0] && Program.GridClickCoords[1] == points[1]) {
+                    a.GridY = Program.GridClickCoords[0];
+                    a.GridX = Program.GridClickCoords[1];
                     Program.player.Abilities.Add(a);
                     Program.console.SetText("The orb vanishes in a flash of light!");
                     Program.console.SetText("You gain the skill of " + a.Name + "!");

@@ -104,7 +104,7 @@ namespace GridRL {
             int pX = CoordX;
             if(Program.MA == MouseArea.TileInv) {
                 #region TileInv
-                int index = (Program.TileInvMouseCoords[0] * 11) + Program.TileInvMouseCoords[1];
+                int index = (Program.TileInvClickCoords[0] * 11) + Program.TileInvClickCoords[1];
                 // get the item from the inv
                 Item toPickUp = Program.world.Data[pY, pX].Inventory.Items[index];
                 // if it's not null, try to add
@@ -120,7 +120,7 @@ namespace GridRL {
             else if(Program.MA == MouseArea.PlayerInv) {
                 #region PlayerInv
                 // check for item relevance
-                int index = (Program.PlrInvMouseCoords[0] * 11) + Program.PlrInvMouseCoords[1];
+                int index = (Program.PlayerInvClickCoords[0] * 11) + Program.PlayerInvClickCoords[1];
                 Item toWorkWith = Inventory.Items[index];
                 if(toWorkWith == null) {
                     return false;
@@ -344,8 +344,8 @@ namespace GridRL {
             }
             else if(Program.MA == MouseArea.Grid) {
                 #region Grid
-                int y = Program.GridMouseCoords[0];
-                int x = Program.GridMouseCoords[1];
+                int y = Program.GridClickCoords[0];
+                int x = Program.GridClickCoords[1];
                 int index = -1;
                 foreach(Ability a in Abilities) {
                     if(y >= a.GridY && y < a.GridY + a.GridHeight && x >= a.GridX && x < a.GridX + a.GridWidth) {
